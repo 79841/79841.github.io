@@ -1,12 +1,14 @@
-import { siteMetadata } from "@/data";
 import React from "react";
 import { Navbar } from "./navbar";
+import { Logo } from "./logo";
 
 export const Header = () => {
   return (
-    <div className="fixed w-[1320px] px-5 h-12 border flex justify-between items-center">
-      <h1>{siteMetadata.username}</h1>
-      <Navbar />
+    <div className="fixed z-50 flex w-full justify-center backdrop-blur-md">
+      <div className="flex w-full max-w-[1320px] justify-between px-5 py-2">
+        <Logo />
+        <Navbar />
+      </div>
     </div>
   );
 };
