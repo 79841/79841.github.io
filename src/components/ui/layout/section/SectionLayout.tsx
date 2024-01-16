@@ -1,9 +1,14 @@
 import React, { PropsWithChildren } from "react";
 
-type TSectionLayout = PropsWithChildren;
-export const SectionLayout = ({ children }: TSectionLayout) => {
+type TSectionLayout = {
+  id: string;
+} & PropsWithChildren;
+export const SectionLayout = ({ id, children }: TSectionLayout) => {
   return (
-    <section className="h-screen border w-full flex flex-col justify-center gap-8">
+    <section
+      id={id}
+      className="flex h-screen w-full flex-col justify-center gap-8 border"
+    >
       {children}
     </section>
   );
