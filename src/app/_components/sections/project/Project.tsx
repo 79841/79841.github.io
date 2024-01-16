@@ -1,6 +1,5 @@
-import { ImageFrame } from "@/components/ui/image-frame/ImageFrame";
+import { Carousel } from "@/components/carousel";
 import { TProjectData } from "@/types";
-import Image from "next/image";
 import React from "react";
 
 type TProjectProps = {
@@ -9,12 +8,14 @@ type TProjectProps = {
 export const Project = ({ project }: TProjectProps) => {
   return (
     <div>
-      <h1 className="text-3xl">{project.name}</h1>
-      <div>
-        <div className="relative w-80 h-60 border">
-          {/* <Image src={project.images[0]} alt={project.name} fill /> */}
-          <ImageFrame src={project.images[0]} />
-        </div>
+      <h1 className="text-xl">{project.name}</h1>
+
+      <div className="border">
+        {project.images.length > 0 ? (
+          <Carousel height="20rem" images={project.images} />
+        ) : (
+          <div>No Images</div>
+        )}
       </div>
     </div>
   );
