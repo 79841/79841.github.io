@@ -2,17 +2,18 @@ import React from "react";
 import { ProfileImage } from "./ProfileImage";
 import { IntroPhrase } from "./IntroPhrase";
 import { SectionLayout } from "@/components/ui/layout/section";
+import { ContactButton, ResumeButton } from "./buttons";
 
 export const IntroSection = () => {
   return (
-    <SectionLayout>
+    <SectionLayout id={"home"}>
       <div className="flex flex-col items-center gap-24">
         <ProfileImage />
-        <div className="flex flex-col border gap-4">
+        <div className="animate-rising flex flex-col gap-8">
           <IntroPhrase />
-          <div className="flex justify-center">
-            <button className="border w-fit p-2">Contact</button>
-            <button className="border w-fit p-2">Resume</button>
+          <div className="flex justify-center gap-4">
+            <ContactButton />
+            <ResumeButton />
           </div>
         </div>
       </div>
