@@ -1,6 +1,7 @@
-import { ExperienceSection } from "./_components/sections/experience";
 import { IntroSection } from "./_components/sections/intro";
-import { ProjectSection } from "./_components/sections/project";
+// import { ContactSection } from "./_components/sections/contact";
+// import { ExperienceSection } from "./_components/sections/experience";
+// import { ProjectSection } from "./_components/sections/project";
 import { SkillSection } from "./_components/sections/skill";
 
 export default function Home() {
@@ -8,8 +9,9 @@ export default function Home() {
     <main className="flex w-full flex-col items-center justify-center">
       <IntroSection />
       <SkillSection />
-      <ExperienceSection />
+      {/* <ExperienceSection />
       <ProjectSection />
+      <ContactSection /> */}
     </main>
   );
 }
