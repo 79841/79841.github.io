@@ -30,13 +30,6 @@ export const experiencesData: Record<number, TExperienceData[]> = {
       period: "2020.01.",
       image: "/images/experience/naver-logo-circle.avif",
     },
-
-    {
-      title: "비욘드 코딩",
-      content: "HTML, CSS, Javascript, Python 강의",
-      period: "2020.11. ~ ",
-      image: "/images/experience/beyond-coding-logo.avif",
-    },
     {
       title: "2020 금융보안 위협분석 대회 FIESTA 우승",
       period: "2020.12.",
@@ -66,6 +59,14 @@ export const experiencesData: Record<number, TExperienceData[]> = {
       title: "2022 소개딩 해커톤 본선",
       period: "2022.09.",
       image: "/images/experience/software-dev-sec-logo.avif",
+    },
+  ],
+  2023: [
+    {
+      title: "비욘드 코딩",
+      content: "HTML, CSS, Javascript, Python 강의",
+      period: "2020.11. ~ ",
+      image: "/images/experience/beyond-coding-logo.avif",
     },
   ],
 };

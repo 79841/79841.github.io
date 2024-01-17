@@ -26,8 +26,8 @@ export const useMovingImagesBox = () => {
 
   useEffect(() => {
     if (!ref.current) return;
-    ref.current.style.transform = `translateX(-${currentPosition}px)`;
-  }, [currentPosition]);
+    ref.current.style.transform = `translateX(calc(-${currentPosition}px - ${currentImageIndex} * 1rem))`;
+  }, [currentPosition, currentImageIndex]);
 
   return [ref, currentImageIndex] as const;
 };

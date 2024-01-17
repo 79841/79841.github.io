@@ -1,17 +1,23 @@
 import { SectionTitle } from "@/components/ui/title";
-import { projectsData } from "@/data";
+import { navigationLinks, projectsData } from "@/data";
 import React from "react";
 import { Project } from "./Project";
+import { SectionLayout } from "@/components/ui/layout/section";
+import { ScrollRisingBox } from "@/components/animation";
 
 export const ProjectSection = () => {
   return (
-    <section className="flex w-full flex-col border">
-      <SectionTitle title="Project" />
-      <div className="flex flex-col">
+    <SectionLayout id={"project"} nextSection={navigationLinks.contact}>
+      <div className="mb-12">
+        <SectionTitle title="Project" />
+      </div>
+      <div className="flex flex-col items-center gap-12">
         {Object.values(projectsData).map((project) => (
-          <Project key={project.name} project={project} />
+          <ScrollRisingBox key={project.name}>
+            <Project project={project} />
+          </ScrollRisingBox>
         ))}
       </div>
-    </section>
+    </SectionLayout>
   );
 };

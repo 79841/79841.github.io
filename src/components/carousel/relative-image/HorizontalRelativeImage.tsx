@@ -8,6 +8,7 @@ type THorizontalRelativeImageProps = {
   src: string;
   alt: string;
 };
+
 export const HorizontalRelativeImage = ({
   height,
   imageSize,
@@ -19,7 +20,10 @@ export const HorizontalRelativeImage = ({
     width: `calc(${height} * ${imageSize.width / imageSize.height})`,
   };
   return (
-    <div className="relative flex-shrink-0 border w-full h-full" style={style}>
+    <div
+      className="relative h-full w-full flex-shrink-0 overflow-hidden rounded-xl shadow-lg"
+      style={style}
+    >
       <Image src={src} alt={alt} fill />
     </div>
   );

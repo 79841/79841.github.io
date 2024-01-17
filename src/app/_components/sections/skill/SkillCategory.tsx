@@ -7,9 +7,13 @@ type TSkillCategoryProps = {
 };
 export const SkillCategory = ({ skillCategory }: TSkillCategoryProps) => {
   return (
-    <div key={skillCategory.name} className="p-4 border">
-      <div className="text-xl">{skillCategory.name}</div>
-      <SkillList skills={skillCategory.skills} />
+    <div className="flex h-fit flex-col gap-2 rounded-lg p-6">
+      <div className="mb-2 border-b pb-2 text-base font-[500]">
+        {skillCategory.name}
+      </div>
+      <div key={skillCategory.name} className="rounded-lg">
+        <SkillList skills={skillCategory.skills} />
+      </div>
     </div>
   );
 };

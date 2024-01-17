@@ -48,13 +48,6 @@ export const skillsData: TSkillCategory[] = [
         defaultImage: "/images/skills/recoil-logo.avif",
       },
       {
-        name: "Zustand",
-        proficiency: 60,
-        proficiencyDetail:
-          "최근에 사용하기 시작한 라이브러리입니다. Npm trend에서 다운로드 수가 빠르게 증가하고 있어 사용하게되었습니다. 러닝커브가 없을 정도로 사용법이 간단하고 recoil과 같은 잦은 에러가 발생하지 않기 때문에 최근 시작하는 프로젝트에는 zustand를 사용하고 있습니다.",
-        defaultImage: "/images/skills/zustand-icon.ico",
-      },
-      {
         name: "Tanstack Query",
         proficiency: 70,
         proficiencyDetail:
@@ -74,42 +67,6 @@ export const skillsData: TSkillCategory[] = [
         proficiencyDetail:
           "가장 애용하는 CSS 프레임워크입니다. 공식문서에 나온 것과 같이 zero-runtime으로 빌드시에 CSS를 생성하여 성능이 좋습니다. 다양한 유틸리티를 제공하여 코드 퍼포먼스로 올라가기 때문에 애용하고 있습니다.",
         defaultImage: "/images/skills/tailwindcss-plain.svg",
-      },
-      {
-        name: "Shadcn",
-        proficiency: 50,
-        proficiencyDetail:
-          "Tailwindcss와 radix를 사용한 디자인 컴포넌트입니다. 컴포넌트를 복사하여 쓰기 때문에 다른 UI 프레임워크에 비해 커스터마이징이 간편하여 사용하고 있습니다.",
-        defaultImage: "/images/skills/shadcn-original.svg",
-        darkModeImage: "/images/skills/shadcn-white.svg",
-      },
-      {
-        name: "Jest",
-        proficiency: 40,
-        proficiencyDetail:
-          "React에서 기본적으로 제공하는 테스팅 라이브러리로 React와 Next 사용시 TDD를 위해 사용하고 있습니다. TS 환경에서 Jest 사용 시 발생하는 타입에러를 해결해본 경험이 있습니다. 아직은 익숙하지 못해 더 공부할 필요가 있습니다.",
-        defaultImage: "/images/skills/jest-logo.avif",
-      },
-      {
-        name: "Testing Library",
-        proficiency: 40,
-        proficiencyDetail:
-          "Jest와 마찬가지로 테스팅을 위해 최근부터 사용하기 시작했습니다. 간단한 테스트 코드를 작성할 수 있으며 userEvent와 babel관련 warning을 처리해본 경험이 있습니다.",
-        defaultImage: "/images/skills/testing-library-logo.avif",
-      },
-      {
-        name: "Msw",
-        proficiency: 30,
-        proficiencyDetail:
-          "백엔드 팀과 협업하면서 개발 파트와 스프린트 진행 차이로 인해 프론트엔드에서 개발된 부분이 백엔드에서 구현되지 않아 진행이 더뎌진 경험이 있습니다. 이를 해결하기 위해 데이터 Mocking이 필요했고 초기에는 Express로 진행하다 편의성을 위해 MSW로 전환하게 되었습니다. Nextjs에서 SSR시 발생하는 문제를 해결하기 위해 커스텀 Provider로 mocking을 제어했습니다.",
-        defaultImage: "/images/skills/msw-logo.avif",
-      },
-      {
-        name: "Prisma",
-        proficiency: 40,
-        proficiencyDetail:
-          "서버 컴포넌트에서 server action을 사용하면서 프론트엔드에서 DB에 직접 접근하여 데이터를 조작하는 일이 많아졌습니다. 이때 DB 모델을 구현하기 위해 ORM 중 하나인 Prisma를 사용했습니다. 블로그의 게시글의 조회수 기능 또한 DB모델을 Prisma로 구현했습니다.",
-        defaultImage: "/images/skills/prisma-logo.avif",
       },
     ],
   },
@@ -132,25 +89,11 @@ export const skillsData: TSkillCategory[] = [
         darkModeImage: "/images/skills/express-white.svg",
       },
       {
-        name: "Nest.js",
-        proficiency: 30,
-        proficiencyDetail:
-          "취미로 공부하기 시작하여 최근 시작한 프로젝트에서 사용중입니다. 아직 공부중에 있고 간단한 API 개발이 가능합니다.",
-        defaultImage: "/images/skills/nestjs-plain.svg",
-      },
-      {
         name: "FastAPI",
         proficiency: 80,
         proficiencyDetail:
           "ML 엔지니어들과 협업하면서 사용하게 된 Python 백엔드 프레임워크 입니다. 백엔드 개발하면서 가장 많이 사용한 프레임워크로 RestAPI, 인증, 웹소켓 등 여러가지 기능을 구현해보았습니다.",
         defaultImage: "/images/skills/fastapi-original.svg",
-      },
-      {
-        name: "PHP",
-        proficiency: 60,
-        proficiencyDetail:
-          "해킹 문제를 해결하거나 출제할 때 사용했던 언어입니다. 순전히 백엔드 개발을 목적으로 사용한 경험은 없으나 해킹 공부할 때 자주 사용하면서 언어 이해도가 높고 그누보드나 워드프레스같은 CMS를 사용한 경험이 있습니다.",
-        defaultImage: "/images/skills/php-plain.svg",
       },
       {
         name: "Firebase",
