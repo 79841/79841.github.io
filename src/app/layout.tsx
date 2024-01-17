@@ -8,13 +8,13 @@ import { Footer } from "./_components/footer";
 const roboto = Roboto({
   subsets: ["latin"],
   display: "swap",
-  weight: "400",
+  weight: ["400", "500", "700"],
 });
 
 const noto_sans_kr = Noto_Sans_KR({
   display: "swap",
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -42,7 +42,7 @@ export default function RootLayout({
         className={`flex w-screen flex-col items-center text-sm ${noto_sans_kr.className} ${roboto.className}`}
       >
         <Header />
-        <div className="w-full max-w-[1320px] border px-5">{children}</div>
+        <div className="w-full max-w-[1320px] border  px-5">{children}</div>
         <Footer />
       </body>
     </html>
