@@ -13,7 +13,7 @@ export const ExperienceSection = () => {
           <SectionTitle title="Experience" />
         </ScrollRisingBox>
       </div>
-      <div className="flex w-fit flex-col gap-4">
+      <div className="flex w-full flex-col items-start gap-4 sm:w-fit">
         {Object.entries(experiencesData).map(([year, experiences]) => (
           <ScrollRisingBox key={year}>
             <ExperiencesByYear experiences={experiences} year={year} />
