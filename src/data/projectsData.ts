@@ -1,16 +1,6 @@
 import { TProjectData } from "@/types/Project";
 
 export const projectsData: Record<string, TProjectData> = {
-  securityGym: {
-    name: "Security Gym",
-    link: "/projects/security-gym",
-    description: "침해사고가 발생했을 시 즉각적인 대응을 위한 훈련 시스템",
-    content:
-      "기업에 침해사고 발생시 즉각적인 대응(Incident Response)을 위한 시스템입니다. BoB에서 진행한 5인 프로젝트로 시스템 구축과 포렌식을 맡아서 했습니다. 처음 진행한 협업 프로젝트이기에 의미가 큽니다. PHP와 Flask를 이용하여 서버를 개발했고 Docker와 VMware로 가상환경을 구현했습니다.",
-    images: [],
-    techStack: ["Python", "PHP", "Flask", "Mysql", "Docker", "VMware"],
-    date: "2017.09. ~ 2017.12.",
-  },
   chusinsa: {
     name: "Chusinsa",
     link: "/projects/chusinsa",
@@ -57,6 +47,33 @@ export const projectsData: Record<string, TProjectData> = {
       "https://github.com/79841/letsdo-back",
     ],
   },
+
+  portfolio: {
+    name: "Portfolio",
+    link: "/projects/portfolio",
+    description: "포트폴리오 사이트",
+    content:
+      "직접 개발한 포트폴리오 사이트 입니다. Nextjs14 app router과 shacn을 이용하여 개발하였습니다. shadcn을 처음 사용한 프로젝트이면서 opengraph에 대해 이해할 수 있었던 의미있는 프로젝트입니다. 깃허브 페이지로 배포하고 있고 지속적으로 기능을 추가할 계획입니다.",
+    techStack: ["Next.js14", "Tailwindcss", "Shadcn"],
+    date: "2023.12.",
+    images: [
+      "/images/projects/portfolio/portfolio-light.avif",
+      "/images/projects/portfolio/portfolio-experience.avif",
+      "/images/projects/portfolio/portfolio-dark.avif",
+      "/images/projects/portfolio/portfolio-skill.avif",
+    ],
+    github: ["https://github.com/79841/portfolio"],
+  },
+  securityGym: {
+    name: "Security Gym",
+    link: "/projects/security-gym",
+    description: "침해사고가 발생했을 시 즉각적인 대응을 위한 훈련 시스템",
+    content:
+      "기업에 침해사고 발생시 즉각적인 대응(Incident Response)을 위한 시스템입니다. BoB에서 진행한 5인 프로젝트로 시스템 구축과 포렌식을 맡아서 했습니다. 처음 진행한 협업 프로젝트이기에 의미가 큽니다. PHP와 Flask를 이용하여 서버를 개발했고 Docker와 VMware로 가상환경을 구현했습니다.",
+    images: [],
+    techStack: ["Python", "PHP", "Flask", "Mysql", "Docker", "VMware"],
+    date: "2017.09. ~ 2017.12.",
+  },
   dreamShare: {
     name: "Dream Share",
     link: "/projects/dream-share",
@@ -75,21 +92,5 @@ export const projectsData: Record<string, TProjectData> = {
     images: [],
     date: "2023.10. ~ 진행중",
     github: ["https://github.com/Dream-share"],
-  },
-  portfolio: {
-    name: "Portfolio",
-    link: "/projects/portfolio",
-    description: "포트폴리오 사이트",
-    content:
-      "직접 개발한 포트폴리오 사이트 입니다. Nextjs14 app router과 shacn을 이용하여 개발하였습니다. shadcn을 처음 사용한 프로젝트이면서 opengraph에 대해 이해할 수 있었던 의미있는 프로젝트입니다. 깃허브 페이지로 배포하고 있고 지속적으로 기능을 추가할 계획입니다.",
-    techStack: ["Next.js14", "Tailwindcss", "Shadcn"],
-    date: "2023.12.",
-    images: [
-      "/images/projects/portfolio/portfolio-light.avif",
-      "/images/projects/portfolio/portfolio-experience.avif",
-      "/images/projects/portfolio/portfolio-dark.avif",
-      "/images/projects/portfolio/portfolio-skill.avif",
-    ],
-    github: ["https://github.com/79841/portfolio"],
   },
 };
