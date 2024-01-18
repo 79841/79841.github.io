@@ -23,7 +23,7 @@ export const CarouselImageArea = ({
     }
   }, [isImagesLoaded]);
 
-  if (!isImagesLoaded) return <div>loading...</div>;
+  // if (!isImagesLoaded) return <div>loading...</div>;
 
   const currentImageSize = imagesSizes[currentImageIndex];
   const style = {
