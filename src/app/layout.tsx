@@ -42,7 +42,7 @@ export default function RootLayout({
         className={`flex w-screen flex-col items-center text-sm ${noto_sans_kr.className} ${roboto.className}`}
       >
         <Header />
-        <div className="w-full max-w-[1320px] border  px-5">{children}</div>
+        <div className="w-full max-w-[1320px] px-5">{children}</div>
         <Footer />
       </body>
     </html>
