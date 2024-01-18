@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import React, { useRef } from "react";
 
 type THorizontalRelativeImageProps = {
-  height: string;
+  height: number;
   imageSize: Record<string, number>;
   src: string;
   alt: string;
@@ -15,16 +15,20 @@ export const HorizontalRelativeImage = ({
   src,
   alt,
 }: THorizontalRelativeImageProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+
   const style = {
-    height,
-    width: `calc(${height} * ${imageSize.width / imageSize.height})`,
+    height: `${height}px`,
+    width: `calc(${height}px * ${imageSize.width / imageSize.height})`,
   };
+
   return (
     <div
+      ref={ref}
       className="relative h-full w-full flex-shrink-0 overflow-hidden rounded-xl shadow-lg"
       style={style}
     >
-      <Image src={src} alt={alt} fill />
+      <Image src={src} alt={alt} fill sizes="400px" />
     </div>
   );
 };
