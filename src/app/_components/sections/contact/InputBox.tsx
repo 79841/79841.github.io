@@ -1,5 +1,15 @@
-import React from "react";
+import { cn } from "@/lib/utils";
+import React, { InputHTMLAttributes } from "react";
 
-export const InputBox = () => {
-  return <input className="h-12 border" />;
+type TInputBoxProps = InputHTMLAttributes<HTMLInputElement>;
+export const InputBox = ({ className, ...props }: TInputBoxProps) => {
+  return (
+    <input
+      className={cn(
+        "h-12 rounded-xl border p-2 px-4 focus:outline-none",
+        className,
+      )}
+      {...props}
+    />
+  );
 };
