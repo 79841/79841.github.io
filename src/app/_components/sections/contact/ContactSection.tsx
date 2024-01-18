@@ -7,7 +7,9 @@ import { navigationLinks } from "@/data";
 export const ContactSection = () => {
   return (
     <SectionLayout id="contact" nextSection={navigationLinks.home}>
-      <SectionTitle title="Contact" />
+      <div className="pb-24">
+        <SectionTitle title="Contact" />
+      </div>
       <form className="flex w-1/2 flex-col gap-4">
         <InputBox placeholder="Name" className="focus:outline-none" />
         <InputBox placeholder="Email" />
