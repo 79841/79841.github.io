@@ -9,7 +9,8 @@ export const IntroPhrase = () => {
       <div className="flex flex-col items-center justify-center text-center">
         <span>JS를 사랑한 개발자 명인지 입니다.</span>
         <span>
-          Next.js를 주로 사용하며 아키텍쳐와 최적화에 관심이 많습니다.
+          프론트엔드 아키텍쳐를 설계하고 웹 페이지 성능을 최적화하는데
+          집중합니다.
         </span>
       </div>
     </div>
