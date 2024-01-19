@@ -4,7 +4,7 @@ import Link from "next/link";
 import { siteMetadata } from "@/data";
 export const Footer = () => {
   return (
-    <div className="flex h-36 flex-col items-center justify-center gap-4 text-zinc-300">
+    <div className="flex h-36 flex-col items-center justify-center gap-4 text-zinc-400">
       <div className="flex items-center justify-center gap-4 text-xl ">
         <Link
           href={siteMetadata.githubUrl}
