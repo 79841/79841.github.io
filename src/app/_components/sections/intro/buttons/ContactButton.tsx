@@ -7,7 +7,7 @@ export const ContactButton = () => {
   return (
     <Link
       href={navigationLinks.contact.path}
-      className="flex w-fit items-center justify-center gap-2 rounded-full bg-zinc-100 px-6 py-3"
+      className="flex w-fit items-center justify-center gap-2 rounded-full bg-zinc-100 px-8 py-4"
     >
       <div>Contact</div>
       <FaArrowAltCircleRight size={18} />
