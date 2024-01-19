@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Header } from "./_components/header";
 import { Noto_Sans_KR, Roboto } from "next/font/google";
 import { siteMetadata } from "@/data";
 import { Footer } from "./_components/footer";
+import { Header } from "./_components/header";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -39,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`flex w-screen flex-col items-center text-sm ${noto_sans_kr.className} ${roboto.className}`}
+        className={`flex w-screen flex-col items-center overflow-x-hidden text-sm ${noto_sans_kr.className} ${roboto.className}`}
       >
         <Header />
         <div className="w-full max-w-[1320px] px-5">{children}</div>
