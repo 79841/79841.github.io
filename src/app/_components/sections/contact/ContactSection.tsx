@@ -8,7 +8,7 @@ import { ScrollRisingBox } from "@/components/animation";
 export const ContactSection = () => {
   return (
     <SectionLayout id="contact" nextSection={navigationLinks.home}>
-      <div className="pb-24">
+      <div className="pb-12">
         <ScrollRisingBox>
           <SectionTitle title="Contact" />
         </ScrollRisingBox>

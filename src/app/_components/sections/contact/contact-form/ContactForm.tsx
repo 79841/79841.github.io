@@ -6,6 +6,7 @@ import { SubmitButton } from "./SubmitButton";
 import { MessageBox } from "./MessageBox";
 import { StateMessage } from "./StateMessage";
 import { ScrollRisingBox } from "@/components/animation";
+import { siteMetadata } from "@/data";
 
 export const ContactForm = () => {
   const [state, formAction] = useContact();
@@ -26,7 +27,10 @@ export const ContactForm = () => {
         <InputBox placeholder="Email" name="email" type="email" />
       </ScrollRisingBox>
       <ScrollRisingBox>
-        <MessageBox />
+        <div className="relative">
+          <MessageBox />
+          <div className="absolute bottom-4 right-4 text-zinc-500">{`to: <${siteMetadata.primaryEmail}>`}</div>
+        </div>
       </ScrollRisingBox>
       <ScrollRisingBox>
         <div className="flex w-full items-center justify-end">
