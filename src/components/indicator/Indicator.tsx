@@ -1,8 +1,10 @@
 "use client";
+import { navigationLinks } from "@/data";
 import { TNavigation } from "@/types/Navigation";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowUp } from "react-icons/io";
 
 type TIndicatorProps = {
   nextSection: TNavigation;
@@ -22,7 +24,12 @@ export const Indicator = ({ nextSection }: TIndicatorProps) => {
         </div>
         <Link href={nextSection.path}>
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white">
-            {isContentVisible && <IoIosArrowForward size={20} />}
+            {isContentVisible &&
+              (nextSection.name === navigationLinks.home.name ? (
+                <IoIosArrowUp size={20} />
+              ) : (
+                <IoIosArrowForward size={20} />
+              ))}
           </div>
         </Link>
       </div>
