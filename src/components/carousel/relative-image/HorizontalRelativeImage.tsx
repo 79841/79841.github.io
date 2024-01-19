@@ -4,7 +4,7 @@ import React, { useRef } from "react";
 
 type THorizontalRelativeImageProps = {
   height: number;
-  imageSize: Record<string, number>;
+  imageSize: { width: number; height: number };
   src: string;
   alt: string;
 };

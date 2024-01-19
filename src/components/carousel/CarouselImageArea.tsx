@@ -1,19 +1,22 @@
 import React, { RefObject, useEffect, useRef, useState } from "react";
 import { HorizontalRelativeImage } from "./relative-image";
-import { useImagesSizes } from "./hooks/useImagesSizes";
 
 type TCarouselImageAreaProps = {
+  isImagesLoaded: boolean;
+  imagesSizes: { width: number; height: number }[];
   imagesRef: RefObject<HTMLDivElement>;
   images: string[];
   currentImageIndex: number;
 };
 
 export const CarouselImageArea = ({
+  isImagesLoaded,
+  imagesSizes,
   imagesRef,
   images,
   currentImageIndex,
 }: TCarouselImageAreaProps) => {
-  const [isImagesLoaded, imagesSizes] = useImagesSizes(images);
+  // const [isImagesLoaded, imagesSizes] = useImagesSizes(images);
   const [frameHeight, setFrameHeight] = useState(0);
   const frameRef = useRef<HTMLDivElement>(null);
 
@@ -23,7 +26,7 @@ export const CarouselImageArea = ({
     }
   }, [isImagesLoaded]);
 
-  // if (!isImagesLoaded) return <div>loading...</div>;
+  if (!isImagesLoaded) return <div>loading...</div>;
 
   const currentImageSize = imagesSizes[currentImageIndex];
   const style = {

@@ -12,6 +12,7 @@ type TProjectProps = {
 };
 export const Project = ({ project }: TProjectProps) => {
   const [ref, inView] = useInView();
+
   return (
     <div
       ref={ref}
