@@ -3,7 +3,7 @@ import { HorizontalRelativeImage } from "./relative-image";
 
 type TCarouselImageAreaProps = {
   isImagesLoaded: boolean;
-  imagesSizes: { width: number; height: number }[];
+  imagesSizes: Record<string, { width: number; height: number }>;
   imagesRef: RefObject<HTMLDivElement>;
   images: string[];
   currentImageIndex: number;
@@ -16,7 +16,6 @@ export const CarouselImageArea = ({
   images,
   currentImageIndex,
 }: TCarouselImageAreaProps) => {
-  // const [isImagesLoaded, imagesSizes] = useImagesSizes(images);
   const [frameHeight, setFrameHeight] = useState(0);
   const frameRef = useRef<HTMLDivElement>(null);
 
@@ -28,28 +27,31 @@ export const CarouselImageArea = ({
 
   if (!isImagesLoaded) return <div>loading...</div>;
 
-  const currentImageSize = imagesSizes[currentImageIndex];
+  const currentImageSize = imagesSizes[images[currentImageIndex]];
+
   const style = {
-    width: `calc(${frameHeight}px * ${currentImageSize.width / currentImageSize.height})`,
+    width: `${(frameHeight * currentImageSize.width) / currentImageSize.height}px`,
   };
 
   return (
     <div
       ref={frameRef}
       style={style}
-      className="relative flex flex-[1] overflow-hidden rounded-xl shadow-lg"
+      className={
+        "relative flex flex-[1] overflow-hidden rounded-xl shadow-lg transition-[width] duration-1000"
+      }
     >
       <div
         ref={imagesRef}
         className="absolute flex h-full transition-all duration-1000"
       >
-        {images.map((image, i) => (
+        {images.map((image) => (
           <div key={image} className="mr-4 h-full">
             <HorizontalRelativeImage
               alt={image}
               src={image}
               height={frameHeight}
-              imageSize={imagesSizes[i]}
+              imageSize={imagesSizes[image]}
             />
           </div>
         ))}

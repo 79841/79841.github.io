@@ -19,7 +19,7 @@ export const HorizontalRelativeImage = ({
 
   const style = {
     height: `${height}px`,
-    width: `calc(${height}px * ${imageSize.width / imageSize.height})`,
+    width: `${(height * imageSize.width) / imageSize.height}px`,
   };
 
   return (

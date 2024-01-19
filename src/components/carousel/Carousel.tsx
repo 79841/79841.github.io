@@ -5,7 +5,7 @@ import { CarouselIndicator } from "./CarouselIndicator";
 
 type TCarouselProps = {
   isImagesLoaded: boolean;
-  imagesSizes: { width: number; height: number }[];
+  imagesSizes: Record<string, { width: number; height: number }>;
   images: string[];
 };
 export const Carousel = ({

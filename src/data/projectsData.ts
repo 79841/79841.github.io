@@ -47,7 +47,20 @@ export const projectsData: Record<string, TProjectData> = {
       "https://github.com/79841/letsdo-back",
     ],
   },
-
+  metflix: {
+    name: "Metflix",
+    link: "/",
+    description: "TMDB를 사용한 나만의 영화 웹 사이트",
+    content: "",
+    techStack: ["HTML", "CSS", "Javascript"],
+    date: "",
+    images: [
+      "/images/projects/metflix/metflix-1.png",
+      "/images/projects/metflix/metflix-2.png",
+      "/images/projects/metflix/metflix-3.png",
+    ],
+    github: [],
+  },
   portfolio: {
     name: "Portfolio",
     link: "/projects/portfolio",
