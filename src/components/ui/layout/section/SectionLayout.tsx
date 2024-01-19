@@ -23,7 +23,7 @@ export const SectionLayout = ({
     >
       <div className="mb-auto"></div>
       {children}
-      <div className="sticky bottom-12 mt-auto min-h-12 -translate-y-[2rem]">
+      <div className="sticky bottom-12 mt-auto min-h-16 -translate-y-[2rem]">
         {inView && <Indicator nextSection={nextSection} />}
       </div>
     </section>
