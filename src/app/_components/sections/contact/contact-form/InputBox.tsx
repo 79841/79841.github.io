@@ -6,7 +6,7 @@ export const InputBox = ({ className, ...props }: TInputBoxProps) => {
   return (
     <input
       className={cn(
-        "h-12 rounded-xl border p-2 px-4 focus:outline-none",
+        "h-12 w-full rounded-xl border p-2 px-4 focus:outline-none",
         className,
       )}
       {...props}

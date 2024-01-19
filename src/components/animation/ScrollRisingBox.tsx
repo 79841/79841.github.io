@@ -8,7 +8,10 @@ export const ScrollRisingBox = ({ children }: TScrollRisingBoxProps) => {
   const [ref, inView] = useInView();
 
   return (
-    <div ref={ref} className={cn("opacity-0", inView && "animate-rising")}>
+    <div
+      ref={ref}
+      className={cn("w-full opacity-0", inView && "animate-rising")}
+    >
       {children}
     </div>
   );

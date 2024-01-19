@@ -3,12 +3,15 @@ import { SectionTitle } from "@/components/ui/title";
 import React from "react";
 import { navigationLinks } from "@/data";
 import { ContactForm } from "./contact-form";
+import { ScrollRisingBox } from "@/components/animation";
 
 export const ContactSection = () => {
   return (
     <SectionLayout id="contact" nextSection={navigationLinks.home}>
       <div className="pb-24">
-        <SectionTitle title="Contact" />
+        <ScrollRisingBox>
+          <SectionTitle title="Contact" />
+        </ScrollRisingBox>
       </div>
       <ContactForm />
     </SectionLayout>
