@@ -1,8 +1,8 @@
 import { IntroSection } from "./_components/sections/intro";
-import { ContactSection } from "./_components/sections/contact";
 import { ExperienceSection } from "./_components/sections/experience";
-import { ProjectSection } from "./_components/sections/project";
 import { SkillSection } from "./_components/sections/skill";
+import { ProjectSection } from "./_components/sections/project";
+import { ContactSection } from "./_components/sections/contact";
 
 export default function Home() {
   return (
