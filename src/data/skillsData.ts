@@ -45,21 +45,21 @@ export const skillsData: TSkillCategory[] = [
         proficiency: 70,
         proficiencyDetail:
           "상태관리를 하기 위해 필요한 코드가 리덕스에 비해 적고 간편하여 사용하게 되었습니다. 특히, 의존성이 있는 상태를 처리할 때 Selector를 유용하게 사용했습니다.",
-        defaultImage: "/images/skills/recoil-logo.avif",
+        defaultImage: "/images/skills/recoil-logo.webp",
       },
       {
         name: "Tanstack Query",
         proficiency: 70,
         proficiencyDetail:
           "Lazy 쿼리 사용시 invalidateQueires가 무시되는 문제를 캐시 타임을 조정하여 해결하면서 전반적인 개념을 깊이 다지게 되었습니다.",
-        defaultImage: "/images/skills/tanstack-original.avif",
+        defaultImage: "/images/skills/tanstack-original.webp",
       },
       {
         name: "Styled Components",
         proficiency: 70,
         proficiencyDetail:
           "JSON 형태로 스타일을 전달하는 inline style의 단점을 해결하기 위해 사용했습니다. CSS in JS이기에 재사용성이 뛰어나고 디자인을 로직에서 분리하는데 용이했으나 SSR 사용시 반짝임 문제(FUOC, 추가 설정으로 해결 가능)와 페이지 성능이 떨어지는 문제, 번들사이즈가 과하게 커지는 문제로 최근들어 사용하지 않고 있습니다.",
-        defaultImage: "/images/skills/styled-components-logo.avif",
+        defaultImage: "/images/skills/styled-components-logo.webp",
       },
       {
         name: "Tailwindcss",
@@ -78,7 +78,7 @@ export const skillsData: TSkillCategory[] = [
         proficiency: 100,
         proficiencyDetail:
           "브라우저를 제외한 대부분의 환경에서 Node를 사용했습니다. 순수 JS만 사용하기 보다는 프레임워크와 함께 사용했으며 백엔드의 경우 Express와 Nest를 사용했습니다.",
-        defaultImage: "/images/skills/nodejs-logo.avif",
+        defaultImage: "/images/skills/nodejs-logo.webp",
       },
       {
         name: "Express.js",
@@ -145,7 +145,7 @@ export const skillsData: TSkillCategory[] = [
         proficiency: 60,
         proficiencyDetail:
           "테스트 서버 같은 간단한 배포를 위해 자주 사용합니다. 현재 개인 블로그 또한 vercel로 배포하여 사용하고 있습니다.",
-        defaultImage: "/images/skills/vercel-logo.avif",
+        defaultImage: "/images/skills/vercel-logo.webp",
       },
       {
         name: "Docker",
@@ -211,7 +211,7 @@ export const skillsData: TSkillCategory[] = [
         proficiency: 50,
         proficiencyDetail:
           "회의에 참여하면 자신만의 캐릭터가 생겨 도트형태의 VR 환경을 제공하는 온라인 회의 플랫폼입니다. 재미를 위해 사용하기 시작했으나 eraser같은 편리한 툴을 제공하여 지금까지 사용하고 있습니다.",
-        defaultImage: "/images/skills/gather-logo.avif",
+        defaultImage: "/images/skills/gather-logo.webp",
       },
       {
         name: "Figma",
