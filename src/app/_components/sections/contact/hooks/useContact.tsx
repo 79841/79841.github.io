@@ -16,8 +16,7 @@ export const useContact = () => {
       message: formData.get("message"),
     });
 
-    if (!validatedData.success)
-      return { message: validatedData.error.toString() };
+    if (!validatedData.success) return { message: "Failed..." };
 
     const res = await postContact(validatedData.data);
 
