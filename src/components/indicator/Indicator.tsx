@@ -17,10 +17,14 @@ export const Indicator = ({ nextSection }: TIndicatorProps) => {
   }, []);
 
   return (
-    <div className="sticky flex h-16 w-40 items-center justify-center">
+    <div className="sticky flex h-16 items-center justify-center">
       <div className="flex animate-indicator-show-up items-center justify-center overflow-hidden rounded-full bg-zinc-100 bg-opacity-50 p-2 backdrop-blur-md">
         <div className="flex flex-[1] items-center justify-center">
-          {isContentVisible && nextSection.name}
+          {isContentVisible && (
+            <div>
+              Go to <span>{nextSection.name}</span>
+            </div>
+          )}
         </div>
         <Link href={nextSection.path}>
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white">
