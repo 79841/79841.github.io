@@ -38,12 +38,12 @@ export const CarouselImageArea = ({
       ref={frameRef}
       style={style}
       className={
-        "relative flex flex-[1] overflow-hidden rounded-xl shadow-lg transition-[width] duration-1000"
+        "relative flex flex-[1] overflow-hidden rounded-xl shadow-lg transition-[width] duration-500"
       }
     >
       <div
         ref={imagesRef}
-        className="absolute flex h-full transition-all duration-1000"
+        className="absolute flex h-full transition-all duration-500"
       >
         {images.map((image) => (
           <div key={image} className="mr-4 h-full">
