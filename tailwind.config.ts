@@ -32,7 +32,7 @@ const config: Config = {
             height: "3.5rem",
           },
           "100%": {
-            width: "10rem",
+            width: "11rem",
             height: "3.5rem",
           },
         },
