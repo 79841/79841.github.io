@@ -13,7 +13,7 @@ export const Carousel = ({
   imagesSizes,
   images,
 }: TCarouselProps) => {
-  const [ref, currentImageIndex, handleInit] = useMovingImagesBox(2000);
+  const [ref, currentImageIndex, handleInit] = useMovingImagesBox(3000);
 
   return (
     <div className="flex h-full w-fit flex-col items-center">
