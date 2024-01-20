@@ -9,7 +9,7 @@ import { navigationLinks } from "@/data";
 export const IntroSection = () => {
   return (
     <SectionLayout id={"home"} nextSection={navigationLinks.skill}>
-      <div className="flex translate-y-16 flex-col items-center gap-24">
+      <div className="flex flex-col items-center gap-16">
         <ProfileImage />
         <div className="flex animate-rising flex-col gap-8">
           <IntroPhrase />
