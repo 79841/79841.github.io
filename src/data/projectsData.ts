@@ -47,6 +47,20 @@ export const projectsData: Record<string, TProjectData> = {
       "https://github.com/79841/letsdo-back",
     ],
   },
+  moviz: {
+    name: "MoviZ",
+    link: "/",
+    description: "TMDB를 사용한 나만의 영화 웹 사이트",
+    content: "",
+    techStack: ["React", "Styled-components"],
+    date: "",
+    images: [
+      "/images/projects/moviz/moviz-1.png",
+      "/images/projects/moviz/moviz-2.png",
+      "/images/projects/moviz/moviz-3.png",
+    ],
+    github: [],
+  },
   metflix: {
     name: "Metflix",
     link: "/",
