@@ -74,7 +74,7 @@ export const projectsData: Record<string, TProjectData> = {
       "/images/projects/moviz/moviz-2.png",
       "/images/projects/moviz/moviz-3.png",
     ],
-    github: ["https://github.com/79841/beyond-movie-app.git"],
+    github: ["https://github.com/79841/beyond-movie-app"],
   },
   metflix: {
     name: "Metflix",
@@ -88,7 +88,7 @@ export const projectsData: Record<string, TProjectData> = {
       "/images/projects/metflix/metflix-2.png",
       "/images/projects/metflix/metflix-3.png",
     ],
-    github: ["https://github.com/79841/metflix.git"],
+    github: ["https://github.com/79841/metflix"],
   },
   portfolio: {
     name: "Portfolio",
@@ -112,6 +112,24 @@ export const projectsData: Record<string, TProjectData> = {
       "/images/projects/portfolio/portfolio-skill.webp",
     ],
     github: ["https://github.com/79841/portfolio"],
+  },
+  newPortfolio: {
+    name: "New Portfolio",
+    link: "",
+    description: "리뉴얼 포트폴리오 사이트",
+    content: "깔끔한 디자인으로 리뉴얼한 Nextjs14 기반의 포트폴리오 사이트",
+    techStack: [
+      "Next.js14 App Router",
+      "Tailwindcss",
+      "Image Optimization",
+      "Responsive Web",
+    ],
+    date: "",
+    images: [
+      "/images/projects/new-portfolio/new-portfolio-1.webp",
+      "/images/projects/new-portfolio/new-portfolio-2.webp",
+    ],
+    github: ["https://github.com/79841/79841.github.io"],
   },
   bookRecommender: {
     name: "Book Recommender",
