@@ -22,8 +22,8 @@ export const ProjectImages = ({ images, inView }: TProjectImagesProps) => {
           )}
         </div>
       ) : (
-        <div className="flex h-full w-52 items-center justify-center rounded-xl border text-base text-zinc-500">
-          No Images
+        <div className="flex h-full w-52 items-center justify-center rounded-xl pb-4 text-base text-zinc-500">
+          No Images..
         </div>
       )}
     </div>
