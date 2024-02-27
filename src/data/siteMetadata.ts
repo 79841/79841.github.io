@@ -18,7 +18,7 @@ export const siteMetadata = {
   username: "LEtMeDEv",
   language: "ko",
   locale: "ko_KR",
-  profilePrimary: "/images/profile/profile.webp",
+  profilePrimary: "/images/profile/profile_compressed.webp",
   profileSecondary: "/images/profile/profile-secondary.avif",
   resumePath: "/docs/명인지_이력서.pdf",
 };
