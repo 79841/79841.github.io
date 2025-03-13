@@ -1,58 +1,86 @@
-import React, { RefObject, useEffect, useRef, useState } from "react";
-import { HorizontalRelativeImage } from "./relative-image";
+import Image from "next/image";
+import { RefObject, useEffect, useRef, useState } from "react";
 
 type TCarouselImageAreaProps = {
-  isImagesLoaded: boolean;
-  imagesSizes: Record<string, { width: number; height: number }>;
   imagesRef: RefObject<HTMLDivElement>;
   images: string[];
   currentImageIndex: number;
 };
 
 export const CarouselImageArea = ({
-  isImagesLoaded,
-  imagesSizes,
   imagesRef,
   images,
-  currentImageIndex,
 }: TCarouselImageAreaProps) => {
-  const [frameHeight, setFrameHeight] = useState(0);
   const frameRef = useRef<HTMLDivElement>(null);
+  const [frameWidth, setFrameWidth] = useState(0);
 
   useEffect(() => {
-    if (frameRef.current) {
-      setFrameHeight(frameRef.current.getBoundingClientRect().height);
-    }
-  }, [isImagesLoaded]);
+    if (!frameRef.current) return;
+    const width = frameRef.current.getBoundingClientRect().width;
+    setFrameWidth(() => {
+      console.log(width);
+      return width;
+    });
 
-  if (!isImagesLoaded) return <div>loading...</div>;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width } = entry.contentRect;
+        setFrameWidth(width);
+      }
+    });
 
-  const currentImageSize = imagesSizes[images[currentImageIndex]];
+    observer.observe(frameRef.current);
 
-  const style = {
-    width: `${(frameHeight * currentImageSize.width) / currentImageSize.height}px`,
-  };
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div
       ref={frameRef}
-      style={style}
-      className={
-        "relative flex flex-[1] overflow-hidden rounded-xl shadow-lg transition-[width] duration-500"
-      }
+      className="relative flex h-full w-full justify-start overflow-hidden rounded-xl transition-[width] duration-500"
     >
       <div
         ref={imagesRef}
-        className="absolute flex h-full transition-all duration-500"
+        className="absolute flex h-full gap-4 transition-all duration-500"
       >
         {images.map((image) => (
-          <div key={image} className="mr-4 h-full">
-            <HorizontalRelativeImage
-              alt={image}
-              src={image}
-              height={frameHeight}
-              imageSize={imagesSizes[image]}
-            />
+          <div
+            key={image}
+            className="flex h-full justify-center overflow-hidden"
+            style={{ width: `${frameWidth}px` }}
+          >
+            {/*
+              1) 배경 + blur 레이어
+                 - absolute + inset-0로 부모 영역 전부 덮음
+                 - z-index: 0으로 가장 뒤에 위치
+                 - backgroundImage와 filter: blur 적용
+            */}
+            <div
+              className="relative h-full w-full"
+              style={{ position: "relative" }}
+            >
+              <div
+                className="absolute inset-0 z-0"
+                style={{
+                  backgroundImage: `url(${image})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  filter: "blur(32px)",
+                }}
+              />
+
+              {/*
+                2) 실제 선명한 이미지 레이어
+                   - z-index: 10 등으로 배경 위에 표시
+                   - fill + object-contain으로 원본 비율 유지
+              */}
+              <Image
+                src={image}
+                alt={image}
+                fill
+                className="z-10 rounded-xl object-contain shadow-xl"
+              />
+            </div>
           </div>
         ))}
       </div>

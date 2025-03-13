@@ -8,9 +8,9 @@ export const ResumeButton = () => {
       href={siteMetadata.resumePath}
       download={siteMetadata.resumePath.split("/").at(-1)}
       target="_blank"
-      className="flex w-fit items-center justify-center gap-2 rounded-full border bg-blue-600 px-7 py-4 text-white"
+      className="flex h-14 w-fit items-center justify-center gap-2 rounded-full border bg-blue-600 px-7 text-white"
     >
-      <span>Resume</span>
+      <span className="text-base">Resume</span>
       <IoMdDownload size={18} />
     </Link>
   );

@@ -20,20 +20,32 @@ const config: Config = {
         },
         rising: {
           from: { opacity: "0", transform: "translateY(35px)" },
-          to: { opacity: "1", tranform: "translateY(0)" },
+          to: { opacity: "1", transform: "translateY(0)" },
         },
         "indicator-show-up": {
           "0%": {
-            width: "0rem",
+            "max-width": "0rem",
             height: "0rem",
           },
           "80%": {
-            width: "3.6rem",
+            "max-width": "3.5rem",
             height: "3.5rem",
           },
           "100%": {
-            width: "11rem",
+            "max-width": "20rem",
             height: "3.5rem",
+          },
+        },
+        "indicator-arrow-show-up": {
+          "0%": {
+            width: "0",
+            height: "0",
+            transform: "translateX(0)",
+          },
+          "100%": {
+            width: "2.5rem",
+            height: "2.5rem",
+            transform: "translateX(100%)",
           },
         },
         "indicator-disappear": {
@@ -57,6 +69,8 @@ const config: Config = {
         "indicator-show-up": "1.5s ease-in-out 1 forwards indicator-show-up",
         "indicator-disappear":
           "1.5s ease-in-out 1 forwards indicator-disappear",
+        "indicator-arrow-show-up":
+          "1.5s ease-in-out 1 forwards indicator-arrow-show-up",
       },
     },
   },

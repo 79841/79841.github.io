@@ -1,5 +1,4 @@
 import { TExperienceData } from "@/types";
-import React from "react";
 import { Experience } from "./Experience";
 
 type TExperiencesByYear = {
@@ -15,7 +14,7 @@ export const ExperiencesByYear = ({
       <div className="flex w-24 items-center justify-center font-bold">
         {year}
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
         {experiences.map((experience) => (
           <Experience key={experience.title} experience={experience} />
         ))}

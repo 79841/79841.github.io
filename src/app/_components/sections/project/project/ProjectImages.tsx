@@ -1,22 +1,21 @@
 "use client";
 import { Carousel } from "@/components/carousel";
-import { useImagesSizes } from "@/hooks";
 
 type TProjectImagesProps = {
   images: string[];
   inView: boolean;
 };
 export const ProjectImages = ({ images, inView }: TProjectImagesProps) => {
-  const [isImagesLoaded, imagesSizes] = useImagesSizes(images);
+  // const [isImagesLoaded, imagesSizes] = useImagesSizes(images);
 
   return (
-    <div className="flex flex-[1] justify-center">
+    <div className="flex w-full justify-center">
       {images.length > 0 ? (
-        <div className="h-[17.5rem] sm:h-[30rem]">
+        <div className="h-[17.5rem] w-full sm:h-[30rem]">
           {inView && (
             <Carousel
-              isImagesLoaded={isImagesLoaded}
-              imagesSizes={imagesSizes}
+              // isImagesLoaded={isImagesLoaded}
+              // imagesSizes={imagesSizes}
               images={images}
             />
           )}

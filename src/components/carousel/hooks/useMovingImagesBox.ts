@@ -17,10 +17,11 @@ export const useMovingImagesBox = (duration: number) => {
       if (currentImageIndex >= ref.current.children.length - 1) return;
       setCurrentPosition((prev) => {
         if (!ref.current) return prev;
-        return (
-          prev +
-          ref.current.children[currentImageIndex].getBoundingClientRect().width
-        );
+        const distance =
+          ref.current.children[currentImageIndex].getBoundingClientRect().width;
+        // console.log(ref.current.getBoundingClientRect().width, distance);
+        // console.log(ref.current.children[currentImageIndex]);
+        return prev + distance;
       });
       setCurrentImageIndex((prev) => prev + 1);
     }, duration);
