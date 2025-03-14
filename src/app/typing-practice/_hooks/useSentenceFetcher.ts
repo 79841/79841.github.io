@@ -77,13 +77,13 @@ export default function useSentenceFetcher(): UseSentenceFetcherResult {
             const bodyParagraphs = post.body
               .split(/\.\s+|\n+/) // 마침표+공백 또는 줄바꿈으로 분리
               .filter((para: string) => para.trim().length > 30) // 너무 짧은 문장 제외
-              .map((para: string) => para.trim() + "."); // 마침표 추가
+              .map((para: string) => para.trim()); // 마침표 추가
 
             paragraphs.push(...bodyParagraphs);
           });
 
           // 제목도 연습용 문장으로 추가
-          const titles = data.posts.map((post: any) => post.title.trim() + ".");
+          const titles = data.posts.map((post: any) => post.title.trim());
 
           // 중복 제거 및 셔플
           const allSentences = Array.from(new Set([...paragraphs, ...titles]));
