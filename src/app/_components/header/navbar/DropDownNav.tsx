@@ -1,7 +1,7 @@
 "use client";
 import { navigationLinks } from "@/data";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useState } from "react";
 import { IoIosMenu } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 export const DropDownNav = () => {
@@ -21,7 +21,15 @@ export const DropDownNav = () => {
       {isVisible && (
         <div className="flex w-full flex-col gap-2 pr-1 text-right backdrop-blur-md">
           {Object.values(navigationLinks).map((linkInfo) => (
-            <Link key={linkInfo.name} href={linkInfo.path}>
+            <Link
+              key={linkInfo.name}
+              href={linkInfo.path}
+              className={
+                linkInfo.isSpecial
+                  ? "font-bold text-blue-500 transition-colors hover:text-blue-700"
+                  : ""
+              }
+            >
               {linkInfo.name}
             </Link>
           ))}

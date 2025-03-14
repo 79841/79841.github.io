@@ -62,6 +62,33 @@ const config: Config = {
             height: "0rem",
           },
         },
+        fadeIn: {
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
+          },
+        },
+        "skeleton-pulse": {
+          "0%": {
+            opacity: "0.6",
+          },
+          "50%": {
+            opacity: "0.8",
+          },
+          "100%": {
+            opacity: "0.6",
+          },
+        },
+        "simple-shimmer": {
+          "0%": {
+            opacity: "0.5",
+          },
+          "100%": {
+            opacity: "0.8",
+          },
+        },
       },
       animation: {
         "show-up": "1s ease-in-out 1 forwards show-up",
@@ -71,6 +98,9 @@ const config: Config = {
           "1.5s ease-in-out 1 forwards indicator-disappear",
         "indicator-arrow-show-up":
           "1.5s ease-in-out 1 forwards indicator-arrow-show-up",
+        fadeIn: "0.4s ease-out forwards fadeIn",
+        "skeleton-pulse": "1.5s ease-in-out infinite skeleton-pulse",
+        shimmer: "1.5s infinite alternate simple-shimmer",
       },
     },
   },

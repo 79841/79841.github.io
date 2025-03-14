@@ -6,4 +6,9 @@ export const navigationLinks: Record<string, TNavigation> = {
   experience: { name: "Experience", path: "/#experience" },
   project: { name: "Project", path: "/#project" },
   contact: { name: "Contact", path: "/#contact" },
+  typingPractice: {
+    name: "Typing",
+    path: "/typing-practice",
+    isSpecial: true,
+  },
 };
