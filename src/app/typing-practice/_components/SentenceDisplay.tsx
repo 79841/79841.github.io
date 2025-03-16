@@ -12,7 +12,7 @@ const SentenceDisplay: React.FC<SentenceDisplayProps> = ({
   isFocused,
 }) => {
   return (
-    <div className="relative whitespace-pre-wrap break-words">
+    <div className="relative whitespace-pre-wrap break-words font-mono">
       {currentSentence.split("").map((expectedChar, index) => {
         const userChar = typedText[index]; // 사용자가 입력한 문자
         const isTyped = index < typedText.length; // 이미 입력된 문자인지
