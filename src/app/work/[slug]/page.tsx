@@ -53,8 +53,8 @@ export default async function WorkPage({ params }: WorkPageProps) {
             {work.period}
           </p>
           <h1 className="mt-4 text-[clamp(1.8rem,4vw,2.8rem)] font-bold tracking-[-0.03em]">
-            {work.name}
-            <span className="ml-3 text-[0.45em] font-normal text-muted">
+            {work.name}{" "}
+            <span className="ml-1 text-[0.45em] font-normal text-muted">
               {work.tagline}
             </span>
           </h1>
@@ -68,7 +68,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
       <Reveal>
         <div className="mono-card group">
           {work.phone ? (
-            <div className="flex items-end justify-center gap-5 overflow-hidden rounded-lg bg-imgbg px-10 pt-10">
+            <div className="flex items-end justify-center gap-5 overflow-hidden rounded-lg bg-imgbg ring-1 ring-hairline px-10 pt-10">
               {work.images.map((image) => (
                 <Image
                   key={image.src}
@@ -82,7 +82,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
               ))}
             </div>
           ) : (
-            <div className="overflow-hidden rounded-lg bg-imgbg">
+            <div className="overflow-hidden rounded-lg bg-imgbg ring-1 ring-hairline">
               <Image
                 src={work.images[0].src}
                 alt={`${work.name} 화면`}
@@ -142,7 +142,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
             {work.detail.gallery.map((image) => (
               <div key={image.src} className="mono-card group">
                 <div
-                  className={`overflow-hidden rounded-lg bg-imgbg ${
+                  className={`overflow-hidden rounded-lg bg-imgbg ring-1 ring-hairline ${
                     work.phone ? "px-6 pt-6" : ""
                   }`}
                 >

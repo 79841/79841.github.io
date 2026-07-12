@@ -8,7 +8,7 @@ import { SectionLabel } from "@/features/site/section-label";
 function WorkVisual({ work }: { work: Work }) {
   if (work.phone) {
     return (
-      <div className="flex items-end justify-center gap-5 overflow-hidden rounded-lg bg-imgbg px-10 pt-10">
+      <div className="flex items-end justify-center gap-5 overflow-hidden rounded-lg bg-imgbg ring-1 ring-hairline px-10 pt-10">
         {work.images.map((image) => (
           <Image
             key={image.src}
@@ -25,7 +25,7 @@ function WorkVisual({ work }: { work: Work }) {
 
   if (work.wide) {
     return (
-      <div className="overflow-hidden rounded-lg bg-imgbg">
+      <div className="overflow-hidden rounded-lg bg-imgbg ring-1 ring-hairline">
         <Image
           src={work.images[0].src}
           alt={`${work.name} 화면`}
@@ -39,7 +39,7 @@ function WorkVisual({ work }: { work: Work }) {
   }
 
   return (
-    <div className="flex justify-center overflow-hidden rounded-lg bg-imgbg px-10 pt-10">
+    <div className="flex justify-center overflow-hidden rounded-lg bg-imgbg ring-1 ring-hairline px-10 pt-10">
       <Image
         src={work.images[0].src}
         alt={`${work.name} 화면`}
@@ -53,40 +53,34 @@ function WorkVisual({ work }: { work: Work }) {
 
 function WorkCaption({ work }: { work: Work }) {
   return (
-    <div
-      className={`mt-4 grid gap-2 ${
-        work.wide ? "sm:grid-cols-[1fr_auto] sm:items-baseline" : ""
-      }`}
-    >
-      <div className={work.wide ? "" : "flex items-baseline justify-between gap-4"}>
+    <div className="mt-4 space-y-1.5">
+      <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
         <h3
           className={`font-bold tracking-[-0.01em] ${
             work.wide ? "text-[16px]" : "text-[14.5px]"
           }`}
         >
           {work.name}
-          <span
-            className={`ml-2.5 font-normal text-muted ${
-              work.wide ? "text-[13px]" : "text-[12.5px]"
-            }`}
-          >
-            {work.tagline}
-          </span>
         </h3>
-        {!work.wide && work.period ? (
-          <p className="shrink-0 font-mono text-[10px] text-ghost">
-            {work.period}
-          </p>
-        ) : null}
+        <span
+          className={`font-normal text-muted ${
+            work.wide ? "text-[13px]" : "text-[12.5px]"
+          }`}
+        >
+          {work.tagline}
+        </span>
       </div>
       <p className="font-mono text-[10.5px] tracking-[0.05em] text-faint">
         {work.stack}
-        {work.wide && work.period ? (
-          <span className="ml-4 text-ghost">{work.period}</span>
+        {work.period ? (
+          <>
+            {" "}
+            <span className="ml-3 text-ghost">{work.period}</span>
+          </>
         ) : null}
       </p>
       {work.description ? (
-        <p className="max-w-lg text-[13px] leading-relaxed text-muted sm:col-span-2">
+        <p className="max-w-lg pt-1 text-[13px] leading-relaxed text-muted">
           {work.description}
         </p>
       ) : null}
