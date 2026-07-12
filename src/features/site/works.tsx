@@ -115,18 +115,11 @@ export function Works() {
       </Reveal>
 
       <div className="grid gap-x-10 gap-y-16 sm:grid-cols-2">
-        {rest.map((work, i) => {
-          const lastAndOdd = i === rest.length - 1 && rest.length % 2 === 1;
-          return (
-            <Reveal
-              key={work.name}
-              delay={(i % 2) * 100}
-              className={lastAndOdd ? "sm:col-span-2" : ""}
-            >
-              <WorkCard work={work} />
-            </Reveal>
-          );
-        })}
+        {rest.map((work, i) => (
+          <Reveal key={work.name} delay={(i % 2) * 100}>
+            <WorkCard work={work} />
+          </Reveal>
+        ))}
       </div>
 
       <Reveal>
