@@ -25,13 +25,13 @@ function WorkVisual({ work }: { work: Work }) {
 
   if (work.wide) {
     return (
-      <div className="overflow-hidden rounded-lg bg-imgbg ring-1 ring-hairline">
+      <div className="aspect-[2/1] overflow-hidden rounded-lg bg-imgbg ring-1 ring-hairline">
         <Image
           src={work.images[0].src}
           alt={`${work.name} 화면`}
           width={work.images[0].width}
           height={work.images[0].height}
-          className="mono-img w-full group-hover:scale-[1.005]"
+          className="mono-img h-full w-full object-cover object-top group-hover:scale-[1.005]"
           priority
         />
       </div>
@@ -45,7 +45,7 @@ function WorkVisual({ work }: { work: Work }) {
         alt={`${work.name} 화면`}
         width={work.images[0].width}
         height={work.images[0].height}
-        className="mono-img w-full rounded-t-md shadow-[0_2px_24px_rgb(0_0_0/0.10)]"
+        className="mono-img max-h-[360px] w-full rounded-t-md object-cover object-top shadow-[0_2px_24px_rgb(0_0_0/0.10)]"
       />
     </div>
   );
