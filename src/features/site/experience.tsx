@@ -1,11 +1,12 @@
+import { SectionLabel } from "@/features/site/section-label";
 import { experiences } from "@/shared/lib/profile";
 import { Reveal } from "@/shared/ui/reveal";
-import { SectionLabel } from "@/features/site/section-label";
 
-export function Experience() {
+/** 연도 역순 타임라인 — 메인에서 /about으로 옮겨왔다 */
+export function Experience({ index = "02" }: { index?: string }) {
   return (
     <section id="experience" className="mt-32 scroll-mt-16">
-      <SectionLabel index="02" title="Experience" />
+      <SectionLabel index={index} title="Experience" />
       <ol className="divide-y divide-hairline">
         {experiences.map((entry, i) => (
           <Reveal key={entry.org} delay={i * 70}>

@@ -1,55 +1,57 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { profile } from "@/shared/lib/profile";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/features/site/theme-toggle";
+import { profile } from "@/shared/lib/profile";
 
 const links = [
-  { id: "work", label: "Work" },
-  { id: "experience", label: "Experience" },
-  { id: "about", label: "About" },
-  { id: "contact", label: "Contact" },
+  { href: "/", label: "Home" },
+  { href: "/work", label: "Work" },
+  { href: "/blog", label: "Blog" },
+  { href: "/about", label: "About" },
 ];
 
-export function Nav() {
-  const [active, setActive] = useState<string | null>(null);
+/** trailingSlash: true라 브라우저 경로는 "/work/"로 들어온다 — 비교 전에 끝 슬래시를 떼어낸다 */
+function normalize(pathname: string): string {
+  return pathname.replace(/\/+$/, "") || "/";
+}
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        }
-      },
-      { rootMargin: "-35% 0px -55% 0px" },
-    );
-    for (const { id } of links) {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    }
-    return () => observer.disconnect();
-  }, []);
+/** 상세 페이지에서도 상위 항목이 켜져 있어야 한다 — /work/argus → Work, /blog/tag/react → Blog */
+export function isActive(pathname: string, href: string): boolean {
+  const current = normalize(pathname);
+  if (href === "/") return current === "/";
+  return current === href || current.startsWith(`${href}/`);
+}
+
+export function Nav() {
+  const pathname = usePathname();
 
   return (
     <nav className="flex items-baseline justify-between py-8">
-      <a
-        href="#top"
+      <Link
+        href="/"
         className="text-[14px] font-semibold tracking-[-0.01em] transition-colors hover:text-muted"
       >
         {profile.name}
-      </a>
+      </Link>
+
       <div className="flex items-baseline gap-5 text-[13px] sm:gap-7">
-        {links.map((link) => (
-          <a
-            key={link.id}
-            href={`#${link.id}`}
-            className={`transition-colors hover:text-ink ${
-              active === link.id ? "text-ink" : "text-muted"
-            }`}
-          >
-            {link.label}
-          </a>
-        ))}
+        {links.map((link) => {
+          const active = isActive(pathname, link.href);
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={active ? "page" : undefined}
+              className={`transition-colors hover:text-ink ${
+                active ? "text-ink" : "text-muted"
+              }`}
+            >
+              {link.label}
+            </Link>
+          );
+        })}
         <ThemeToggle />
       </div>
     </nav>

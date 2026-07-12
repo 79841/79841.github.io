@@ -1,11 +1,12 @@
-import { footerNote, profile } from "@/shared/lib/profile";
-import { Reveal } from "@/shared/ui/reveal";
 import { SectionLabel } from "@/features/site/section-label";
+import { profile } from "@/shared/lib/profile";
+import { Reveal } from "@/shared/ui/reveal";
 
+/** 메인 마무리 CTA — 푸터는 site-footer.tsx로 분리해 전 페이지 공통이 됐다 */
 export function Contact() {
   return (
     <section id="contact" className="mt-32 scroll-mt-16">
-      <SectionLabel index="04" title="Contact" />
+      <SectionLabel index="05" title="Contact" />
       <Reveal>
         <p className="max-w-xl text-[clamp(1.4rem,3vw,2rem)] leading-[1.4] font-bold tracking-[-0.02em]">
           함께 만들 것이 있다면,
@@ -38,11 +39,6 @@ export function Contact() {
           </a>
         </div>
       </Reveal>
-
-      <footer className="mt-24 flex flex-wrap items-baseline justify-between gap-2 border-t border-hairline py-10 font-mono text-[10px] tracking-[0.15em] text-ghost">
-        <span>© 2026 {profile.nameEn.toUpperCase()}</span>
-        <span>{footerNote.toUpperCase()}</span>
-      </footer>
     </section>
   );
 }

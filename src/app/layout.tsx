@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist_Mono } from "next/font/google";
+import { Nav } from "@/features/site/nav";
+import { SiteFooter } from "@/features/site/site-footer";
 import { profile, SITE_URL } from "@/shared/lib/profile";
 import "./globals.css";
 
@@ -75,7 +77,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {children}
+        {/* 모든 페이지가 같은 셸을 쓴다 — 예전엔 페이지마다 컨테이너와 nav를 각자 들고 있었다 */}
+        <div className="mx-auto max-w-4xl px-6">
+          <Nav />
+          {children}
+          <SiteFooter />
+        </div>
       </body>
     </html>
   );

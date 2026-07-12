@@ -96,6 +96,21 @@ body {
   }
 }
 
+/* 블로그 본문 — 코드 블록 안의 <code>는 인라인 코드 스타일을 벗는다.
+   `.post-body pre code`가 mdx-components의 유틸리티 클래스보다 명시도가 높다. */
+.post-body pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  box-shadow: none;
+}
+
+/* 본문 첫 요소 위의 여백은 헤더가 이미 만들었다 */
+.post-body > :first-child {
+  margin-top: 0;
+}
+
 /* Scroll-reveal — toggled by the Reveal component */
 .reveal {
   opacity: 0;

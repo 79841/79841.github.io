@@ -33,23 +33,23 @@ export default async function WorkPage({ params }: WorkPageProps) {
   const next = works[(index + 1) % works.length];
 
   return (
-    <div className="mx-auto max-w-4xl px-6">
-      <nav className="flex items-baseline justify-between py-8">
-        <Link
-          href="/#work"
-          className="font-mono text-[11px] tracking-[0.1em] text-muted transition-colors hover:text-ink"
-        >
-          ← {profile.name}
-        </Link>
-        <span className="font-mono text-[10px] tracking-[0.15em] text-ghost">
-          WORK {String(index + 1).padStart(2, "0")} /{" "}
-          {String(works.length).padStart(2, "0")}
-        </span>
-      </nav>
-
+    <main>
       <header className="pt-16 pb-14">
         <Reveal>
-          <p className="font-mono text-[10.5px] tracking-[0.15em] text-ghost">
+          <div className="flex items-baseline justify-between gap-4">
+            <Link
+              href="/work"
+              className="font-mono text-[10px] tracking-[0.2em] text-ghost transition-colors hover:text-ink"
+            >
+              ← WORK
+            </Link>
+            <span className="font-mono text-[10px] tracking-[0.15em] text-ghost">
+              {String(index + 1).padStart(2, "0")} /{" "}
+              {String(works.length).padStart(2, "0")}
+            </span>
+          </div>
+
+          <p className="mt-5 font-mono text-[10.5px] tracking-[0.15em] text-ghost">
             {work.period}
           </p>
           <h1 className="mt-4 text-[clamp(1.8rem,4vw,2.8rem)] font-bold tracking-[-0.03em]">
@@ -184,6 +184,6 @@ export default async function WorkPage({ params }: WorkPageProps) {
           </span>
         </Link>
       </div>
-    </div>
+    </main>
   );
 }
