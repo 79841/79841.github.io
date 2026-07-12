@@ -133,7 +133,7 @@ export function Works() {
         <ol className="mt-16 divide-y divide-hairline border-t border-hairline">
           {moreWorks.map((work) => {
             const row = (
-              <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1 py-4">
+              <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1 py-4 pr-3">
                 <h3 className="w-32 shrink-0 text-[13.5px] font-bold">
                   {work.name}
                 </h3>

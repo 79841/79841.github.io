@@ -27,7 +27,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={dark ? "라이트 모드로 전환" : "다크 모드로 전환"}
-      className="font-mono text-[11px] text-muted transition-colors hover:text-ink"
+      className="-my-2 -mr-2 flex size-9 shrink-0 items-center justify-center self-center rounded-full font-mono text-[12px] text-muted transition-colors hover:bg-imgbg hover:text-ink"
     >
       {dark === null ? "◐" : dark ? "☾" : "☀"}
     </button>
