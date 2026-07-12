@@ -259,21 +259,28 @@ export const stackGroups: StackGroup[] = [
   {
     label: "FRONT-END",
     items:
-      "TypeScript · JavaScript · React · Next.js · Jotai · Redux · Recoil · TanStack Query · Tailwind CSS · Styled Components · Recharts · shadcn/ui",
+      "TypeScript · React · Next.js · Vite · Jotai · TanStack Query · Tailwind CSS · Recharts · shadcn/ui",
   },
-  { label: "APP", items: "Electron · React Native · Expo · Flutter" },
+  {
+    label: "APP",
+    items: "React Native · Expo · NativeWind · Electron · Flutter",
+  },
   {
     label: "BACK-END",
-    items:
-      "NestJS · FastAPI · Node.js · Express · MySQL · MongoDB · SQLite · Firebase",
+    items: "NestJS · FastAPI · PostgreSQL · Prisma · MySQL · SQLite",
+  },
+  {
+    label: "TESTING",
+    items: "Jest · React Testing Library · MSW · Vitest · TDD",
   },
   {
     label: "DEVOPS",
-    items: "GitHub Actions · Vercel · Docker · Vultr · OpenTelemetry",
+    items: "GitHub Actions · Docker · GCP Cloud Run · Vercel · OpenTelemetry",
   },
   {
     label: "AI TOOLING",
-    items: "Claude Code · Cursor · Spec-Driven Development · n8n · NotebookLM",
+    items:
+      "Claude Code · Cursor · MCP 서버 개발 · Spec-Driven Development · n8n",
   },
   {
     label: "COLLABORATION",
