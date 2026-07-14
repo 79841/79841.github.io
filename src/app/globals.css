@@ -39,18 +39,109 @@
   --color-ghost: #5a5a5f;
 }
 
+/* ── 그레이니 글로우 — 페이지 상단의 무채색 빛 ─────────────────────────
+   Linear의 시그니처를 무채색으로 옮긴 것 (기법: css-tricks.com/grainy-gradients).
+   노이즈는 SVG feTurbulence data URI라 네트워크 요청이 없다.
+   라이트에서는 종이에 진 옅은 그늘, 다크에서는 은은한 광원으로 읽힌다.
+   문서 상단에 앵커된 absolute 레이어 — fixed가 아니므로 스크롤하면
+   콘텐츠와 함께 밀려 올라간다. */
+:root {
+  --glow-wash: rgba(23, 23, 26, 0.07);
+  --glow-wash-2: rgba(23, 23, 26, 0.05);
+  --glow-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* 다크 — 잉크가 흰색으로 뒤집히고, 흰 입자는 더 세게 보이므로 알파를 낮춘다 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --glow-wash: rgba(232, 232, 228, 0.055);
+    --glow-wash-2: rgba(232, 232, 228, 0.04);
+    --glow-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.36 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
+}
+
+:root[data-theme="dark"] {
+  --glow-wash: rgba(232, 232, 228, 0.055);
+  --glow-wash-2: rgba(232, 232, 228, 0.04);
+  --glow-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.36 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
 html {
   scroll-behavior: smooth;
+  /* 배경을 html이 담당해야 body::before(z-index: -1)가 그 위에 그려진다 */
+  background: var(--color-paper);
 }
 
 body {
-  background: var(--color-paper);
+  position: relative;
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   word-break: keep-all;
   overflow-wrap: break-word;
+}
+
+/* 페이지 시작(히어로)과 끝(푸터)에만 빛이 든다.
+   스크롤하면 첫 빛이 걷히고, 중간은 무광, 끝에서 다시 차오른다 —
+   경계가 첫 화면 안에 있어야 배경이 콘텐츠에 붙어 움직이는 게 눈에 보인다. */
+body::before,
+body::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+body::before {
+  top: 0;
+  height: 90vh;
+  background-image:
+    var(--glow-noise),
+    radial-gradient(90% 70% at 50% 0%, var(--glow-wash), transparent 60%);
+  /* 입자가 글로우와 같은 모양으로 흩어지며 사라진다 — 이게 grainy gradient의 핵심 */
+  -webkit-mask-image: radial-gradient(
+    95% 80% at 50% 0%,
+    #000 0%,
+    rgba(0, 0, 0, 0.35) 45%,
+    transparent 68%
+  );
+  mask-image: radial-gradient(
+    95% 80% at 50% 0%,
+    #000 0%,
+    rgba(0, 0, 0, 0.35) 45%,
+    transparent 68%
+  );
+}
+
+/* 푸터 빛 — bottom 앵커라 짧은 페이지에서도 스크롤 영역을 늘리지 않는다 */
+body::after {
+  bottom: 0;
+  height: 70vh;
+  background-image:
+    var(--glow-noise),
+    radial-gradient(85% 60% at 50% 100%, var(--glow-wash-2), transparent 62%);
+  -webkit-mask-image: radial-gradient(
+    90% 70% at 50% 100%,
+    #000 0%,
+    rgba(0, 0, 0, 0.3) 45%,
+    transparent 70%
+  );
+  mask-image: radial-gradient(
+    90% 70% at 50% 100%,
+    #000 0%,
+    rgba(0, 0, 0, 0.3) 45%,
+    transparent 70%
+  );
+}
+
+@media print {
+  body::before,
+  body::after {
+    display: none;
+  }
 }
 
 ::selection {
