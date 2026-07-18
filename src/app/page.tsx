@@ -35,7 +35,7 @@ export default function Home() {
           total={posts.length}
           index="02"
         />
-        <Experience index="03" />
+        <Experience index="03" navCtx="§03 — EXPERIENCE" />
         <About index="04" />
         <Contact />
       </main>

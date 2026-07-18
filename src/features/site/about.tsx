@@ -39,7 +39,7 @@ export function AboutBody() {
 /** 메인의 About 섹션 */
 export function About({ index = "04" }: { index?: string }) {
   return (
-    <section id="about" className="mt-32 scroll-mt-16">
+    <section id="about" data-nav-ctx="§04 — ABOUT" className="mt-32 scroll-mt-16">
       <SectionLabel index={index} title="About" />
       <AboutBody />
     </section>

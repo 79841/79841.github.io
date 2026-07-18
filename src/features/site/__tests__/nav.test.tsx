@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { isActive, Nav } from "@/features/site/nav";
 
@@ -8,8 +8,13 @@ vi.mock("next/navigation", () => ({
   usePathname: () => pathname.current,
 }));
 
+function setScrollY(value: number) {
+  Object.defineProperty(window, "scrollY", { value, configurable: true });
+}
+
 afterEach(() => {
   pathname.current = "/";
+  setScrollY(0);
 });
 
 describe("isActive", () => {
@@ -76,5 +81,49 @@ describe("Nav", () => {
       "aria-current",
       "page",
     );
+  });
+
+  it("assembles into a capsule after scrolling and relaxes back at the top", async () => {
+    render(<Nav />);
+    const header = screen.getByRole("banner");
+    expect(header).not.toHaveAttribute("data-scrolled");
+
+    setScrollY(120);
+    fireEvent.scroll(window);
+    await waitFor(() => expect(header).toHaveAttribute("data-scrolled"));
+
+    setScrollY(0);
+    fireEvent.scroll(window);
+    await waitFor(() => expect(header).not.toHaveAttribute("data-scrolled"));
+  });
+
+  it("shows the page nameplate when there are no labeled sections", () => {
+    pathname.current = "/blog/tag/react/";
+    const { container } = render(<Nav />);
+    expect(container.querySelector(".nav-ctx")).toHaveTextContent("BLOG");
+  });
+
+  it("keeps the nameplate empty on the root before sections report in", () => {
+    pathname.current = "/";
+    const { container } = render(<Nav />);
+    expect(container.querySelector(".nav-ctx")).toBeEmptyDOMElement();
+  });
+
+  it("puts a reading-progress ring in the brand slot instead of the name", () => {
+    const { container } = render(<Nav />);
+    expect(screen.getByRole("button", { name: "맨 위로" })).toBeInTheDocument();
+    expect(container.querySelector(".nav-gauge-arc")).not.toBeNull();
+    // 이름은 더 이상 헤더에 없다 — 히어로와 푸터가 말한다
+    expect(screen.queryByText("명인지")).not.toBeInTheDocument();
+  });
+
+  it("scrolls back to the top when the ring is pressed", () => {
+    const scrollTo = vi
+      .spyOn(window, "scrollTo")
+      .mockImplementation(() => {});
+    render(<Nav />);
+    fireEvent.click(screen.getByRole("button", { name: "맨 위로" }));
+    expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
+    scrollTo.mockRestore();
   });
 });

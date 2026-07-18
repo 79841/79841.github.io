@@ -2,7 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Work } from "@/shared/lib/profile";
 
-function WorkVisual({ work }: { work: Work }) {
+interface WorkCardProps {
+  work: Work;
+  /** 뷰포트 초입에 놓이는 카드는 LCP가 되기 쉽다 — 지연 로딩을 끈다 */
+  eager?: boolean;
+}
+
+function WorkVisual({ work, eager }: WorkCardProps) {
   if (work.phone) {
     return (
       <div className="flex items-end justify-center gap-5 overflow-hidden rounded-lg bg-imgbg ring-1 ring-hairline px-10 pt-10">
@@ -14,6 +20,7 @@ function WorkVisual({ work }: { work: Work }) {
             width={image.width}
             height={image.height}
             className="mono-img w-[38%] rounded-t-lg shadow-[0_2px_24px_rgb(0_0_0/0.12)]"
+            loading={eager ? "eager" : undefined}
           />
         ))}
       </div>
@@ -43,6 +50,7 @@ function WorkVisual({ work }: { work: Work }) {
         width={work.images[0].width}
         height={work.images[0].height}
         className="mono-img max-h-[360px] w-full rounded-t-md object-cover object-top shadow-[0_2px_24px_rgb(0_0_0/0.10)]"
+        loading={eager ? "eager" : undefined}
       />
     </div>
   );
@@ -85,10 +93,10 @@ function WorkCaption({ work }: { work: Work }) {
   );
 }
 
-export function WorkCard({ work }: { work: Work }) {
+export function WorkCard({ work, eager }: WorkCardProps) {
   return (
     <Link href={`/work/${work.slug}`} className="mono-card group block">
-      <WorkVisual work={work} />
+      <WorkVisual work={work} eager={eager} />
       <WorkCaption work={work} />
     </Link>
   );

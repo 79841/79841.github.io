@@ -31,14 +31,14 @@ export default function AboutPage() {
         </Reveal>
       </header>
 
-      <section>
+      <section data-nav-ctx="§01 — PROFILE">
         <SectionLabel index="01" title="Profile" />
         <AboutBody />
       </section>
 
-      <Experience index="02" />
+      <Experience index="02" navCtx="§02 — EXPERIENCE" />
 
-      <section className="mt-32">
+      <section className="mt-32" data-nav-ctx="§03 — CONTACT">
         <SectionLabel index="03" title="Contact" />
         <Reveal>
           <div className="flex flex-wrap gap-x-8 gap-y-2 font-mono text-[11px] tracking-[0.08em]">

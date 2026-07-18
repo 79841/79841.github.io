@@ -70,6 +70,9 @@ html {
   scroll-behavior: smooth;
   /* 배경을 html이 담당해야 body::before(z-index: -1)가 그 위에 그려진다 */
   background: var(--color-paper);
+  /* 스크롤바가 없는 짧은 페이지에서도 자리를 예약한다 — 없으면 페이지를
+     오갈 때 중앙 정렬 컨테이너가 스크롤바 폭의 절반만큼 수평으로 점프한다 */
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -141,6 +144,262 @@ body::after {
   body::before,
   body::after {
     display: none;
+  }
+}
+
+/* ── 스티키 헤더 — 문패 × 자기조립 × 리플 유리 ─────────────────────────
+   최상단에서는 예전의 정적 헤더와 똑같이 페이지 폭에 펼쳐져 있고,
+   스크롤하면 리플 굴절 유리 캡슐로 응집한다. 캡슐 가운데에는 지금 읽는
+   섹션의 문패가 산다 (nav.tsx가 IntersectionObserver로 갱신).
+   굴절(backdrop-filter: url)은 Chromium 전용 — 다른 브라우저는
+   반투명 종이 + 그레인으로 폴백된다. */
+:root {
+  --nav-bg: rgba(250, 250, 248, 0.52);
+  --nav-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    inset 0 0 0 1px rgba(23, 23, 26, 0.06),
+    0 8px 28px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --nav-bg: rgba(19, 19, 21, 0.55);
+    --nav-shadow:
+      inset 0 1px 1px rgba(255, 255, 255, 0.07),
+      inset 0 0 0 1px rgba(232, 232, 228, 0.08),
+      0 8px 28px rgba(0, 0, 0, 0.35);
+  }
+}
+
+:root[data-theme="dark"] {
+  --nav-bg: rgba(19, 19, 21, 0.55);
+  --nav-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.07),
+    inset 0 0 0 1px rgba(232, 232, 228, 0.08),
+    0 8px 28px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="light"] {
+  --nav-bg: rgba(250, 250, 248, 0.52);
+  --nav-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    inset 0 0 0 1px rgba(23, 23, 26, 0.06),
+    0 8px 28px rgba(0, 0, 0, 0.08);
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  /* BFC — sticky는 BFC를 만들지 않아 .nav-bar의 위 마진이 헤더 밖으로
+     병합돼 버린다(캡슐 간격이 뷰포트 위로 사라짐). flow-root가 막는다. */
+  display: flow-root;
+}
+
+.nav-bar {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  transition:
+    max-width 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    margin 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.35s,
+    box-shadow 0.35s;
+}
+
+/* 유리 표면의 그레인 — 배경 글로우와 같은 입자, 캡슐일 때만 배어난다 */
+.nav-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: var(--glow-noise);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+
+/* 읽기 진행 링 — 이름 대신 좌측 슬롯을 차지한다.
+   잉크가 원주를 감고(진행률), 클릭하면 맨 위로 돌아간다.
+   호버·포커스 시에만 정확한 %가 옆에 펼쳐진다. */
+.nav-gauge {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0.25rem;
+  margin: -0.25rem; /* 히트 영역만 넓힌다 */
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  color: var(--color-ink);
+}
+
+.nav-gauge-body {
+  display: block;
+  overflow: visible;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-gauge:hover .nav-gauge-body {
+  transform: scale(1.18);
+}
+
+.nav-gauge-track {
+  stroke: var(--color-hairline);
+}
+
+.nav-gauge-arc {
+  stroke: var(--color-ink);
+  stroke-dasharray: 100;
+  stroke-dashoffset: calc(100 - var(--prog, 0));
+  transform: rotate(-90deg);
+  transform-origin: center;
+  transition: stroke-dashoffset 0.15s linear;
+}
+
+.nav-gauge-pct {
+  display: inline-block;
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--color-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition:
+    max-width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.25s,
+    margin 0.35s;
+}
+
+.nav-gauge:hover .nav-gauge-pct,
+.nav-gauge:focus-visible .nav-gauge-pct {
+  max-width: 3.5em;
+  opacity: 1;
+  margin-left: 0.55em;
+}
+
+.nav-gauge:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* 완독 순간 한 번 튄다 — nav.tsx가 경계를 넘는 순간에만 클래스를 단다 */
+.site-header.nav-done .nav-gauge-body {
+  animation: nav-done-pulse 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 1;
+}
+
+@keyframes nav-done-pulse {
+  35% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.nav-links {
+  transition:
+    gap 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    font-size 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 문패 — 접혀 있다가 캡슐이 되면 가운데서 펼쳐진다.
+   바는 baseline 정렬이라 9px 문패가 이름 베이스라인에 매달려 처져 보인다 —
+   문패만 수직 가운데로 뺀다. */
+.nav-ctx {
+  align-self: center;
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--color-faint);
+  transition:
+    max-width 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    margin 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s 0.12s;
+}
+
+.nav-ctx s {
+  display: inline-block;
+  max-width: 16rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+  animation: nav-ctx-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes nav-ctx-in {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.site-header[data-scrolled] .nav-bar {
+  max-width: min(40rem, calc(100vw - 2rem));
+  /* 캡슐은 상단에 붙지 않고 떠 있어야 한다 — 화면 위 모서리와 한 호흡의 간격 */
+  margin: 1.25rem auto 0;
+  padding: 0.7rem 1.5rem;
+  border-radius: 999px;
+  background: var(--nav-bg);
+  -webkit-backdrop-filter: url(#nav-ripple) blur(2px) saturate(1.15);
+  backdrop-filter: url(#nav-ripple) blur(2px) saturate(1.15);
+  box-shadow: var(--nav-shadow);
+}
+
+.site-header[data-scrolled] .nav-bar::after {
+  opacity: 0.3;
+}
+
+.site-header[data-scrolled] .nav-links {
+  gap: 1.1rem;
+  font-size: 12.5px;
+}
+
+.site-header[data-scrolled] .nav-ctx {
+  max-width: 16rem;
+  opacity: 1;
+  margin: 0 1.2rem;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header[data-scrolled] .nav-bar {
+    background: var(--color-paper);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .site-header[data-scrolled] .nav-bar {
+    background: var(--color-paper);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* 좁은 화면 — 캡슐이 좁아지면 문패부터 양보한다 */
+@media (max-width: 560px) {
+  .site-header[data-scrolled] .nav-ctx {
+    max-width: 0;
+    opacity: 0;
+    margin: 0;
   }
 }
 
@@ -230,5 +489,20 @@ body::after {
 
   .mono-img {
     transition: none;
+  }
+
+  .nav-bar,
+  .nav-bar::after,
+  .nav-links,
+  .nav-ctx,
+  .nav-gauge-body,
+  .nav-gauge-arc,
+  .nav-gauge-pct {
+    transition: none;
+  }
+
+  .nav-ctx s,
+  .site-header.nav-done .nav-gauge-body {
+    animation: none;
   }
 }

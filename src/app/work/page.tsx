@@ -34,7 +34,7 @@ export default function WorkPage() {
         </Reveal>
       </header>
 
-      <section>
+      <section data-nav-ctx="§01 — SELECTED WORK">
         <SectionLabel
           index="01"
           title="Selected Work"
@@ -56,7 +56,7 @@ export default function WorkPage() {
         </div>
       </section>
 
-      <section className="mt-32">
+      <section className="mt-32" data-nav-ctx="§02 — MORE">
         <SectionLabel index="02" title="More" />
         <MoreWorks />
       </section>

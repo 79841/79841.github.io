@@ -14,7 +14,7 @@ interface RecentPostsProps {
 /** 메인의 최근 글 섹션 — 목록 UI는 블로그의 PostList를 그대로 쓴다 */
 export function RecentPosts({ posts, total, index = "02" }: RecentPostsProps) {
   return (
-    <section id="writing" className="mt-32 scroll-mt-16">
+    <section id="writing" data-nav-ctx="§02 — WRITING" className="mt-32 scroll-mt-16">
       <SectionLabel index={index} title="Recent Writing" />
       <PostList posts={posts} />
       <MoreLink

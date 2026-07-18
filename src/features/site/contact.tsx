@@ -5,7 +5,7 @@ import { Reveal } from "@/shared/ui/reveal";
 /** 메인 마무리 CTA — 푸터는 site-footer.tsx로 분리해 전 페이지 공통이 됐다 */
 export function Contact() {
   return (
-    <section id="contact" className="mt-32 scroll-mt-16">
+    <section id="contact" data-nav-ctx="§05 — CONTACT" className="mt-32 scroll-mt-16">
       <SectionLabel index="05" title="Contact" />
       <Reveal>
         <p className="max-w-xl text-[clamp(1.4rem,3vw,2rem)] leading-[1.4] font-bold tracking-[-0.02em]">

@@ -77,9 +77,10 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {/* 모든 페이지가 같은 셸을 쓴다 — 예전엔 페이지마다 컨테이너와 nav를 각자 들고 있었다 */}
+        {/* 모든 페이지가 같은 셸을 쓴다. 헤더는 스티키 캡슐이 화면 폭을 쓸 수
+            있도록 컨테이너 밖에 있다 — 내부 정렬은 .nav-bar가 맞춘다 */}
+        <Nav />
         <div className="mx-auto max-w-4xl px-6">
-          <Nav />
           {children}
           <SiteFooter />
         </div>

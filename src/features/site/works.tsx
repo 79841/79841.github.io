@@ -9,7 +9,7 @@ export function Works() {
   const [featured, ...rest] = works;
 
   return (
-    <section id="work" className="scroll-mt-16">
+    <section id="work" data-nav-ctx="§01 — WORK" className="scroll-mt-16">
       <SectionLabel
         index="01"
         title="Selected Work"
@@ -25,7 +25,7 @@ export function Works() {
       <div className="grid gap-x-10 gap-y-16 sm:grid-cols-2">
         {rest.map((work, i) => (
           <Reveal key={work.slug} delay={(i % 2) * 100}>
-            <WorkCard work={work} />
+            <WorkCard work={work} eager />
           </Reveal>
         ))}
       </div>

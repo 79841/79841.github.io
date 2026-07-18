@@ -3,7 +3,7 @@ import { Reveal } from "@/shared/ui/reveal";
 
 export function Hero() {
   return (
-    <header id="top" className="pt-24 pb-28 sm:pt-28 sm:pb-32">
+    <header id="top" data-nav-ctx="§00 — HOME" className="pt-24 pb-28 sm:pt-28 sm:pb-32">
       <Reveal>
         <p className="font-mono text-[11px] tracking-[0.2em] text-faint">
           {profile.role}

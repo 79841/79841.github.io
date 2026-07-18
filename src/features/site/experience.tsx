@@ -2,10 +2,16 @@ import { SectionLabel } from "@/features/site/section-label";
 import { experiences } from "@/shared/lib/profile";
 import { Reveal } from "@/shared/ui/reveal";
 
-/** 연도 역순 타임라인 — 메인에서 /about으로 옮겨왔다 */
-export function Experience({ index = "02" }: { index?: string }) {
+interface ExperienceProps {
+  index?: string;
+  /** 헤더 문패 라벨 — 메인과 /about에서 번호가 다르다 */
+  navCtx?: string;
+}
+
+/** 연도 역순 타임라인 */
+export function Experience({ index = "02", navCtx }: ExperienceProps) {
   return (
-    <section id="experience" className="mt-32 scroll-mt-16">
+    <section id="experience" data-nav-ctx={navCtx} className="mt-32 scroll-mt-16">
       <SectionLabel index={index} title="Experience" />
       <ol className="divide-y divide-hairline">
         {experiences.map((entry, i) => (
