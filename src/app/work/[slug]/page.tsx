@@ -100,7 +100,8 @@ export default async function WorkPage({ params }: WorkPageProps) {
       <div className="mx-auto max-w-2xl py-20">
         {work.detail.sections.map((section, i) => (
           <Reveal key={section.heading} delay={i * 60}>
-            <section className={i > 0 ? "mt-14" : ""}>
+            {/* 문패·링 눈금이 이 라벨을 따라간다 */}
+            <section data-nav-ctx={section.heading} className={i > 0 ? "mt-14" : ""}>
               <h2 className="flex items-baseline gap-4 text-[13px] font-semibold tracking-[0.02em]">
                 <span className="font-mono text-[10px] font-normal text-ghost">
                   {String(i + 1).padStart(2, "0")}
