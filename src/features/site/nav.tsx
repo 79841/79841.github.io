@@ -54,8 +54,6 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   // 라벨을 경로와 묶어 두면 페이지를 이동해도 이전 페이지의 문패가 남지 않는다
   const [ctx, setCtx] = useState<CtxState>({ path: "", label: "" });
-  /* 링에 새길 섹션 경계 — 전체 스크롤 대비 0..1 지점들 */
-  const [notches, setNotches] = useState<number[]>([]);
   const dispRef = useRef<SVGFEDisplacementMapElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   const pctRef = useRef<HTMLSpanElement>(null);
@@ -101,22 +99,18 @@ export function Nav() {
     };
   }, []);
 
-  /* 문패 + 링 눈금 — 라벨 달린 섹션이 있으면 그걸, 블로그 글이면 본문 h2를 따라간다.
-     같은 목록에서 문패(현재 위치)와 링의 섹션 경계 눈금이 함께 나온다. */
+  /* 문패 — 라벨 달린 섹션이 있으면 그걸, 블로그 글이면 본문 h2를 따라간다 */
   useEffect(() => {
     let targets = Array.from(
       document.querySelectorAll<HTMLElement>("[data-nav-ctx]"),
-    ).map((el) => ({ el, label: el.dataset.navCtx ?? "" }));
+    ).map((el) => ({ el: el as Element, label: el.dataset.navCtx ?? "" }));
 
     if (targets.length === 0) {
       targets = Array.from(
         document.querySelectorAll<HTMLElement>(".post-body h2[id]"),
-      ).map((el) => ({ el, label: el.textContent ?? "" }));
+      ).map((el) => ({ el: el as Element, label: el.textContent ?? "" }));
     }
-    if (targets.length === 0) {
-      setNotches([]);
-      return;
-    }
+    if (targets.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -129,45 +123,7 @@ export function Nav() {
       { rootMargin: "-20% 0px -65% 0px" },
     );
     for (const { el } of targets) observer.observe(el);
-
-    /* 눈금 위치: 섹션 시작점을 스크롤 진행률(0..1)로 환산한다.
-       링은 전체 진행률을 유지하고 경계만 새긴다 — 눈금을 지나는 순간이
-       문패가 갈리는 순간이다. 이미지 로드·리사이즈로 높이가 변하면 다시 잰다. */
-    const computeNotches = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      if (max <= 0) {
-        setNotches([]);
-        return;
-      }
-      const fractions = targets
-        .map(({ el }) => (el.getBoundingClientRect().top + window.scrollY) / max)
-        .filter((f) => f > 0.02 && f < 0.985)
-        .sort((a, b) => a - b);
-      /* 너무 붙은 눈금은 합치고, 과밀하면 (아주 긴 글) 눈금을 포기한다 */
-      const spaced: number[] = [];
-      for (const f of fractions) {
-        if (spaced.length === 0 || f - spaced[spaced.length - 1] >= 0.035) {
-          spaced.push(f);
-        }
-      }
-      setNotches(spaced.length <= 8 ? spaced : []);
-    };
-
-    let raf = requestAnimationFrame(computeNotches);
-    let resizeTimer = 0;
-    const onResize = () => {
-      window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(computeNotches, 150);
-    };
-    window.addEventListener("resize", onResize);
-    window.addEventListener("load", computeNotches);
-    return () => {
-      observer.disconnect();
-      cancelAnimationFrame(raf);
-      window.clearTimeout(resizeTimer);
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("load", computeNotches);
-    };
+    return () => observer.disconnect();
   }, [pathname]);
 
   /* 스크롤 속도 → 굴절 강도. 잦아들면 루프도 잠든다 */
@@ -238,50 +194,24 @@ export function Nav() {
             viewBox="0 0 16 16"
             aria-hidden="true"
           >
-            {notches.length > 0 ? (
-              <defs>
-                {/* 섹션 경계 눈금 — 마스크가 트랙과 원호를 같이 끊는다 */}
-                <mask id="nav-ring-mask">
-                  <rect x="-2" y="-2" width="20" height="20" fill="#fff" />
-                  {notches.map((f) => {
-                    const angle = f * 2 * Math.PI - Math.PI / 2;
-                    const cos = Math.cos(angle);
-                    const sin = Math.sin(angle);
-                    return (
-                      <line
-                        key={f}
-                        x1={8 + 4.3 * cos}
-                        y1={8 + 4.3 * sin}
-                        x2={8 + 7.7 * cos}
-                        y2={8 + 7.7 * sin}
-                        stroke="#000"
-                        strokeWidth="1.1"
-                      />
-                    );
-                  })}
-                </mask>
-              </defs>
-            ) : null}
-            <g mask={notches.length > 0 ? "url(#nav-ring-mask)" : undefined}>
-              <circle
-                className="nav-gauge-track"
-                cx="8"
-                cy="8"
-                r="6"
-                fill="none"
-                strokeWidth="1.5"
-              />
-              <circle
-                className="nav-gauge-arc"
-                cx="8"
-                cy="8"
-                r="6"
-                fill="none"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                pathLength={100}
-              />
-            </g>
+            <circle
+              className="nav-gauge-track"
+              cx="8"
+              cy="8"
+              r="6"
+              fill="none"
+              strokeWidth="1.5"
+            />
+            <circle
+              className="nav-gauge-arc"
+              cx="8"
+              cy="8"
+              r="6"
+              fill="none"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              pathLength={100}
+            />
           </svg>
           <span className="nav-gauge-pct" ref={pctRef} aria-hidden="true">
             0%
