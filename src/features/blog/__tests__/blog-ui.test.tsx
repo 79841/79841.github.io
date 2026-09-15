@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { CodeBlock } from "@/features/blog/code-block";
 import { PostCard } from "@/features/blog/post-card";
@@ -105,24 +106,37 @@ describe("Toc", () => {
   });
 });
 
+/** 서버 컴포넌트라 호출해서 엘리먼트를 받은 다음 그린다 */
+async function renderBlock(children: ReactNode) {
+  render(await CodeBlock({ children }));
+}
+
 describe("CodeBlock", () => {
-  it("renders a labelled code block with a copy button", () => {
-    render(
-      <CodeBlock>
-        <code className="language-ts">{"const a = 1;\n"}</code>
-      </CodeBlock>,
-    );
+  it("renders a labelled code block with a copy button", async () => {
+    await renderBlock(<code className="language-ts">{"const a = 1;\n"}</code>);
     expect(screen.getByText("ts")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /코드 복사/ })).toBeInTheDocument();
     expect(screen.queryByTestId("mermaid")).not.toBeInTheDocument();
   });
 
-  it("hands a mermaid fence to the diagram renderer instead", () => {
-    render(
-      <CodeBlock>
-        <code className="language-mermaid">{"flowchart LR\n  A --> B\n"}</code>
-      </CodeBlock>,
-    );
+  it("colours the code with the site palette", async () => {
+    await renderBlock(<code className="language-ts">{"const a = 1;\n"}</code>);
+    const pre = document.querySelector(".code-pre")!;
+    expect(pre.textContent).toContain("const a = 1;");
+    // shiki가 토큰마다 라이트·다크 두 색을 변수로 남긴다 — 둘 다 있어야 테마 전환이 된다
+    expect(pre.innerHTML).toContain("--shiki-light");
+    expect(pre.innerHTML).toContain("--shiki-dark");
+  });
+
+  it("leaves an unknown language as plain text", async () => {
+    await renderBlock(<code className="language-여기없는언어">{"hello\n"}</code>);
+    const pre = document.querySelector(".code-pre")!;
+    expect(pre.textContent).toContain("hello");
+    expect(pre.innerHTML).not.toContain("--shiki-light");
+  });
+
+  it("hands a mermaid fence to the diagram renderer instead", async () => {
+    await renderBlock(<code className="language-mermaid">{"flowchart LR\n  A --> B\n"}</code>);
     expect(screen.getByTestId("mermaid")).toHaveTextContent("flowchart LR");
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });

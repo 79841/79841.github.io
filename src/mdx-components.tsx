@@ -93,7 +93,7 @@ const components: MDXComponents = {
   ),
   td: ({ children, ...props }) => (
     <td
-      className="border-b border-hairline py-3 pr-6 leading-[1.7] text-body last:border-b-0"
+      className="border-b border-hairline py-3 pr-6 leading-[1.7] text-body"
       {...props}
     >
       {children}

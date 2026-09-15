@@ -89,7 +89,7 @@ export default async function PostPage({ params }: PostPageProps) {
           </div>
         </Reveal>
 
-        <div className="mt-8 grid gap-10 lg:grid-cols-[220px_minmax(0,700px)_220px] lg:justify-center lg:gap-10">
+        <div className="mt-8 grid gap-10 lg:grid-cols-[180px_minmax(0,840px)] lg:justify-center lg:gap-11">
           <aside className="lg:order-1">
             <Toc headings={post.headings} />
           </aside>
@@ -110,7 +110,6 @@ export default async function PostPage({ params }: PostPageProps) {
               </div>
             ) : null}
           </div>
-          <div className="hidden lg:order-3 lg:block" />
         </div>
       </article>
 

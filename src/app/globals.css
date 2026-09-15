@@ -50,6 +50,9 @@
   --art-base-b: #dcdcd7;
   --art-base-c: #b3b3ad;
   --art-base-d: #8c8c86;
+  /* 다이어그램 도형이 종이 위에 떠 보이도록 — 잉크 그늘 두 겹 */
+  --mermaid-shadow: drop-shadow(0 1px 1px rgba(23, 23, 26, 0.06))
+    drop-shadow(0 6px 14px rgba(23, 23, 26, 0.12));
 }
 
 /* 다크 — 시스템 선호를 따르되 토글로 덮어쓸 수 있다 */
@@ -91,6 +94,8 @@
     --art-base-b: #3a3a44;
     --art-base-c: #26262d;
     --art-base-d: #17171c;
+    --mermaid-shadow: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45))
+      drop-shadow(0 8px 18px rgba(0, 0, 0, 0.5));
   }
 }
 
@@ -131,6 +136,8 @@
   --art-base-b: #3a3a44;
   --art-base-c: #26262d;
   --art-base-d: #17171c;
+  --mermaid-shadow: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45))
+    drop-shadow(0 8px 18px rgba(0, 0, 0, 0.5));
 }
 
 html {
@@ -730,6 +737,48 @@ button:focus-visible {
 }
 
 /* 코드 블록 안의 <code>는 인라인 코드 스타일을 벗는다 */
+/* 코드는 가로로 밀지 않고 접는다 — 옆으로 스크롤하며 읽는 것이 더 불편하다 */
+/* 줄 밑줄은 행 전체에 — 칸마다 last:border-b-0을 걸면 마지막 칸만 선이 없다 */
+.post-body tbody tr:last-child > td {
+  border-bottom: 0;
+}
+
+.post-body pre {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  tab-size: 2;
+}
+
+/* 표 안의 환경변수처럼 띄어쓰기 없는 토큰도 칸 안에서 끊는다 */
+.post-body code {
+  overflow-wrap: anywhere;
+}
+
+/* 색칠한 토큰 — shiki가 라이트·다크 두 색을 변수로 남기고 여기서 고른다 */
+.code-pre {
+  color: var(--color-body);
+}
+
+.code-pre span {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style, normal);
+  font-weight: var(--shiki-light-font-weight, inherit);
+}
+
+:root[data-theme="dark"] .code-pre span {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style, normal);
+  font-weight: var(--shiki-dark-font-weight, inherit);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .code-pre span {
+    color: var(--shiki-dark);
+    font-style: var(--shiki-dark-font-style, normal);
+    font-weight: var(--shiki-dark-font-weight, inherit);
+  }
+}
+
 .post-body pre code {
   background: none;
   padding: 0;
@@ -745,6 +794,64 @@ button:focus-visible {
   max-width: 100%;
   height: auto;
   margin: 0 auto;
+}
+
+/* 머메이드가 그려 준 SVG 다듬기 — 모서리를 둥글리고 선을 얇게 */
+.mermaid-figure svg .node rect,
+.mermaid-figure svg .node polygon,
+.mermaid-figure svg .cluster rect,
+.mermaid-figure svg .label-container {
+  rx: 14px;
+  ry: 14px;
+}
+
+.mermaid-figure svg .node rect,
+.mermaid-figure svg .node circle,
+.mermaid-figure svg .node ellipse,
+.mermaid-figure svg .node polygon,
+.mermaid-figure svg .node path,
+.mermaid-figure svg .cluster rect {
+  stroke-width: 1px;
+}
+
+/* 도형 그림자 — 다이어그램이 카드 밖 종이 위에 바로 놓이므로 도형 자체가 떠 보여야 한다.
+   머메이드 기본 룩의 밝은 회색 그림자는 쓰지 않고(다크에서 후광이 된다) 여기서 다시 깐다.
+   머메이드가 SVG 안에 id 선택자로 심으므로 !important가 아니면 이기지 못한다 */
+.mermaid-figure svg .node rect,
+.mermaid-figure svg .node circle,
+.mermaid-figure svg .node ellipse,
+.mermaid-figure svg .node polygon,
+.mermaid-figure svg .node path,
+.mermaid-figure svg .cluster rect,
+.mermaid-figure svg .icon-shape .icon {
+  filter: var(--mermaid-shadow) !important;
+}
+
+.mermaid-figure svg .edgePath .path,
+.mermaid-figure svg .flowchart-link,
+.mermaid-figure svg .messageLine0,
+.mermaid-figure svg .messageLine1 {
+  stroke-width: 1.2px;
+}
+
+.mermaid-figure svg .nodeLabel,
+.mermaid-figure svg .edgeLabel,
+.mermaid-figure svg .messageText {
+  letter-spacing: -0.005em;
+}
+
+.mermaid-figure svg .edgeLabel {
+  font-size: 12px;
+}
+
+/* 묶음(subgraph) 이름은 본문 소제목처럼 작고 흐리게 */
+.mermaid-figure svg .cluster .nodeLabel,
+.mermaid-figure svg .cluster-label .nodeLabel {
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+  fill: var(--color-faint);
 }
 
 /* ── 스크롤 리빌 ──────────────────────────────────────────────────────── */

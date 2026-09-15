@@ -8,49 +8,79 @@ interface MermaidProps {
   code: string;
 }
 
-/** 잉크 단색 팔레트 — 사이트 토큰과 같은 값. 다크에서는 종이·잉크가 뒤집힌다 */
+/**
+ * 다이어그램 팔레트 — 흰(다크에서는 짙은) 면에 얇은 테두리, 가는 연결선.
+ * 면과 선의 대비를 낮추고 글자만 또렷하게 둬서 본문과 같은 결로 읽히게 한다.
+ */
 function themeFor(dark: boolean) {
   const ink = dark ? "#e8e8e4" : "#17171a";
-  const paper = dark ? "#1c1c1f" : "#ffffff";
-  const muted = dark ? "#a3a39d" : "#55554f";
-  const line = dark ? "#84847e" : "#6f6f69";
+  const muted = dark ? "#a3a39d" : "#6f6f69";
+  const surface = dark ? "#26262c" : "#ffffff";
+  const surfaceAlt = dark ? "#1d1d22" : "#f7f7f5";
+  const border = dark ? "#484852" : "#dcdad4";
+  const line = dark ? "#5f5f6a" : "#b6b6b0";
+
   return {
     theme: "base" as const,
+    /* 기본 룩("neo")은 도형마다 밝은 drop-shadow를 넣는다 — 종이 톤과 맞지 않아 끈다 */
+    look: "classic" as const,
     themeVariables: {
       fontFamily:
         '"Pretendard Variable", Pretendard, -apple-system, system-ui, sans-serif',
       fontSize: "14px",
-      primaryColor: paper,
+      background: "transparent",
+      primaryColor: surface,
       primaryTextColor: ink,
-      primaryBorderColor: line,
-      secondaryColor: dark ? "#26262a" : "#f4f4f1",
+      primaryBorderColor: border,
+      secondaryColor: surfaceAlt,
       secondaryTextColor: ink,
-      secondaryBorderColor: line,
-      tertiaryColor: dark ? "#131315" : "#ecece8",
+      secondaryBorderColor: border,
+      tertiaryColor: surfaceAlt,
       tertiaryTextColor: ink,
-      tertiaryBorderColor: line,
+      tertiaryBorderColor: border,
       lineColor: line,
       textColor: ink,
-      mainBkg: paper,
-      nodeBorder: line,
-      clusterBkg: dark ? "#131315" : "#f4f4f1",
-      clusterBorder: line,
-      edgeLabelBackground: paper,
+      mainBkg: surface,
+      nodeBorder: border,
+      nodeTextColor: ink,
+      clusterBkg: surfaceAlt,
+      clusterBorder: border,
+      edgeLabelBackground: dark ? "#1f1f24" : "#fbfbf9",
       titleColor: ink,
-      noteBkgColor: dark ? "#26262a" : "#f4f4f1",
+      noteBkgColor: surfaceAlt,
       noteTextColor: ink,
-      noteBorderColor: line,
-      actorBkg: paper,
-      actorBorder: line,
+      noteBorderColor: border,
+      actorBkg: surface,
+      actorBorder: border,
       actorTextColor: ink,
+      actorLineColor: line,
       signalColor: line,
       signalTextColor: ink,
-      labelBoxBkgColor: paper,
+      labelBoxBkgColor: surface,
+      labelBoxBorderColor: border,
       labelTextColor: ink,
       loopTextColor: muted,
-      activationBkgColor: dark ? "#26262a" : "#ecece8",
-      activationBorderColor: line,
-      sequenceNumberColor: paper,
+      activationBkgColor: surfaceAlt,
+      activationBorderColor: border,
+      sequenceNumberColor: surface,
+    },
+    /* 둥근 연결선과 넉넉한 간격 — 모서리도 도형도 각지지 않게 */
+    flowchart: {
+      curve: "basis" as const,
+      htmlLabels: true,
+      useMaxWidth: true,
+      padding: 18,
+      nodeSpacing: 44,
+      rankSpacing: 58,
+      diagramPadding: 4,
+    },
+    sequence: {
+      useMaxWidth: true,
+      actorMargin: 56,
+      boxMargin: 12,
+      mirrorActors: false,
+      messageFontSize: 13,
+      noteFontSize: 12,
     },
   };
 }
@@ -96,16 +126,16 @@ export function Mermaid({ code }: MermaidProps) {
   if (error) {
     /* 문법 오류는 숨기지 않고 원문과 함께 보여준다 — 글쓴이가 바로 고칠 수 있게 */
     return (
-      <figure className="mermaid-figure glass mt-6 rounded-[18px] p-5">
+      <figure className="mermaid-figure mt-8 rounded-[18px] border border-hairline px-5 py-6">
         <p className="text-[13px] text-faint">다이어그램을 그리지 못했습니다: {error}</p>
-        <pre className="mt-3 overflow-x-auto font-mono text-[12.5px] leading-[1.7]">{code}</pre>
+        <pre className="mt-3 font-mono text-[12.5px] leading-[1.7]">{code}</pre>
       </figure>
     );
   }
 
   return (
     <figure
-      className="mermaid-figure glass mt-6 min-h-[120px] rounded-[18px] p-5"
+      className="mermaid-figure mt-8 mb-2 min-h-[120px]"
       role="img"
       aria-label="다이어그램"
       data-rendered={svg ? "" : undefined}
