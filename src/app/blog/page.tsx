@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { PostList } from "@/features/blog/post-list";
-import { TagRow } from "@/features/blog/tag-row";
+import { PostGrid } from "@/features/blog/post-grid";
+import { TagRail } from "@/features/blog/tag-rail";
 import { getAllPosts, getAllTags } from "@/shared/lib/blog";
 import { profile } from "@/shared/lib/profile";
 import { Reveal } from "@/shared/ui/reveal";
 
 export const metadata: Metadata = {
-  title: "Blog",
+  title: "Writing",
   description:
-    "렌더링 최적화, AI 에이전트 텔레메트리, 그리고 보안에서 배운 것들 — 명인지가 만들면서 알게 된 것들을 적습니다.",
+    "개발하면서 겪은 문제와 해결 과정을 기록합니다. 측정한 숫자와 재현 조건을 같이 남깁니다.",
   openGraph: {
-    title: `Blog — ${profile.name}`,
-    description: "만들면서 알게 된 것들을 적습니다.",
+    title: `Writing — ${profile.name}`,
+    description: "개발하면서 겪은 문제와 해결 과정을 기록합니다.",
     url: "/blog",
     type: "website",
   },
@@ -23,28 +23,29 @@ export default function BlogPage() {
 
   return (
     <main>
-      <header className="pt-16 pb-12">
+      <header className="flex flex-col gap-7 pt-16 pb-6 sm:pt-24">
         <Reveal>
-          <div className="flex items-baseline justify-between gap-4">
-            <h1 className="text-[clamp(1.8rem,4vw,2.8rem)] font-bold tracking-[-0.03em]">
-              Blog
-            </h1>
-            <span className="font-mono text-[10px] tracking-[0.15em] text-ghost">
-              {String(posts.length).padStart(2, "0")} POSTS
+          <div className="flex items-end justify-between gap-10">
+            <div className="flex flex-col gap-3.5">
+              <h1 className="text-[clamp(2.6rem,6vw,4.5rem)] leading-[1.04] font-medium tracking-[-0.035em]">
+                Writing
+              </h1>
+              <p className="max-w-[620px] text-[17px] leading-[1.55] text-muted sm:text-[18px]">
+                개발하면서 겪은 문제와 해결 과정을 기록합니다. 측정한 숫자와 재현
+                조건을 같이 남깁니다.
+              </p>
+            </div>
+            <span className="hidden shrink-0 font-mono text-[13px] text-faint sm:block">
+              {posts.length} POSTS
             </span>
           </div>
-          <p className="mt-4 max-w-xl text-[14px] leading-[1.9] text-muted">
-            만들면서 알게 된 것들을 적습니다. 대부분 숫자로 시작해서 구조로
-            끝납니다.
-          </p>
         </Reveal>
       </header>
 
-      <Reveal>
-        <TagRow tags={tags} />
-      </Reveal>
-
-      <PostList posts={posts} />
+      <div className="grid gap-8 pt-4 lg:grid-cols-[168px_minmax(0,1fr)] lg:gap-10">
+        <TagRail tags={tags} total={posts.length} />
+        <PostGrid posts={posts} />
+      </div>
     </main>
   );
 }

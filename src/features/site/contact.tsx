@@ -1,42 +1,49 @@
-import { SectionLabel } from "@/features/site/section-label";
 import { profile } from "@/shared/lib/profile";
+import { ArrowUpRight } from "@/shared/ui/icons";
 import { Reveal } from "@/shared/ui/reveal";
 
-/** 메인 마무리 CTA — 푸터는 site-footer.tsx로 분리해 전 페이지 공통이 됐다 */
+/** 마무리 CTA — 큰 유리 패널 */
 export function Contact() {
   return (
-    <section id="contact" data-nav-ctx="§05 — CONTACT" className="mt-32 scroll-mt-16">
-      <SectionLabel index="05" title="Contact" />
+    <section id="contact" aria-labelledby="contact-h" className="mt-24 scroll-mt-20">
       <Reveal>
-        <p className="max-w-xl text-[clamp(1.4rem,3vw,2rem)] leading-[1.4] font-bold tracking-[-0.02em]">
-          함께 만들 것이 있다면,
-          <br />
-          <a
-            href={`mailto:${profile.email}`}
-            className="text-muted underline decoration-hairline decoration-2 underline-offset-8 transition-colors hover:text-ink hover:decoration-ink"
-          >
-            {profile.email}
-          </a>
-        </p>
-      </Reveal>
-      <Reveal delay={100}>
-        <div className="mt-10 flex flex-wrap gap-x-8 gap-y-2 font-mono text-[11px] tracking-[0.08em]">
-          <a
-            href={profile.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted transition-colors hover:text-ink"
-          >
-            {profile.githubLabel} ↗
-          </a>
-          <a
-            href={profile.resumeHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted transition-colors hover:text-ink"
-          >
-            이력서 PDF ↓
-          </a>
+        <div className="glass-strong flex flex-col gap-8 rounded-[28px] px-7 py-10 sm:rounded-[32px] sm:px-12 sm:py-16 lg:flex-row lg:items-center lg:justify-between lg:px-[72px] lg:py-[72px]">
+          <div className="flex flex-col gap-4">
+            <span className="eyebrow">CONTACT</span>
+            <h2
+              id="contact-h"
+              className="text-[36px] leading-[1.08] font-medium tracking-[-0.03em] sm:text-[52px]"
+            >
+              Get in touch.
+            </h2>
+            <a
+              href={`mailto:${profile.email}`}
+              className="text-[17px] text-muted transition-colors hover:text-ink sm:text-[20px]"
+            >
+              {profile.email}
+            </a>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <a href={`mailto:${profile.email}`} className="btn btn-ink">
+              메일 보내기
+            </a>
+            <a
+              href={profile.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-glass"
+            >
+              GitHub <ArrowUpRight />
+            </a>
+            <a
+              href={profile.resumeHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-glass"
+            >
+              이력서 PDF
+            </a>
+          </div>
         </div>
       </Reveal>
     </section>

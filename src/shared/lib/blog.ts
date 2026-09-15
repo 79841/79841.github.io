@@ -12,6 +12,8 @@ import fs from "node:fs";
 import path from "node:path";
 import GithubSlugger from "github-slugger";
 import matter from "gray-matter";
+import { ARTS } from "@/shared/lib/art";
+import type { ArtName } from "@/shared/lib/art";
 
 const BLOG_DIR = path.join(process.cwd(), "src/content/blog");
 
@@ -36,6 +38,8 @@ export interface Post {
   readingMinutes: number;
   /** h2·h3만 모은 목차 — id는 rehype-slug가 붙이는 값과 같다 */
   headings: Heading[];
+  /** 사진이 없는 글의 썸네일 무늬 — 목록 순서대로 돌아간다 */
+  art: ArtName;
 }
 
 /** 코드 펜스(``` … ```) 안쪽을 걷어낸다 — 본문 분석에서 코드는 제외한다 */
@@ -109,7 +113,7 @@ export function extractHeadings(markdown: string): Heading[] {
 }
 
 /** 원문 한 편을 Post로 — 프론트매터가 빠지면 빌드를 세운다 */
-export function parsePost(slug: string, raw: string): Post {
+export function parsePost(slug: string, raw: string): Omit<Post, "art"> {
   const { data, content } = matter(raw);
   const { title, date, summary, tags } = data as Partial<{
     title: string;
@@ -162,7 +166,9 @@ export function getAllPosts(): Post[] {
       const raw = fs.readFileSync(path.join(BLOG_DIR, file), "utf8");
       return parsePost(slug, raw);
     })
-    .sort((a, b) => b.date.localeCompare(a.date));
+    .sort((a, b) => b.date.localeCompare(a.date))
+    // 최신순으로 세운 다음 무늬를 돌려 배정한다 — 목록 어디를 봐도 셋이 번갈아 나온다
+    .map((post, i) => ({ ...post, art: ARTS[i % ARTS.length] }));
 }
 
 export function getPost(slug: string): Post | undefined {

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PostList } from "@/features/blog/post-list";
-import { TagRow } from "@/features/blog/tag-row";
-import { getAllTags, getPostsByTagSlug } from "@/shared/lib/blog";
+import { PostGrid } from "@/features/blog/post-grid";
+import { TagRail } from "@/features/blog/tag-rail";
+import { getAllPosts, getAllTags, getPostsByTagSlug } from "@/shared/lib/blog";
+import { ArrowLeft } from "@/shared/ui/icons";
 import { Reveal } from "@/shared/ui/reveal";
 
 interface TagPageProps {
@@ -22,7 +23,7 @@ export async function generateMetadata({
   if (!entry) return {};
 
   return {
-    title: `${entry.tag} — Blog`,
+    title: `${entry.tag} — Writing`,
     description: `${entry.tag} 태그가 붙은 글 ${entry.count}편.`,
   };
 }
@@ -35,29 +36,29 @@ export default async function TagPage({ params }: TagPageProps) {
   if (!entry) notFound();
 
   const posts = getPostsByTagSlug(slug);
+  const total = getAllPosts().length;
 
   return (
     <main>
-      <header className="pt-16 pb-12">
+      <header className="flex flex-col gap-7 pt-16 pb-6 sm:pt-24">
         <Reveal>
           <Link
             href="/blog"
-            className="font-mono text-[10px] tracking-[0.2em] text-ghost transition-colors hover:text-ink"
+            className="inline-flex h-8 items-center gap-1.5 text-[14px] text-faint transition-colors hover:text-ink"
           >
-            ← BLOG
+            <ArrowLeft /> Writing
           </Link>
-          <h1 className="mt-4 text-[clamp(1.8rem,4vw,2.8rem)] font-bold tracking-[-0.03em]">
+          <h1 className="mt-3 text-[clamp(2.6rem,6vw,4.5rem)] leading-[1.04] font-medium tracking-[-0.035em]">
             {entry.tag}
           </h1>
-          <p className="mt-4 text-[14px] text-muted">글 {entry.count}편</p>
+          <p className="mt-3 text-[17px] text-muted">글 {entry.count}편</p>
         </Reveal>
       </header>
 
-      <Reveal>
-        <TagRow tags={tags} activeSlug={slug} />
-      </Reveal>
-
-      <PostList posts={posts} />
+      <div className="grid gap-8 pt-4 lg:grid-cols-[168px_minmax(0,1fr)] lg:gap-10">
+        <TagRail tags={tags} activeSlug={slug} total={total} />
+        <PostGrid posts={posts} />
+      </div>
     </main>
   );
 }

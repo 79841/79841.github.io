@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist_Mono } from "next/font/google";
+import { Aurora } from "@/features/site/aurora";
 import { Nav } from "@/features/site/nav";
 import { SiteFooter } from "@/features/site/site-footer";
 import { profile, SITE_URL } from "@/shared/lib/profile";
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
     template: "%s | 명인지",
   },
   description:
-    "복잡한 문제를 단순한 구조로. 실시간 데이터 시각화와 렌더링 최적화를 다루는 프론트엔드 개발자 명인지의 포트폴리오.",
+    "실시간 데이터 시각화와 렌더링 성능 개선을 주로 다루는 프론트엔드 개발자 명인지의 포트폴리오.",
   keywords: [
     "Front-End Developer",
     "React",
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "명인지 — Front-End Developer",
-    description: "복잡한 문제를 단순한 구조로. 성능은 숫자로, 화면은 손끝으로.",
+    description: profile.summary,
     url: SITE_URL,
     siteName: "명인지 포트폴리오",
     type: "website",
@@ -38,14 +39,14 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "명인지 — Front-End Developer",
-    description: "복잡한 문제를 단순한 구조로.",
+    description: profile.headline,
     images: ["/og.png"],
   },
 };
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafaf8" },
+    { media: "(prefers-color-scheme: light)", color: "#f4f4f1" },
     { media: "(prefers-color-scheme: dark)", color: "#131315" },
   ],
 };
@@ -77,10 +78,10 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {/* 모든 페이지가 같은 셸을 쓴다. 헤더는 스티키 캡슐이 화면 폭을 쓸 수
-            있도록 컨테이너 밖에 있다 — 내부 정렬은 .nav-bar가 맞춘다 */}
+        <Aurora />
+        {/* 헤더는 전체 폭 스티키 유리 바 — 내부 정렬은 Nav가 맞춘다 */}
         <Nav />
-        <div className="mx-auto max-w-4xl px-6">
+        <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
           {children}
           <SiteFooter />
         </div>

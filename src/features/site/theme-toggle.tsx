@@ -1,25 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-function systemPrefersDark() {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
-}
+import { setTheme, useIsDark } from "@/shared/lib/theme";
 
 export function ThemeToggle() {
-  const [dark, setDark] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("theme");
-    setDark(stored ? stored === "dark" : systemPrefersDark());
-  }, []);
+  const dark = useIsDark();
 
   const toggle = () => {
-    const nextDark = !(dark ?? systemPrefersDark());
-    setDark(nextDark);
-    const theme = nextDark ? "dark" : "light";
-    localStorage.setItem("theme", theme);
-    document.documentElement.dataset.theme = theme;
+    setTheme(dark ? "light" : "dark");
   };
 
   return (
@@ -27,7 +14,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={dark ? "라이트 모드로 전환" : "다크 모드로 전환"}
-      className="-my-2 -mr-2 flex size-9 shrink-0 items-center justify-center self-center rounded-full font-mono text-[12px] text-muted transition-colors hover:bg-imgbg hover:text-ink"
+      className="flex size-9 shrink-0 items-center justify-center rounded-full text-[14px] text-muted transition-colors hover:text-ink"
     >
       {dark === null ? "◐" : dark ? "☾" : "☀"}
     </button>

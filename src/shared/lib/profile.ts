@@ -38,8 +38,12 @@ export interface Work {
   name: string;
   /** 이름 옆 한 줄 요약 */
   tagline: string;
-  /** 기간 */
+  /** 기간 — YYYY.MM — YYYY.MM 또는 "YYYY — 현재" */
   period?: string;
+  /** 카드 이미지 위 배지 — "운영 중", "5인 팀" */
+  badge?: string;
+  /** 어두운 스크린샷 — 그 위의 유리 배지·캡션을 다크 유리로 뒤집는다 (대비 확보) */
+  dark?: boolean;
   /** 카드 아래 설명 */
   description?: string;
   /** mono 표기 스택 */
@@ -62,27 +66,52 @@ export interface MoreWork {
 
 export interface StackGroup {
   label: string;
-  items: string;
+  items: string[];
 }
 
 export interface ExperienceEntry {
+  /** YYYY.MM — YYYY.MM, 진행 중이면 "현재" */
   period: string;
   org: string;
   role: string;
+  /** 성과 한 줄 — /about 상세 타임라인에만 보인다 */
   desc: string;
+  /** 키워드 뱃지 — 홈 타임라인은 이것만 보여준다 */
+  tags: string[];
+  /** 현재 재직 중 — 타임라인에서 채워진 점과 진한 유리 카드 */
+  current?: boolean;
+}
+
+export interface Award {
+  /** YYYY.MM */
+  date: string;
+  name: string;
+  org: string;
+}
+
+export interface Stat {
+  label: string;
+  value: string;
+  note: string;
 }
 
 export const profile = {
   name: "명인지",
   nameEn: "Myeong Inji",
-  role: "FRONT-END DEVELOPER · SEOUL",
+  role: "Front-end Developer · Seoul",
   email: "79841@naver.com",
   github: "https://github.com/79841",
   githubLabel: "github.com/79841",
   resumeHref: "/docs/명인지_이력서.pdf",
-  thesis: ["복잡한 문제를 단순한 구조로.", "성능은 숫자로, 화면은 손끝으로."],
+  /** 히어로 한 줄 — 짧은 영어 단어 셋 */
+  headline: "Simple. Fast. Precise.",
   summary:
-    "실시간 데이터 시각화와 렌더링 최적화를 다루는 프론트엔드 개발자. 반복은 AI 에이전트에게 맡기고, 아낀 시간을 마지막 픽셀에 씁니다.",
+    "실시간 데이터 시각화와 렌더링 성능 개선을 주로 다루는 프론트엔드 개발자입니다. 지금은 새솔테크에서 Electron·React 데스크톱 앱과 Next.js 서비스를 만들고 있습니다.",
+  /** /about 머리 */
+  aboutHeadline: "보안에서 프론트엔드로.",
+  aboutSummary:
+    "보안 진단 5년을 거쳐 2024년부터 프론트엔드를 만듭니다. 렌더링 성능과 실시간 데이터 시각화를 주로 다룹니다.",
+  location: "Seoul, Korea",
 } as const;
 
 /** 스크린샷이 있는 대표 작업 — 배열에 추가하면 카드와 상세 페이지가 늘어납니다 */
@@ -90,13 +119,15 @@ export const works: Work[] = [
   {
     slug: "argus",
     name: "Argus",
-    tagline: "AI 코딩 에이전트 모니터링 — 릴리즈 운영 중",
-    period: "2025 —",
+    tagline: "AI 코딩 에이전트의 비용과 토큰 사용량을 프로젝트별로 추적하는 데스크톱 모니터링 앱",
+    period: "2025 — 현재",
+    badge: "운영 중",
     description:
-      "복수 AI 에이전트의 비용·토큰·세션을 통합 추적할 수단이 없어 직접 만들었습니다. OTLP 텔레메트리 인제스트부터 Electron 트레이 앱 릴리즈까지.",
+      "AI 코딩 에이전트의 비용과 토큰 사용량을 추적하는 데스크톱 앱. OTLP 수집 서버부터 Electron 트레이 앱까지 직접 만들었습니다.",
     stack: "Next.js 15 · Electron · OpenTelemetry · SQLite · Recharts",
     images: [{ src: "/work/argus.webp", width: 1280, height: 900 }],
     wide: true,
+    dark: true,
     detail: {
       sections: [
         {
@@ -121,10 +152,11 @@ export const works: Work[] = [
   {
     slug: "malgoum",
     name: "Malgoum",
-    tagline: "Simple. Smart. Weather. · 라이브",
+    tagline: "검색, 즐겨찾기, 시간대별 예보를 갖춘 날씨 앱",
     period: "2026",
+    badge: "라이브",
     description:
-      "검색·즐겨찾기·시간대별 예보를 담은 날씨 앱. 불필요한 것을 덜어낸 인터페이스로 Vercel에서 운영 중입니다.",
+      "검색, 즐겨찾기, 시간대별 예보를 갖춘 날씨 앱. Vercel에서 운영 중입니다.",
     stack: "Next.js · TypeScript · Vercel",
     images: [{ src: "/work/malgoum.webp", width: 1280, height: 800 }],
     detail: {
@@ -148,10 +180,11 @@ export const works: Work[] = [
   {
     slug: "letsdo",
     name: "Let'sdo",
-    tagline: "척수 장애인 건강관리 앱 · 1인 풀스택",
+    tagline: "척수 장애인을 위한 건강관리 앱. 사용자 앱과 관리자 앱, 백엔드까지 혼자 개발했습니다.",
     period: "2023.06 — 2023.10",
+    badge: "1인 풀스택",
     description:
-      "사용자용·관리자용 두 앱과 백엔드까지 혼자 개발했습니다. 과제 수행도 대시보드와 WebSocket 실시간 상담 채팅이 핵심.",
+      "척수 장애인 건강관리 앱. 사용자 앱, 관리자 앱, 백엔드를 혼자 개발했습니다.",
     stack: "Flutter · FastAPI · MySQL · Redis · WebSocket",
     images: [
       { src: "/work/letsdo1.webp", width: 483, height: 804 },
@@ -190,10 +223,11 @@ export const works: Work[] = [
   {
     slug: "chusinsa",
     name: "Chusinsa",
-    tagline: "체형 기반 의류 추천 커머스 · 5인 팀",
+    tagline: "체형 정보로 의류를 추천하는 쇼핑몰. 프론트엔드와 백엔드를 맡았습니다.",
     period: "2022.04 — 2022.11",
+    badge: "5인 팀",
     description:
-      "성별·키·몸무게로 의류를 추천하는 쇼핑몰. 프론트엔드와 백엔드 전반을 맡았고, 방대한 상품 데이터를 다루며 데이터베이스 정규화에 집중했습니다.",
+      "체형 정보로 의류를 추천하는 쇼핑몰. 프론트엔드와 백엔드를 맡았습니다.",
     stack: "Next.js · Recoil · FastAPI · MySQL",
     images: [{ src: "/work/chusinsa.webp", width: 1600, height: 1030 }],
     detail: {
@@ -228,111 +262,94 @@ export const moreWorks: MoreWork[] = [
   {
     name: "Travel Docent",
     period: "개발 중",
-    note: "위치·관심사 기반 AI 여행 도슨트 앱 — RN 0.79 · Expo 53 · NestJS · 6-role 에이전트 오케스트레이션 · SDD · 테스트 커버리지 Service 100%",
+    note: "위치 기반 여행 안내 앱 · React Native · NestJS",
   },
   {
     name: "Dream Share",
-    period: "2023.10 —",
-    note: "꿈 일기 공유 앱, 3인 협업 — Next.js · Flutter · Spring Boot · OAuth/OIDC 소셜 로그인 · Jira 애자일",
+    period: "2023",
+    note: "꿈 일기 공유 앱 · 3인 협업 · Next.js · Flutter · Spring Boot",
     href: "https://github.com/Dream-share",
-  },
-  {
-    name: "Metflix",
-    period: "2022",
-    note: "TMDB 기반 영화 웹 — HTML · CSS · JavaScript · 반응형, 웹의 기본기를 다진 초기작",
-    href: "https://github.com/79841/metflix",
   },
   {
     name: "Portfolio",
     period: "2023 —",
-    note: "이 사이트 — Lighthouse 98 · 번들 2MB → 200KB · 이미지 로딩 500ms → 100ms · LCP < 2s",
+    note: "이 사이트 · Lighthouse 98 · LCP < 2s",
     href: "https://github.com/79841/79841.github.io",
   },
-];
-
-export const aboutParagraphs: string[] = [
-  "보안에서 시작했습니다. 토스페이먼츠에서 취약점을 분석했고, BoB와 대회들(Fiesta 우승, 네이버 버그바운티 명예의전당)에서 남들이 못 보는 곳을 먼저 보는 법을 배웠습니다.",
-  "지금은 그 눈으로 화면을 만듭니다. 밀리초 단위의 프레임을 재고, 병목을 찾고, 구조를 단순하게 유지합니다. 반복 작업은 멀티 에이전트 오케스트레이션과 SDD 워크플로우로 자동화하고 — 그렇게 아낀 시간을 전부 사용자가 만지는 마지막 픽셀에 씁니다.",
+  {
+    name: "Metflix",
+    period: "2022",
+    note: "TMDB 기반 영화 웹 · HTML · CSS · JavaScript",
+    href: "https://github.com/79841/metflix",
+  },
 ];
 
 export const stackGroups: StackGroup[] = [
   {
     label: "FRONT-END",
-    items:
-      "TypeScript · React · Next.js · Jotai · TanStack Query · Tailwind CSS · Recharts",
+    items: ["TypeScript", "React", "Next.js", "Jotai", "TanStack Query", "Tailwind CSS", "Recharts"],
   },
-  {
-    label: "APP",
-    items: "React Native · Expo · Electron · Flutter",
-  },
-  {
-    label: "BACK-END",
-    items: "NestJS · FastAPI · PostgreSQL · Prisma",
-  },
-  {
-    label: "TESTING",
-    items: "Jest · React Testing Library · MSW · TDD",
-  },
-  {
-    label: "DEVOPS",
-    items: "GitHub Actions · Docker · GCP Cloud Run · OpenTelemetry",
-  },
+  { label: "APP", items: ["React Native", "Expo", "Electron", "Flutter"] },
+  { label: "BACK-END", items: ["NestJS", "FastAPI", "PostgreSQL", "Prisma"] },
+  { label: "TESTING", items: ["Jest", "React Testing Library", "MSW", "TDD"] },
+  { label: "DEVOPS", items: ["GitHub Actions", "Docker", "GCP Cloud Run", "OpenTelemetry"] },
   {
     label: "AI TOOLING",
-    items: "Claude Code · Cursor · MCP 서버 개발 · Spec-Driven Development",
+    items: ["Claude Code", "Cursor", "MCP 서버 개발", "Spec-Driven Development"],
   },
 ];
 
-/** 연도 역순 타임라인 — 기존 사이트의 전체 이력을 그대로 계승 */
+/** 연도 역순 경력 — 수상은 awards로 분리한다 */
 export const experiences: ExperienceEntry[] = [
   {
     period: "2024.02 — 현재",
     org: "새솔테크",
     role: "Front-End Developer",
-    desc: "Electron+React 자동화 테스트 데스크톱 앱(OmniAir 인증, 3사 납품) · Next.js 권한 관리 플랫폼 · React+NestJS 인증 서비스 운영 — Frame Drop 85% 감소 · IPC 1.2s → 0.8s · 배포 15분 → 6분",
+    desc: "Electron·React 자동화 테스트 데스크톱 앱(OmniAir 인증, 3사 납품), Next.js 권한 관리 플랫폼, 인증 서비스 개발과 운영. 프레임 드롭 85% 감소, 배포 15분 → 6분.",
+    tags: ["Electron", "React", "Next.js", "NestJS", "성능 최적화"],
+    current: true,
   },
   {
-    period: "2023 — ",
+    period: "2023.03 — 현재",
     org: "비욘드 코딩",
     role: "Programming Instructor",
-    desc: "HTML·CSS·JavaScript·Python 커리큘럼 개발 및 강의 — 만족도 4.8/5.0 · 완주율 65% → 80%",
+    desc: "HTML·CSS·JavaScript·Python 커리큘럼 개발과 강의. 만족도 4.8/5.0, 완주율 65% → 80%.",
+    tags: ["JavaScript", "Python", "커리큘럼 개발"],
   },
   {
-    period: "2022.04 — 06",
+    period: "2022.04 — 2022.06",
     org: "토스페이먼츠",
     role: "Security Engineer",
-    desc: "웹 애플리케이션 취약점 진단 및 보안 리스크 평가",
-  },
-  {
-    period: "2021.12",
-    org: "FIESTA 금융보안 위협분석 대회 3위",
-    role: "금융보안원",
-    desc: "웹 취약점 분석 및 리포트 작성",
-  },
-  {
-    period: "2020",
-    org: "네이버 버그바운티 명예의전당 · FIESTA 우승 · K-사이버 본선",
-    role: "Security Research",
-    desc: "취약점 제보(1월) · 금융보안 위협분석 대회 우승(12월) · 개인정보 비식별 챌린지 본선(12월)",
-  },
-  {
-    period: "2019.11",
-    org: "사이버공격방어대회 CCE 기관팀 3위",
-    role: "국가정보원",
-    desc: "웹 취약점 분석 및 Incident Response",
+    desc: "웹 애플리케이션 취약점 진단과 보안 리스크 평가.",
+    tags: ["웹 취약점 진단", "리스크 평가"],
   },
   {
     period: "2018.08 — 2020.05",
     org: "공군 사이버 작전센터",
-    role: "체계 개발·취약점 분석",
-    desc: "군 복무 중 사이버 방호 체계 개발 및 취약점 분석 수행",
+    role: "체계 개발 · 취약점 분석",
+    desc: "군 복무 중 사이버 방호 체계 개발과 취약점 분석.",
+    tags: ["사이버 방호", "취약점 분석"],
   },
   {
     period: "2017.06 — 2018.02",
     org: "Best of the Best 7기",
     role: "차세대 보안리더 양성프로그램",
-    desc: "취약점 분석 · 시큐리티짐 프로젝트 — 웹 보안, 시스템 최적화, 네트워크 성능 분석",
+    desc: "취약점 분석 과정 수료. 시큐리티짐 프로젝트에서 웹 보안과 시스템 성능 분석 담당.",
+    tags: ["웹 보안", "시스템 최적화", "네트워크 분석"],
   },
 ];
 
-export const footerNote = "reviewed by human, accelerated by AI" as const;
+/** 수상 — 타임라인 아래 한 줄 칩으로 */
+export const awards: Award[] = [
+  { date: "2021.12", name: "FIESTA 금융보안 위협분석 대회 3위", org: "금융보안원" },
+  { date: "2020.12", name: "FIESTA 금융보안 위협분석 대회 우승", org: "금융보안원" },
+  { date: "2020.01", name: "네이버 버그바운티 명예의전당", org: "NAVER" },
+  { date: "2019.11", name: "사이버공격방어대회 CCE 기관팀 3위", org: "국가정보원" },
+];
+
+/** /about 상단 요약 숫자 — 경력 연차와 프로젝트 수 */
+export const stats: Stat[] = [
+  { label: "FRONT-END", value: "2년+", note: "2024.02 — 현재" },
+  { label: "SECURITY", value: "5년", note: "2017 — 2022" },
+  { label: "PROJECTS", value: "8", note: "운영 중 2" },
+];

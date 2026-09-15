@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Contact } from "@/features/site/contact";
+import { SectionHead } from "@/features/site/section-head";
+import { WorkCard } from "@/features/site/work-card";
 import { profile, works } from "@/shared/lib/profile";
+import { ArrowLeft, ArrowUpRight } from "@/shared/ui/icons";
 import { Reveal } from "@/shared/ui/reveal";
 
 interface WorkPageProps {
@@ -30,160 +34,152 @@ export default async function WorkPage({ params }: WorkPageProps) {
   const index = works.findIndex((w) => w.slug === slug);
   if (index === -1) notFound();
   const work = works[index];
-  const next = works[(index + 1) % works.length];
+  const others = works.filter((w) => w.slug !== slug).slice(0, 3);
+  // 대표 이미지 뒤에 갤러리 — 폰 스크린샷은 매트 위에 나란히, 나머지는 한 장씩
+  const gallery = work.phone ? [...work.images, ...work.detail.gallery] : work.detail.gallery;
 
   return (
     <main>
-      <header className="pt-16 pb-14">
+      <header className="flex flex-col items-center gap-5 pt-14 pb-8 text-center sm:pt-20 sm:pb-10">
         <Reveal>
-          <div className="flex items-baseline justify-between gap-4">
-            <Link
-              href="/work"
-              className="font-mono text-[10px] tracking-[0.2em] text-ghost transition-colors hover:text-ink"
-            >
-              ← WORK
-            </Link>
-            <span className="font-mono text-[10px] tracking-[0.15em] text-ghost">
-              {String(index + 1).padStart(2, "0")} /{" "}
-              {String(works.length).padStart(2, "0")}
-            </span>
-          </div>
-
-          <p className="mt-5 font-mono text-[10.5px] tracking-[0.15em] text-ghost">
-            {work.period}
-          </p>
-          <h1 className="mt-4 text-[clamp(1.8rem,4vw,2.8rem)] font-bold tracking-[-0.03em]">
-            {work.name}{" "}
-            <span className="ml-1 text-[0.45em] font-normal text-muted">
-              {work.tagline}
-            </span>
+          <Link
+            href="/work"
+            className="inline-flex h-8 items-center gap-1.5 text-[14px] text-faint transition-colors hover:text-ink"
+          >
+            <ArrowLeft /> Work
+          </Link>
+        </Reveal>
+        <Reveal delay={60}>
+          <h1 className="text-[clamp(2.6rem,6vw,4.5rem)] leading-[1.04] font-medium tracking-[-0.035em]">
+            {work.name}
           </h1>
-          <p className="mt-4 font-mono text-[11px] tracking-[0.05em] text-faint">
-            {work.stack}
+        </Reveal>
+        <Reveal delay={120}>
+          <p className="max-w-[780px] text-[17px] leading-[1.55] text-muted text-pretty sm:text-[20px]">
+            {work.tagline}
           </p>
         </Reveal>
-      </header>
-
-      {/* 대표 이미지 */}
-      <Reveal>
-        <div className="mono-card group">
-          {work.phone ? (
-            <div className="flex items-end justify-center gap-5 overflow-hidden rounded-lg bg-imgbg ring-1 ring-hairline px-10 pt-10">
-              {work.images.map((image) => (
-                <Image
-                  key={image.src}
-                  src={image.src}
-                  alt={`${work.name} 화면`}
-                  width={image.width}
-                  height={image.height}
-                  className="mono-img w-[38%] rounded-t-lg shadow-[0_2px_24px_rgb(0_0_0/0.12)]"
-                  priority
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="overflow-hidden rounded-lg bg-imgbg ring-1 ring-hairline">
-              <Image
-                src={work.images[0].src}
-                alt={`${work.name} 화면`}
-                width={work.images[0].width}
-                height={work.images[0].height}
-                className="mono-img w-full"
-                priority
-              />
-            </div>
-          )}
-        </div>
-      </Reveal>
-
-      {/* 본문 — 문제/설계/결과 */}
-      <div className="mx-auto max-w-2xl py-20">
-        {work.detail.sections.map((section, i) => (
-          <Reveal key={section.heading} delay={i * 60}>
-            <section className={i > 0 ? "mt-14" : ""}>
-              <h2 className="flex items-baseline gap-4 text-[13px] font-semibold tracking-[0.02em]">
-                <span className="font-mono text-[10px] font-normal text-ghost">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                {section.heading}
-              </h2>
-              <p className="mt-4 text-[14px] leading-[1.95] text-muted">
-                {section.body}
-              </p>
-            </section>
-          </Reveal>
-        ))}
-
-        <Reveal delay={100}>
-          <div className="mt-14 flex flex-wrap gap-x-8 gap-y-2 font-mono text-[11px] tracking-[0.08em]">
-            {work.detail.links.map((link) => (
+        <Reveal delay={180}>
+          <div className="flex flex-wrap justify-center gap-2">
+            {work.period ? <span className="chip">{work.period}</span> : null}
+            {work.badge ? <span className="chip">{work.badge}</span> : null}
+            <span className="chip">{work.stack}</span>
+          </div>
+        </Reveal>
+        <Reveal delay={240}>
+          <div className="flex flex-wrap justify-center gap-2.5">
+            {work.detail.links.map((link, i) => (
               <a
                 key={link.href}
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted transition-colors hover:text-ink"
+                className={`btn h-11 px-[18px] text-[14px] ${i === 0 ? "btn-ink" : "btn-glass"}`}
               >
-                {link.label}
+                {link.label.replace(/\s*↗$/, "")} <ArrowUpRight />
               </a>
             ))}
           </div>
         </Reveal>
+      </header>
+
+      {/* 대표 화면 — 유리 액자 */}
+      <Reveal>
+        <figure className="glass flex flex-col rounded-[24px] p-1.5 sm:rounded-[28px] sm:p-2">
+          {work.phone ? (
+            <div className="phone-mat flex flex-wrap justify-center gap-4 rounded-[18px] px-4 py-8 sm:gap-5 sm:rounded-[20px] sm:py-11">
+              {gallery.map((image, i) => (
+                <Image
+                  key={image.src}
+                  src={image.src}
+                  alt={`${work.name} 화면 ${i + 1}`}
+                  width={image.width}
+                  height={image.height}
+                  className="w-[28%] rounded-[16px] shadow-[0_24px_48px_-20px_rgb(23_23_26/0.4)] sm:w-[17%]"
+                  priority={i < 2}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="thumb aspect-[16/10] sm:aspect-[2/1] sm:rounded-[20px]">
+              <Image
+                src={work.images[0].src}
+                alt={`${work.name} 화면`}
+                width={work.images[0].width}
+                height={work.images[0].height}
+                className="cover"
+                priority
+              />
+            </div>
+          )}
+          <figcaption className="sr-only">{work.name} 대표 화면</figcaption>
+        </figure>
+      </Reveal>
+
+      {/* 본문 — 문제/설계/결과, 섹션마다 유리 패널 */}
+      <div className="mt-4 flex flex-col gap-4">
+        {work.detail.sections.map((section, i) => (
+          <Reveal key={section.heading} delay={i * 60}>
+            <section
+              aria-labelledby={`sec-${i}`}
+              className="glass grid gap-6 rounded-[24px] px-6 py-8 sm:px-11 sm:py-10 lg:grid-cols-[240px_minmax(0,720px)_minmax(0,1fr)] lg:gap-12"
+            >
+              <div className="flex flex-col gap-2 lg:sticky lg:top-[92px] lg:self-start">
+                <span className="eyebrow">{String(i + 1).padStart(2, "0")}</span>
+                <h2
+                  id={`sec-${i}`}
+                  className="text-[24px] font-medium tracking-[-0.02em] sm:text-[26px]"
+                >
+                  {section.heading}
+                </h2>
+              </div>
+              <p className="text-[16px] leading-[1.8] text-body text-pretty sm:text-[17px]">
+                {section.body}
+              </p>
+            </section>
+          </Reveal>
+        ))}
       </div>
 
-      {/* 갤러리 */}
-      {work.detail.gallery.length > 0 ? (
+      {/* 갤러리 — 가로 스크린샷만. 폰 스크린샷은 대표 액자에 이미 나란히 있다 */}
+      {!work.phone && work.detail.gallery.length > 0 ? (
         <Reveal>
-          <div
-            className={`grid gap-6 ${
-              work.phone ? "grid-cols-2 sm:grid-cols-3" : "sm:grid-cols-2"
-            }`}
-          >
-            {work.detail.gallery.map((image) => (
-              <div key={image.src} className="mono-card group">
-                <div
-                  className={`overflow-hidden rounded-lg bg-imgbg ring-1 ring-hairline ${
-                    work.phone ? "px-6 pt-6" : ""
-                  }`}
-                >
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {work.detail.gallery.map((image, i) => (
+              <figure key={image.src} className="glass rounded-[24px] p-1.5">
+                <div className="thumb aspect-[16/10]">
                   <Image
                     src={image.src}
-                    alt={`${work.name} 추가 화면`}
+                    alt={`${work.name} 추가 화면 ${i + 1}`}
                     width={image.width}
                     height={image.height}
-                    className={`mono-img w-full ${
-                      work.phone
-                        ? "rounded-t-lg shadow-[0_2px_16px_rgb(0_0_0/0.10)]"
-                        : ""
-                    }`}
+                    className="cover"
                   />
                 </div>
-              </div>
+              </figure>
             ))}
           </div>
         </Reveal>
       ) : null}
 
-      {/* 다음 작업 */}
-      <div className="mt-24 border-t border-hairline">
-        <Link
-          href={`/work/${next.slug}`}
-          className="group flex items-baseline justify-between py-10 transition-colors hover:bg-imgbg/50"
-        >
-          <span className="font-mono text-[10px] tracking-[0.2em] text-ghost">
-            NEXT WORK
-          </span>
-          <span className="text-[15px] font-bold">
-            {next.name}
-            <span
-              aria-hidden
-              className="ml-2 inline-block transition-transform duration-200 group-hover:translate-x-1"
-            >
-              →
-            </span>
-          </span>
-        </Link>
-      </div>
+      {/* 다른 프로젝트 */}
+      <section aria-labelledby="others-h" className="mt-20">
+        <SectionHead
+          eyebrow="WORK"
+          title="다른 프로젝트"
+          id="others-h"
+          more={{ href: "/work", label: "전체 보기" }}
+        />
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {others.map((other, i) => (
+            <Reveal key={other.slug} delay={(i % 3) * 80}>
+              <WorkCard work={other} />
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      <Contact />
     </main>
   );
 }

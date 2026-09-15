@@ -7,9 +7,9 @@ interface TocProps {
   headings: Heading[];
 }
 
-/** 본문 옆에 붙는 목차 — 지금 읽고 있는 절을 표시한다 (nav의 스크롤 스파이와 같은 방식) */
+/** 본문 옆 유리 목차 — 지금 읽고 있는 절을 잉크 레일로 표시한다 */
 export function Toc({ headings }: TocProps) {
-  const [active, setActive] = useState<string | null>(null);
+  const [active, setActive] = useState<string | null>(headings[0]?.id ?? null);
 
   useEffect(() => {
     if (headings.length === 0) return;
@@ -36,25 +36,26 @@ export function Toc({ headings }: TocProps) {
   return (
     <nav
       aria-label="목차"
-      className="sticky top-20 hidden max-h-[70vh] overflow-y-auto lg:block"
+      className="glass sticky top-[92px] hidden max-h-[70vh] flex-col gap-2.5 overflow-y-auto rounded-[18px] px-4 pt-4 pb-3 lg:flex"
     >
-      <p className="font-mono text-[10px] tracking-[0.2em] text-ghost">
-        CONTENTS
-      </p>
-
-      <ul className="mt-4 space-y-2.5">
-        {headings.map((heading) => (
-          <li key={heading.id} className={heading.level === 3 ? "pl-3" : ""}>
-            <a
-              href={`#${heading.id}`}
-              className={`block text-[12px] leading-[1.55] transition-colors hover:text-ink ${
-                active === heading.id ? "text-ink" : "text-faint"
-              }`}
-            >
-              {heading.text}
-            </a>
-          </li>
-        ))}
+      <span className="eyebrow">CONTENTS</span>
+      <ul className="flex flex-col border-l border-hairline">
+        {headings.map((heading) => {
+          const current = active === heading.id;
+          return (
+            <li key={heading.id}>
+              <a
+                href={`#${heading.id}`}
+                aria-current={current ? "location" : undefined}
+                className={`-ml-px block border-l-2 py-1.5 pl-3.5 text-[13.5px] leading-[1.5] transition-colors hover:text-ink ${
+                  heading.level === 3 ? "pl-6" : ""
+                } ${current ? "border-ink font-medium text-ink" : "border-transparent text-faint"}`}
+              >
+                {heading.text}
+              </a>
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );

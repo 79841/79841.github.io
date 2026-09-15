@@ -1,77 +1,141 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
 @import "tailwindcss";
 
+/* ── 토큰 — 종이 톤 + 잉크 단색, 액센트 없음. 포인트는 반투명 유리 ───────── */
 @theme {
-  /* 정제된 라이트 모노크롬 — 액센트 컬러 없음, 색은 이미지 호버의 보상 */
-  --color-paper: #fafaf8;
+  --color-paper: #f4f4f1;
   --color-ink: #17171a;
-  --color-muted: #84847e;
-  --color-faint: #9a9a94;
-  --color-hairline: #ecece7;
-  --color-imgbg: #f0f0ec;
-  --color-ghost: #b9b9b3;
+  --color-body: #2b2b28;
+  --color-muted: #55554f;
+  --color-faint: #6f6f69;
+  --color-hairline: rgba(23, 23, 26, 0.09);
+  --color-imgbg: #e8e8e4;
+  --color-ghost: #9a9a94;
 
   --font-sans: "Pretendard Variable", Pretendard, -apple-system,
     BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif;
   --font-mono: var(--font-geist-mono), "SF Mono", ui-monospace, monospace;
 }
 
-/* 다크 모드 — 시스템 선호를 따르되 토글로 덮어쓸 수 있다 */
+:root {
+  color-scheme: light;
+  /* 오로라 — 유리가 굴절할 배경. 잉크 그늘 하나와 살짝 푸른 종이 색 하나 */
+  --aurora-ink: rgba(23, 23, 26, 0.18);
+  --aurora-tint: #b9bfd2;
+  /* 유리 표면 — 라이트에서는 흰색을 덜 깔아야 뒤가 비친다. 테두리는 잉크 헤어라인으로 */
+  --glass-bg: rgba(255, 255, 255, 0.2);
+  --glass-bg-hover: rgba(255, 255, 255, 0.34);
+  --glass-strong-bg: rgba(255, 255, 255, 0.38);
+  --glass-border: rgba(23, 23, 26, 0.1);
+  --glass-highlight: rgba(255, 255, 255, 0.85);
+  /* 유리 표면에 비스듬히 떨어지는 빛 — 뒤가 평평해도 판이 있다는 것이 보인다 */
+  --glass-sheen: linear-gradient(
+    138deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.12) 34%,
+    rgba(255, 255, 255, 0) 62%
+  );
+  --glass-shadow: 0 1px 2px rgba(23, 23, 26, 0.04),
+    0 24px 56px -28px rgba(23, 23, 26, 0.32);
+  --bar-bg: rgba(244, 244, 241, 0.72);
+  --chip-bg: rgba(255, 255, 255, 0.36);
+  --code-bg: rgba(255, 255, 255, 0.5);
+  /* 글 썸네일 판화 — 무늬는 그대로 두고 색만 테마를 따른다 */
+  --art-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)' opacity='0.26'/%3E%3C/svg%3E");
+  --art-glow: rgba(255, 255, 255, 0.95);
+  --art-shade: rgba(23, 23, 26, 0.44);
+  --art-cool: rgba(146, 160, 196, 0.5);
+  --art-warm: rgba(198, 176, 148, 0.44);
+  --art-base-a: #f6f6f3;
+  --art-base-b: #dcdcd7;
+  --art-base-c: #b3b3ad;
+  --art-base-d: #8c8c86;
+}
+
+/* 다크 — 시스템 선호를 따르되 토글로 덮어쓸 수 있다 */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --color-paper: #131315;
     --color-ink: #e8e8e4;
-    --color-muted: #8f8f89;
-    --color-faint: #6f6f69;
-    --color-hairline: #26262a;
+    --color-body: #d6d6d2;
+    --color-muted: #a3a39d;
+    --color-faint: #84847e;
+    --color-hairline: rgba(232, 232, 228, 0.1);
     --color-imgbg: #1c1c1f;
     --color-ghost: #5a5a5f;
+    --aurora-ink: rgba(232, 232, 228, 0.09);
+    --aurora-tint: #2a2c36;
+    --glass-bg: rgba(38, 38, 42, 0.5);
+    --glass-bg-hover: rgba(48, 48, 52, 0.66);
+    --glass-strong-bg: rgba(44, 44, 48, 0.66);
+    --glass-sheen: linear-gradient(
+      138deg,
+      rgba(255, 255, 255, 0.09) 0%,
+      rgba(255, 255, 255, 0.02) 38%,
+      rgba(255, 255, 255, 0) 64%
+    );
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-highlight: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 1px 0 rgba(0, 0, 0, 0.2),
+      0 20px 48px -28px rgba(0, 0, 0, 0.6);
+    --bar-bg: rgba(19, 19, 21, 0.72);
+    --chip-bg: rgba(38, 38, 42, 0.5);
+    --code-bg: rgba(28, 28, 31, 0.6);
+    --art-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)' opacity='0.26'/%3E%3C/svg%3E");
+    --art-glow: rgba(255, 255, 255, 0.13);
+    --art-shade: rgba(0, 0, 0, 0.3);
+    --art-cool: rgba(128, 144, 184, 0.14);
+    --art-warm: rgba(160, 140, 116, 0.12);
+    --art-base-a: #50505c;
+    --art-base-b: #3a3a44;
+    --art-base-c: #26262d;
+    --art-base-d: #17171c;
   }
 }
 
 :root[data-theme="dark"] {
+  color-scheme: dark;
   --color-paper: #131315;
   --color-ink: #e8e8e4;
-  --color-muted: #8f8f89;
-  --color-faint: #6f6f69;
-  --color-hairline: #26262a;
+  --color-body: #d6d6d2;
+  --color-muted: #a3a39d;
+  --color-faint: #84847e;
+  --color-hairline: rgba(232, 232, 228, 0.1);
   --color-imgbg: #1c1c1f;
   --color-ghost: #5a5a5f;
-}
-
-/* ── 그레이니 글로우 — 페이지 상단의 무채색 빛 ─────────────────────────
-   Linear의 시그니처를 무채색으로 옮긴 것 (기법: css-tricks.com/grainy-gradients).
-   노이즈는 SVG feTurbulence data URI라 네트워크 요청이 없다.
-   라이트에서는 종이에 진 옅은 그늘, 다크에서는 은은한 광원으로 읽힌다.
-   문서 상단에 앵커된 absolute 레이어 — fixed가 아니므로 스크롤하면
-   콘텐츠와 함께 밀려 올라간다. */
-:root {
-  --glow-wash: rgba(23, 23, 26, 0.07);
-  --glow-wash-2: rgba(23, 23, 26, 0.05);
-  --glow-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
-}
-
-/* 다크 — 잉크가 흰색으로 뒤집히고, 흰 입자는 더 세게 보이므로 알파를 낮춘다 */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --glow-wash: rgba(232, 232, 228, 0.055);
-    --glow-wash-2: rgba(232, 232, 228, 0.04);
-    --glow-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.36 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
-  }
-}
-
-:root[data-theme="dark"] {
-  --glow-wash: rgba(232, 232, 228, 0.055);
-  --glow-wash-2: rgba(232, 232, 228, 0.04);
-  --glow-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.36 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  --aurora-ink: rgba(232, 232, 228, 0.09);
+  --aurora-tint: #2a2c36;
+  --glass-bg: rgba(38, 38, 42, 0.5);
+  --glass-bg-hover: rgba(48, 48, 52, 0.66);
+  --glass-strong-bg: rgba(44, 44, 48, 0.66);
+  --glass-sheen: linear-gradient(
+    138deg,
+    rgba(255, 255, 255, 0.09) 0%,
+    rgba(255, 255, 255, 0.02) 38%,
+    rgba(255, 255, 255, 0) 64%
+  );
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-highlight: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 1px 0 rgba(0, 0, 0, 0.2),
+    0 20px 48px -28px rgba(0, 0, 0, 0.6);
+  --bar-bg: rgba(19, 19, 21, 0.72);
+  --chip-bg: rgba(38, 38, 42, 0.5);
+  --code-bg: rgba(28, 28, 31, 0.6);
+  --art-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)' opacity='0.26'/%3E%3C/svg%3E");
+  --art-glow: rgba(255, 255, 255, 0.13);
+  --art-shade: rgba(0, 0, 0, 0.3);
+  --art-cool: rgba(128, 144, 184, 0.14);
+  --art-warm: rgba(160, 140, 116, 0.12);
+  --art-base-a: #50505c;
+  --art-base-b: #3a3a44;
+  --art-base-c: #26262d;
+  --art-base-d: #17171c;
 }
 
 html {
   scroll-behavior: smooth;
-  /* 배경을 html이 담당해야 body::before(z-index: -1)가 그 위에 그려진다 */
   background: var(--color-paper);
-  /* 스크롤바가 없는 짧은 페이지에서도 자리를 예약한다 — 없으면 페이지를
-     오갈 때 중앙 정렬 컨테이너가 스크롤바 폭의 절반만큼 수평으로 점프한다 */
   scrollbar-gutter: stable;
 }
 
@@ -79,328 +143,566 @@ body {
   position: relative;
   color: var(--color-ink);
   font-family: var(--font-sans);
+  letter-spacing: -0.005em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   word-break: keep-all;
   overflow-wrap: break-word;
 }
 
-/* 페이지 시작(히어로)과 끝(푸터)에만 빛이 든다.
-   스크롤하면 첫 빛이 걷히고, 중간은 무광, 끝에서 다시 차오른다 —
-   경계가 첫 화면 안에 있어야 배경이 콘텐츠에 붙어 움직이는 게 눈에 보인다. */
-body::before,
-body::after {
-  content: "";
+/* ── 오로라 — 페이지 곳곳의 무채색 빛. 유리가 굴절할 대상 ─────────────────
+   문서에 앵커된 absolute 레이어라 스크롤하면 콘텐츠와 함께 밀린다. */
+.aurora {
   position: absolute;
+  inset: 0;
   z-index: -1;
-  left: 0;
-  right: 0;
+  overflow: hidden;
   pointer-events: none;
 }
 
-body::before {
-  top: 0;
-  height: 90vh;
-  background-image:
-    var(--glow-noise),
-    radial-gradient(90% 70% at 50% 0%, var(--glow-wash), transparent 60%);
-  /* 입자가 글로우와 같은 모양으로 흩어지며 사라진다 — 이게 grainy gradient의 핵심 */
-  -webkit-mask-image: radial-gradient(
-    95% 80% at 50% 0%,
-    #000 0%,
-    rgba(0, 0, 0, 0.35) 45%,
-    transparent 68%
-  );
-  mask-image: radial-gradient(
-    95% 80% at 50% 0%,
-    #000 0%,
-    rgba(0, 0, 0, 0.35) 45%,
-    transparent 68%
-  );
-}
-
-/* 푸터 빛 — bottom 앵커라 짧은 페이지에서도 스크롤 영역을 늘리지 않는다 */
-body::after {
-  bottom: 0;
-  height: 70vh;
-  background-image:
-    var(--glow-noise),
-    radial-gradient(85% 60% at 50% 100%, var(--glow-wash-2), transparent 62%);
-  -webkit-mask-image: radial-gradient(
-    90% 70% at 50% 100%,
-    #000 0%,
-    rgba(0, 0, 0, 0.3) 45%,
-    transparent 70%
-  );
-  mask-image: radial-gradient(
-    90% 70% at 50% 100%,
-    #000 0%,
-    rgba(0, 0, 0, 0.3) 45%,
-    transparent 70%
-  );
+.aurora::before {
+  content: "";
+  position: absolute;
+  left: -80px;
+  right: -80px;
+  top: -80px;
+  bottom: -80px;
+  filter: blur(48px);
+  /* 자리를 백분율로 잡는다 — 페이지가 길어져도 빛이 문서 전체에 고루 퍼져
+     어느 높이의 카드든 뒤에 비칠 것을 갖는다 */
+  background:
+    radial-gradient(760px 520px at 14% 4%, var(--aurora-tint), transparent 68%),
+    radial-gradient(820px 520px at 88% 2%, var(--aurora-ink), transparent 68%),
+    radial-gradient(680px 560px at 92% 24%, var(--aurora-ink), transparent 68%),
+    radial-gradient(720px 540px at 6% 42%, var(--aurora-tint), transparent 68%),
+    radial-gradient(780px 560px at 86% 60%, var(--aurora-tint), transparent 68%),
+    radial-gradient(700px 540px at 10% 78%, var(--aurora-ink), transparent 68%),
+    radial-gradient(820px 520px at 72% 94%, var(--aurora-tint), transparent 68%);
 }
 
 @media print {
-  body::before,
-  body::after {
+  .aurora {
     display: none;
   }
 }
 
-/* ── 스티키 헤더 — 문패 × 자기조립 × 리플 유리 ─────────────────────────
-   최상단에서는 예전의 정적 헤더와 똑같이 페이지 폭에 펼쳐져 있고,
-   스크롤하면 리플 굴절 유리 캡슐로 응집한다. 캡슐 가운데에는 지금 읽는
-   섹션의 문패가 산다 (nav.tsx가 IntersectionObserver로 갱신).
-   굴절(backdrop-filter: url)은 Chromium 전용 — 다른 브라우저는
-   반투명 종이 + 그레인으로 폴백된다. */
-:root {
-  --nav-bg: rgba(250, 250, 248, 0.52);
-  --nav-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.4),
-    inset 0 0 0 1px rgba(23, 23, 26, 0.06),
-    0 8px 28px rgba(0, 0, 0, 0.08);
+/* ── 유리 ─────────────────────────────────────────────────────────────── */
+.glass,
+.glass-strong {
+  background-color: var(--glass-bg);
+  background-image: var(--glass-sheen);
+  -webkit-backdrop-filter: blur(22px) saturate(1.7);
+  backdrop-filter: blur(22px) saturate(1.7);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --nav-bg: rgba(19, 19, 21, 0.55);
-    --nav-shadow:
-      inset 0 1px 1px rgba(255, 255, 255, 0.07),
-      inset 0 0 0 1px rgba(232, 232, 228, 0.08),
-      0 8px 28px rgba(0, 0, 0, 0.35);
-  }
+.glass-strong {
+  background-color: var(--glass-strong-bg);
 }
 
-:root[data-theme="dark"] {
-  --nav-bg: rgba(19, 19, 21, 0.55);
-  --nav-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.07),
-    inset 0 0 0 1px rgba(232, 232, 228, 0.08),
-    0 8px 28px rgba(0, 0, 0, 0.35);
+.glass-dark {
+  background: rgba(23, 23, 26, 0.58);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
 }
 
-:root[data-theme="light"] {
-  --nav-bg: rgba(250, 250, 248, 0.52);
-  --nav-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.4),
-    inset 0 0 0 1px rgba(23, 23, 26, 0.06),
-    0 8px 28px rgba(0, 0, 0, 0.08);
+.glass-dark .sub {
+  color: rgba(255, 255, 255, 0.78);
 }
 
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  /* BFC — sticky는 BFC를 만들지 않아 .nav-bar의 위 마진이 헤더 밖으로
-     병합돼 버린다(캡슐 간격이 뷰포트 위로 사라짐). flow-root가 막는다. */
-  display: flow-root;
+/* 이미지 위 캡션 — 테마가 아니라 뒤에 깔린 이미지의 밝기를 따른다.
+   밝은 스크린샷 위에는 항상 이 밝은 유리, 어두운 스크린샷 위에는 .glass-dark */
+.glass-light {
+  background: rgba(250, 250, 248, 0.64);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
+  border: 1px solid rgba(23, 23, 26, 0.12);
+  color: #17171a;
+  box-shadow:
+    0 6px 18px -8px rgba(23, 23, 26, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-.nav-bar {
-  position: relative;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  max-width: 56rem;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-  transition:
-    max-width 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    padding 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    margin 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    border-radius 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    background 0.35s,
-    box-shadow 0.35s;
+.glass-light .sub {
+  color: #4a4a46;
 }
 
-/* 유리 표면의 그레인 — 배경 글로우와 같은 입자, 캡슐일 때만 배어난다 */
-.nav-bar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background-image: var(--glow-noise);
-  opacity: 0;
-  transition: opacity 0.35s;
-}
-
-/* 읽기 진행 링 — 이름 대신 좌측 슬롯을 차지한다.
-   잉크가 원주를 감고(진행률), 클릭하면 맨 위로 돌아간다.
-   호버·포커스 시에만 정확한 %가 옆에 펼쳐진다. */
-.nav-gauge {
-  appearance: none;
-  border: 0;
-  background: transparent;
-  padding: 0.25rem;
-  margin: -0.25rem; /* 히트 영역만 넓힌다 */
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  align-self: center;
-  color: var(--color-ink);
-}
-
-.nav-gauge-body {
-  display: block;
-  overflow: visible;
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.nav-gauge:hover .nav-gauge-body {
-  transform: scale(1.18);
-}
-
-.nav-gauge-track {
-  stroke: var(--color-hairline);
-}
-
-.nav-gauge-arc {
-  stroke: var(--color-ink);
-  stroke-dasharray: 100;
-  stroke-dashoffset: calc(100 - var(--prog, 0));
-  transform: rotate(-90deg);
-  transform-origin: center;
-  transition: stroke-dashoffset 0.15s linear;
-}
-
-.nav-gauge-pct {
-  display: inline-block;
-  max-width: 0;
-  overflow: hidden;
-  opacity: 0;
-  font-family: var(--font-mono);
-  font-size: 9.5px;
-  letter-spacing: 0.12em;
-  color: var(--color-faint);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  transition:
-    max-width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.25s,
-    margin 0.35s;
-}
-
-.nav-gauge:hover .nav-gauge-pct,
-.nav-gauge:focus-visible .nav-gauge-pct {
-  max-width: 3.5em;
-  opacity: 1;
-  margin-left: 0.55em;
-}
-
-.nav-gauge:focus-visible {
-  outline: 2px solid var(--color-ink);
-  outline-offset: 3px;
-  border-radius: 6px;
-}
-
-/* 완독 순간 한 번 튄다 — nav.tsx가 경계를 넘는 순간에만 클래스를 단다 */
-.site-header.nav-done .nav-gauge-body {
-  animation: nav-done-pulse 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 1;
-}
-
-@keyframes nav-done-pulse {
-  35% {
-    transform: scale(1.35);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.nav-links {
-  transition:
-    gap 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    font-size 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* 문패 — 접혀 있다가 캡슐이 되면 가운데서 펼쳐진다.
-   바는 baseline 정렬이라 9px 문패가 이름 베이스라인에 매달려 처져 보인다 —
-   문패만 수직 가운데로 뺀다. */
-.nav-ctx {
-  align-self: center;
-  max-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  opacity: 0;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  color: var(--color-faint);
-  transition:
-    max-width 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    margin 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.3s 0.12s;
-}
-
-.nav-ctx s {
-  display: inline-block;
-  max-width: 16rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-decoration: none;
-  animation: nav-ctx-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes nav-ctx-in {
-  from {
-    opacity: 0;
-    transform: translateY(7px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.site-header[data-scrolled] .nav-bar {
-  max-width: min(40rem, calc(100vw - 2rem));
-  /* 캡슐은 상단에 붙지 않고 떠 있어야 한다 — 화면 위 모서리와 한 호흡의 간격 */
-  margin: 1.25rem auto 0;
-  padding: 0.7rem 1.5rem;
-  border-radius: 999px;
-  background: var(--nav-bg);
-  -webkit-backdrop-filter: url(#nav-ripple) blur(2px) saturate(1.15);
-  backdrop-filter: url(#nav-ripple) blur(2px) saturate(1.15);
-  box-shadow: var(--nav-shadow);
-}
-
-.site-header[data-scrolled] .nav-bar::after {
-  opacity: 0.3;
-}
-
-.site-header[data-scrolled] .nav-links {
-  gap: 1.1rem;
-  font-size: 12.5px;
-}
-
-.site-header[data-scrolled] .nav-ctx {
-  max-width: 16rem;
-  opacity: 1;
-  margin: 0 1.2rem;
+/* 전체 폭 스티키 바 */
+.bar {
+  background: var(--bar-bg);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  backdrop-filter: blur(24px) saturate(1.2);
+  border-bottom: 1px solid var(--color-hairline);
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .site-header[data-scrolled] .nav-bar {
+  .glass,
+  .glass-strong,
+  .bar,
+  .chip {
     background: var(--color-paper);
+  }
+  .glass-light {
+    background: #f4f4f1;
+  }
+  .glass-dark {
+    background: #17171a;
   }
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .site-header[data-scrolled] .nav-bar {
+  .glass,
+  .glass-strong,
+  .bar,
+  .chip {
     background: var(--color-paper);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
 }
 
-/* 좁은 화면 — 캡슐이 좁아지면 문패부터 양보한다 */
-@media (max-width: 560px) {
-  .site-header[data-scrolled] .nav-ctx {
-    max-width: 0;
-    opacity: 0;
-    margin: 0;
+/* ── 작은 부품 ────────────────────────────────────────────────────────── */
+.eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--color-faint);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--chip-bg);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  font-size: 13px;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.chip-sm {
+  height: 26px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+.chip-line {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border: 1px solid rgba(23, 23, 26, 0.14);
+}
+
+:root[data-theme="dark"] .chip-line {
+  border-color: rgba(232, 232, 228, 0.16);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .chip-line {
+    border-color: rgba(232, 232, 228, 0.16);
   }
+}
+
+a.chip:hover,
+button.chip:hover {
+  color: var(--color-ink);
+  border-color: rgba(23, 23, 26, 0.3);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.btn-sm {
+  height: 38px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+
+.btn-ink {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.btn-ink:hover {
+  background: var(--color-muted);
+  color: var(--color-paper);
+}
+
+.btn-glass {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border);
+  color: var(--color-ink);
+  box-shadow: 0 8px 24px -16px rgba(23, 23, 26, 0.25);
+}
+
+.btn-glass:hover {
+  background-color: var(--glass-bg-hover);
+  color: var(--color-ink);
+}
+
+/* ── 헤더 캡슐 — 글자색과 유리 색이 뒤에 깔린 것의 밝기(data-tone)를 따른다 ──
+   nav.tsx가 스크롤마다 캡슐 아래를 샘플링해 data-tone을 갱신한다. */
+.nav-cap {
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  backdrop-filter: blur(24px) saturate(1.4);
+  transition:
+    background 220ms ease,
+    border-color 220ms ease,
+    color 220ms ease;
+}
+
+.nav-cap[data-tone="light"] {
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(23, 23, 26, 0.1);
+  color: #17171a;
+  box-shadow:
+    0 1px 2px rgba(23, 23, 26, 0.04),
+    0 20px 48px -28px rgba(23, 23, 26, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.nav-cap[data-tone="dark"] {
+  background: rgba(23, 23, 26, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #f4f4f1;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 20px 48px -28px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.nav-cap .nav-link {
+  color: inherit;
+  opacity: 0.66;
+  transition: opacity 160ms ease;
+}
+
+.nav-cap .nav-link:hover,
+.nav-cap .nav-link-active {
+  opacity: 1;
+}
+
+.nav-cap button {
+  color: inherit;
+  opacity: 0.8;
+}
+
+/* 현재 페이지 뒤의 유리 알약 — 하나뿐이고, 경로가 바뀌면 새 항목의 위치와 폭으로 미끄러진다.
+   위치·폭은 nav.tsx가 DOM에 직접 쓰고, 첫 배치가 끝나면 data-ready가 붙어 그때부터 전환이 켜진다. */
+.nav-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, width;
+}
+
+.nav-pill[data-ready] {
+  transition:
+    transform 460ms cubic-bezier(0.22, 1, 0.36, 1),
+    width 460ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 200ms ease,
+    background 220ms ease;
+}
+
+.nav-cap[data-tone="light"] .nav-pill {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(23, 23, 26, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 2px 6px -2px rgba(23, 23, 26, 0.14);
+}
+
+.nav-cap[data-tone="dark"] .nav-pill {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* 마우스를 올린 항목 — 옅은 유리 기운이 따라온다 */
+.nav-link {
+  transition:
+    background 160ms ease,
+    opacity 160ms ease;
+}
+
+.nav-cap[data-tone="light"] .nav-link:hover:not(.nav-link-active) {
+  background: rgba(255, 255, 255, 0.36);
+}
+
+.nav-cap[data-tone="dark"] .nav-link:hover:not(.nav-link-active) {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* 섹션 머리 오른쪽의 "전체 보기" 알약 */
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 14px 0 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+.more:hover {
+  background-color: var(--glass-bg-hover);
+}
+
+/* 유리 카드 — 이미지 위, 텍스트 아래 */
+.gcard {
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  border-radius: 24px;
+  color: var(--color-ink);
+  transition:
+    transform 240ms ease,
+    background 200ms ease;
+}
+
+.gcard:hover {
+  transform: translateY(-3px);
+  background-color: var(--glass-bg-hover);
+}
+
+.thumb {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--color-imgbg);
+}
+
+/* ── 글 썸네일 그라데이션 — 사진이 없는 글의 바탕 ──────────────────────────
+   층은 위에서부터 [결 · 빛 · 색조 · 그늘 · 바탕]. 빛과 색조는 중간 정지점을
+   한 번 더 둬서 가장자리가 뭉개지지 않게 하고, 맨 위의 아주 옅은 결이
+   넓은 그라데이션에 생기는 띠(banding)를 덮는다. */
+.art {
+  position: absolute;
+  inset: 0;
+  background-blend-mode: soft-light, normal, normal, normal, normal;
+  background-size: 180px 180px, auto, auto, auto, auto;
+}
+
+/* 안개 — 왼쪽 위에서 빛이 들고 오른쪽 아래가 서늘하게 잠긴다 */
+.art[data-art="mist"] {
+  background-image:
+    var(--art-grain),
+    radial-gradient(
+      66% 70% at 24% 16%,
+      var(--art-glow) 0%,
+      color-mix(in srgb, var(--art-glow) 42%, transparent) 30%,
+      transparent 66%
+    ),
+    radial-gradient(
+      58% 62% at 80% 74%,
+      var(--art-cool) 0%,
+      color-mix(in srgb, var(--art-cool) 40%, transparent) 34%,
+      transparent 70%
+    ),
+    radial-gradient(
+      54% 58% at 94% 98%,
+      var(--art-shade) 0%,
+      color-mix(in srgb, var(--art-shade) 38%, transparent) 36%,
+      transparent 72%
+    ),
+    linear-gradient(
+      152deg,
+      var(--art-base-a) 0%,
+      var(--art-base-b) 34%,
+      var(--art-base-c) 68%,
+      var(--art-base-d) 100%
+    );
+}
+
+/* 모래 — 오른쪽 위의 빛과 왼쪽의 따뜻한 기운 */
+.art[data-art="dune"] {
+  background-image:
+    var(--art-grain),
+    radial-gradient(
+      62% 66% at 78% 14%,
+      var(--art-glow) 0%,
+      color-mix(in srgb, var(--art-glow) 44%, transparent) 28%,
+      transparent 64%
+    ),
+    radial-gradient(
+      64% 68% at 16% 52%,
+      var(--art-warm) 0%,
+      color-mix(in srgb, var(--art-warm) 42%, transparent) 34%,
+      transparent 72%
+    ),
+    radial-gradient(
+      56% 60% at 8% 96%,
+      var(--art-shade) 0%,
+      color-mix(in srgb, var(--art-shade) 36%, transparent) 36%,
+      transparent 74%
+    ),
+    linear-gradient(
+      206deg,
+      var(--art-base-a) 0%,
+      var(--art-base-b) 36%,
+      var(--art-base-c) 70%,
+      var(--art-base-d) 100%
+    );
+}
+
+/* 물결 — 아래쪽에서 올라오는 빛, 위쪽 모서리가 깊다 */
+.art[data-art="tide"] {
+  background-image:
+    var(--art-grain),
+    radial-gradient(
+      70% 64% at 56% 92%,
+      var(--art-glow) 0%,
+      color-mix(in srgb, var(--art-glow) 40%, transparent) 30%,
+      transparent 68%
+    ),
+    radial-gradient(
+      60% 64% at 22% 26%,
+      var(--art-cool) 0%,
+      color-mix(in srgb, var(--art-cool) 44%, transparent) 32%,
+      transparent 70%
+    ),
+    radial-gradient(
+      58% 56% at 92% 6%,
+      var(--art-shade) 0%,
+      color-mix(in srgb, var(--art-shade) 38%, transparent) 34%,
+      transparent 72%
+    ),
+    linear-gradient(
+      22deg,
+      var(--art-base-b) 0%,
+      var(--art-base-a) 30%,
+      var(--art-base-c) 72%,
+      var(--art-base-d) 100%
+    );
+}
+
+.thumb .cover {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: transform 700ms ease;
+}
+
+.gcard:hover .thumb .cover {
+  transform: scale(1.03);
+}
+
+/* 폰 스크린샷 매트 — 이미지의 일부라 테마와 무관하게 밝은 회색 */
+.phone-mat {
+  background: linear-gradient(180deg, #e9e9e4 0%, #d9d9d3 100%);
+}
+
+/* 글 목록 필터 알약 */
+/* ── 태그 목록 — 좁은 화면은 낱말 줄, 넓은 화면은 괘선 레일 ───────────────
+   태그가 몇 개로 늘어도 좁은 화면에서는 글줄처럼 흐르고 레일에서는 아래로만 길어진다. */
+.taglist {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  row-gap: 6px;
+}
+
+/* 구분점은 앞 태그에 붙여 둔다 — 줄이 바뀌어도 점이 줄머리로 내려오지 않는다 */
+.taglist > li:not(:last-child)::after {
+  content: "·";
+  margin-left: 8px;
+  color: var(--color-ghost);
+}
+
+.tagrow {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--color-muted);
+  transition: color 160ms ease;
+}
+
+.tagrow:hover {
+  color: var(--color-ink);
+}
+
+.tagrow[aria-current="page"] {
+  color: var(--color-ink);
+  font-weight: 500;
+}
+
+.tagrow .count {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-ghost);
+}
+
+@media (min-width: 1024px) {
+  .taglist {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    column-gap: 0;
+    row-gap: 0;
+  }
+
+  .taglist > li:not(:last-child)::after {
+    content: none;
+  }
+
+  .taglist > li {
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .taglist > li:last-child {
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .tagrow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 34px;
+    padding-right: 2px;
+  }
+
+  .tagrow .count {
+    display: inline;
+  }
+}
+
+/* 포커스 링 — 색이 아니라 잉크 테두리로 */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
 }
 
 ::selection {
@@ -417,51 +719,35 @@ body::after {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-hairline);
+  background: var(--color-imgbg);
   border-radius: 5px;
   border: 2px solid var(--color-paper);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-faint);
+/* ── 블로그 본문 ──────────────────────────────────────────────────────── */
+.post-body > :first-child {
+  margin-top: 0;
 }
 
-/* 듀오톤 시그니처 — 모든 스크린샷은 잉크 톤, 호버한 것만 원색이 돌아온다 */
-.mono-img {
-  filter: grayscale(1) contrast(1.03);
-  transition:
-    filter 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.mono-card:hover .mono-img,
-.mono-card:focus-within .mono-img {
-  filter: none;
-}
-
-/* 터치 기기에는 호버가 없으므로 원색을 그대로 보여준다 */
-@media (hover: none) {
-  .mono-img {
-    filter: none;
-  }
-}
-
-/* 블로그 본문 — 코드 블록 안의 <code>는 인라인 코드 스타일을 벗는다.
-   `.post-body pre code`가 mdx-components의 유틸리티 클래스보다 명시도가 높다. */
+/* 코드 블록 안의 <code>는 인라인 코드 스타일을 벗는다 */
 .post-body pre code {
   background: none;
   padding: 0;
   border-radius: 0;
   font-size: inherit;
   box-shadow: none;
+  color: inherit;
 }
 
-/* 본문 첫 요소 위의 여백은 헤더가 이미 만들었다 */
-.post-body > :first-child {
-  margin-top: 0;
+/* 머메이드 SVG — 잉크 단색 팔레트로 그린다 (mermaid.tsx의 themeVariables와 짝) */
+.mermaid-figure svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
 }
 
-/* Scroll-reveal — toggled by the Reveal component */
+/* ── 스크롤 리빌 ──────────────────────────────────────────────────────── */
 .reveal {
   opacity: 0;
   transform: translateY(14px);
@@ -487,22 +773,48 @@ body::after {
     transform: none;
   }
 
-  .mono-img {
+  .gcard,
+  .thumb .cover,
+  .btn,
+  .tagrow,
+  .nav-cap,
+  .nav-link {
     transition: none;
   }
 
-  .nav-bar,
-  .nav-bar::after,
-  .nav-links,
-  .nav-ctx,
-  .nav-gauge-body,
-  .nav-gauge-arc,
-  .nav-gauge-pct {
+  .nav-pill[data-ready] {
     transition: none;
   }
+}
 
-  .nav-ctx s,
-  .site-header.nav-done .nav-gauge-body {
-    animation: none;
+/* ── 이력 타임라인 카드 — 유리는 현재 자리 하나뿐, 나머지는 괘선만 ───────── */
+.tl-line {
+  background: transparent;
+  border: 1px solid rgba(23, 23, 26, 0.13);
+}
+
+:root[data-theme="dark"] .tl-line {
+  border-color: rgba(232, 232, 228, 0.14);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .tl-line {
+    border-color: rgba(232, 232, 228, 0.14);
   }
+}
+
+/* ── 가운뎃점으로 이어붙인 낱말 목록 — 칩 대신 읽히는 목록 ──────────────── */
+.dotlist {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 8px;
+  row-gap: 4px;
+}
+
+/* 구분점은 앞 낱말에 붙여 둔다 — 줄이 바뀌어도 점이 줄머리로 내려오지 않는다 */
+.dotlist > span:not(:last-child)::after {
+  content: "·";
+  margin-left: 8px;
+  color: var(--color-ghost);
 }

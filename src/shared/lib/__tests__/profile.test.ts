@@ -1,17 +1,18 @@
 import { describe, expect, it } from "vitest";
 import {
-  aboutParagraphs,
+  awards,
   experiences,
   moreWorks,
   profile,
   stackGroups,
+  stats,
   works,
 } from "@/shared/lib/profile";
 
 describe("profile data", () => {
   it("has core identity fields", () => {
     expect(profile.name).toBe("명인지");
-    expect(profile.thesis).toHaveLength(2);
+    expect(profile.headline.length).toBeGreaterThan(0);
     expect(profile.email).toMatch(/@/);
     expect(profile.resumeHref).toMatch(/\.pdf$/);
   });
@@ -54,14 +55,31 @@ describe("profile data", () => {
     }
   });
 
-  it("keeps about, stack, and experience content non-empty", () => {
-    expect(aboutParagraphs.length).toBeGreaterThan(0);
-    expect(experiences.length).toBeGreaterThan(0);
+  it("keeps stack, experience, awards, and stats non-empty", () => {
     const labels = stackGroups.map((g) => g.label);
     expect(labels).toContain("FRONT-END");
     expect(labels).toContain("AI TOOLING");
     for (const group of stackGroups) {
-      expect(group.items).not.toHaveLength(0);
+      expect(group.items.length).toBeGreaterThan(0);
     }
+    expect(experiences.length).toBeGreaterThan(0);
+    expect(awards.length).toBeGreaterThan(0);
+    expect(stats).toHaveLength(3);
+  });
+
+  it("has exactly one current role, listed first, and every role has tags", () => {
+    expect(experiences.filter((e) => e.current)).toHaveLength(1);
+    expect(experiences[0].current).toBe(true);
+    for (const entry of experiences) {
+      expect(entry.tags.length).toBeGreaterThan(0);
+      expect(entry.period).toMatch(/^\d{4}\.\d{2} — (\d{4}\.\d{2}|현재)$/);
+    }
+  });
+
+  it("orders roles and awards newest first", () => {
+    const starts = experiences.map((e) => e.period.slice(0, 7));
+    expect([...starts].sort().reverse()).toEqual(starts);
+    const dates = awards.map((a) => a.date);
+    expect([...dates].sort().reverse()).toEqual(dates);
   });
 });

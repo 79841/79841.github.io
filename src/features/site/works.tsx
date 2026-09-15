@@ -1,36 +1,38 @@
+import { FeaturedWork } from "@/features/site/featured-work";
 import { MoreWorks } from "@/features/site/more-works";
-import { SectionLabel } from "@/features/site/section-label";
+import { SectionHead } from "@/features/site/section-head";
 import { WorkCard } from "@/features/site/work-card";
 import { works } from "@/shared/lib/profile";
 import { Reveal } from "@/shared/ui/reveal";
 
-/** 메인의 작업 섹션 — 대표작 1 + 나머지 그리드 + 텍스트 목록 */
+/** 메인의 작업 섹션 — 대표작 1 + 카드 3 + 텍스트 목록 */
 export function Works() {
   const [featured, ...rest] = works;
 
   return (
-    <section id="work" data-nav-ctx="§01 — WORK" className="scroll-mt-16">
-      <SectionLabel
-        index="01"
-        title="Selected Work"
-        aside="이미지에 마우스를 올리면 색이 돌아옵니다"
-      />
-
+    <section id="work" aria-labelledby="work-h" className="scroll-mt-20">
       <Reveal>
-        <div className="mb-20">
-          <WorkCard work={featured} />
-        </div>
+        <FeaturedWork work={featured} />
       </Reveal>
 
-      <div className="grid gap-x-10 gap-y-16 sm:grid-cols-2">
+      <div className="mt-6">
+        <SectionHead
+          eyebrow="WORK"
+          title="프로젝트"
+          id="work-h"
+          more={{ href: "/work", label: "전체 보기" }}
+        />
+      </div>
+
+      <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {rest.map((work, i) => (
-          <Reveal key={work.slug} delay={(i % 2) * 100}>
-            <WorkCard work={work} eager />
+          <Reveal key={work.slug} delay={(i % 3) * 80}>
+            <WorkCard work={work} />
           </Reveal>
         ))}
       </div>
 
-      <div className="mt-16">
+      <div className="mt-6">
         <MoreWorks />
       </div>
     </section>
