@@ -74,10 +74,12 @@ function themeFor(dark: boolean) {
       rankSpacing: 58,
       diagramPadding: 4,
     },
+    /* 참여자 상자를 좁게 두어 참여자가 대여섯이어도 본문 폭에서 덜 줄어든다 */
     sequence: {
       useMaxWidth: true,
-      actorMargin: 56,
-      boxMargin: 12,
+      width: 118,
+      actorMargin: 30,
+      boxMargin: 10,
       mirrorActors: false,
       messageFontSize: 13,
       noteFontSize: 12,

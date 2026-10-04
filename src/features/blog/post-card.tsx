@@ -9,7 +9,7 @@ interface PostCardProps {
 /** 글 카드 — 판화 썸네일 위, 제목과 메타만 아래 */
 export function PostCard({ post }: PostCardProps) {
   return (
-    <Link href={`/blog/${post.slug}`} className="gcard glass">
+    <Link href={`/blog/${post.slug}`} data-glow className="gcard glass">
       <div className="thumb aspect-[16/10]">
         <div aria-hidden className="art" data-art={post.art} />
       </div>

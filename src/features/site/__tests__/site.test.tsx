@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Contact } from "@/features/site/contact";
 import { Experience } from "@/features/site/experience";
@@ -209,17 +209,21 @@ describe("Stack", () => {
     );
   });
 
-  it("renders every group as a hairline row on the about page", () => {
-    const { container } = render(<StackPanels />);
-    for (const group of stackGroups) {
-      expect(screen.getByText(group.label)).toBeInTheDocument();
-      for (const item of group.items) {
-        expect(screen.getAllByText(item).length).toBeGreaterThan(0);
-      }
-    }
-    // 카드도 칩도 아닌 낱말 목록이다 — about이 카드 나열로 돌아가면 여기서 걸린다
-    expect(container.querySelectorAll(".glass, .chip")).toHaveLength(0);
-    expect(container.querySelectorAll(".dotlist")).toHaveLength(stackGroups.length);
+  it("uses the same rows on the about page as on the home page", () => {
+    const home = render(<StackRows />).container;
+    const rowsOf = (root: HTMLElement) =>
+      [...root.querySelectorAll(".stack-row")].map((row) => row.innerHTML);
+    const homeRows = rowsOf(home);
+    cleanup();
+
+    const about = render(<StackPanels />).container;
+    // 홈과 About의 스택 줄은 글자 하나까지 같아야 한다 — 한쪽만 손대면 여기서 걸린다
+    expect(rowsOf(about)).toEqual(homeRows);
+    expect(homeRows).toHaveLength(stackGroups.length);
+    // 이동 알약은 홈에만 있다
+    expect(
+      within(about).queryByRole("link", { name: /더 알아보기/ }),
+    ).not.toBeInTheDocument();
   });
 });
 

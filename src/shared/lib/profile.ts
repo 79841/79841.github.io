@@ -13,23 +13,9 @@ export interface WorkImage {
   height: number;
 }
 
-export interface WorkDetailSection {
-  heading: string;
-  body: string;
-}
-
 export interface WorkLink {
   label: string;
   href: string;
-}
-
-export interface WorkDetail {
-  /** 문제 → 설계 → 결과 순의 본문 섹션 */
-  sections: WorkDetailSection[];
-  /** 갤러리 이미지 (듀오톤 적용) */
-  gallery: WorkImage[];
-  /** GitHub·라이브 등 외부 링크 */
-  links: WorkLink[];
 }
 
 export interface Work {
@@ -54,7 +40,11 @@ export interface Work {
   phone?: boolean;
   /** true면 전체 폭 카드 */
   wide?: boolean;
-  detail: WorkDetail;
+  /** 상세 개요의 역할 — 무엇을 맡았는지 한 줄 */
+  role: string;
+  /** GitHub·라이브 등 외부 링크. 첫 번째가 대표 링크다 */
+  links: WorkLink[];
+  /* 상세 본문(요점·다이어그램·회고)은 src/content/work/<slug>.mdx에 쓴다 */
 }
 
 export interface MoreWork {
@@ -98,7 +88,7 @@ export interface Stat {
 export const profile = {
   name: "명인지",
   nameEn: "Myeong Inji",
-  role: "Front-end Developer · Seoul",
+  role: "Software Developer · Seoul",
   email: "79841@naver.com",
   github: "https://github.com/79841",
   githubLabel: "github.com/79841",
@@ -106,11 +96,11 @@ export const profile = {
   /** 히어로 한 줄 — 짧은 영어 단어 셋 */
   headline: "Simple. Fast. Precise.",
   summary:
-    "실시간 데이터 시각화와 렌더링 성능 개선을 주로 다루는 프론트엔드 개발자입니다. 지금은 새솔테크에서 Electron·React 데스크톱 앱과 Next.js 서비스를 만들고 있습니다.",
+    "실시간 데이터 시각화와 렌더링 성능 개선을 주로 다루는 소프트웨어 개발자입니다. 지금은 새솔테크에서 Electron·React 데스크톱 앱과 Next.js 서비스를 만들고 있습니다.",
   /** /about 머리 */
-  aboutHeadline: "보안에서 프론트엔드로.",
+  aboutHeadline: "보안에서 소프트웨어 개발로.",
   aboutSummary:
-    "보안 진단 5년을 거쳐 2024년부터 프론트엔드를 만듭니다. 렌더링 성능과 실시간 데이터 시각화를 주로 다룹니다.",
+    "보안 진단 5년을 거쳐 2024년부터 소프트웨어를 만듭니다. 렌더링 성능과 실시간 데이터 시각화를 주로 다룹니다.",
   location: "Seoul, Korea",
 } as const;
 
@@ -128,26 +118,10 @@ export const works: Work[] = [
     images: [{ src: "/work/argus.webp", width: 1280, height: 900 }],
     wide: true,
     dark: true,
-    detail: {
-      sections: [
-        {
-          heading: "문제",
-          body: "Claude Code, Codex, Gemini CLI — 매일 쓰는 AI 코딩 에이전트가 늘어날수록 비용과 토큰 사용량은 블랙박스가 됐습니다. 프로젝트별로 얼마를 쓰는지, 어떤 프롬프트 전략이 토큰을 아끼는지 정량적으로 알 수 없었습니다.",
-        },
-        {
-          heading: "설계",
-          body: "Next.js API Route로 OTLP 인제스트 엔드포인트(/v1/logs)를 열고 에이전트별 자동 태깅·파싱을 붙였습니다. 저장은 SQLite WAL 모드(agent_logs · pricing_model · config_snapshots), 시각화는 Recharts 대시보드, 상주는 Electron 트레이 앱 — 백그라운드에서 OTLP를 수신하며 macOS/Windows를 모두 지원합니다. CLAUDE.md와 .mcp.json 같은 에이전트 설정도 프로젝트 표준에 포함시켰습니다.",
-        },
-        {
-          heading: "결과",
-          body: "프로젝트별 에이전트 비용을 정량 추적해 도구 선택의 근거로 쓰고 있고, 텔레메트리 분석으로 프롬프트 전략과 토큰 효율을 개선했습니다. GitHub Actions로 릴리즈를 자동화해 크로스 플랫폼 데스크톱 앱으로 운영 중입니다.",
-        },
-      ],
-      gallery: [],
-      links: [
-        { label: "GitHub ↗", href: "https://github.com/79841/argus" },
-      ],
-    },
+    role: "수집 서버, 트레이 앱, 릴리즈 자동화까지 직접 구현",
+    links: [
+      { label: "GitHub", href: "https://github.com/79841/argus" },
+    ],
   },
   {
     slug: "malgoum",
@@ -157,25 +131,13 @@ export const works: Work[] = [
     badge: "라이브",
     description:
       "검색, 즐겨찾기, 시간대별 예보를 갖춘 날씨 앱. Vercel에서 운영 중입니다.",
-    stack: "Next.js · TypeScript · Vercel",
+    stack: "React · Vite · TypeScript · Jotai · TanStack Query",
     images: [{ src: "/work/malgoum.webp", width: 1280, height: 800 }],
-    detail: {
-      sections: [
-        {
-          heading: "개요",
-          body: "날씨 앱은 넘치지만 대부분 광고와 정보 과잉으로 무겁습니다. Malgoum은 반대로 갑니다 — 지금 필요한 날씨 하나를 가장 빠르고 깨끗하게. 검색, 즐겨찾기, 시간대별 예보만 남기고 전부 덜어냈습니다.",
-        },
-        {
-          heading: "만듦새",
-          body: "Next.js와 TypeScript로 만들어 Vercel에서 운영합니다. 위치 검색과 예보 데이터 캐싱, 반응형 레이아웃까지 — 작지만 프로덕션 품질로 유지하는 것이 목표입니다.",
-        },
-      ],
-      gallery: [],
-      links: [
-        { label: "라이브 ↗", href: "https://malgoum.vercel.app" },
-        { label: "GitHub ↗", href: "https://github.com/79841/Malgoum" },
-      ],
-    },
+    role: "설계부터 배포까지 혼자 개발",
+    links: [
+      { label: "라이브", href: "https://malgoum.vercel.app" },
+      { label: "GitHub", href: "https://github.com/79841/Malgoum" },
+    ],
   },
   {
     slug: "letsdo",
@@ -191,34 +153,12 @@ export const works: Work[] = [
       { src: "/work/letsdo2.webp", width: 484, height: 808 },
     ],
     phone: true,
-    detail: {
-      sections: [
-        {
-          heading: "문제",
-          body: "척수 장애인은 꾸준한 건강 관리 과제와 전문가 상담이 필요하지만, 이를 하나의 흐름으로 묶어주는 도구가 없었습니다. 사용자와 관리자(상담사)가 같은 데이터를 서로 다른 화면으로 봐야 하는 것도 과제였습니다.",
-        },
-        {
-          heading: "설계",
-          body: "사용자용 앱과 관리자용 앱 두 개를 Flutter로, 백엔드를 FastAPI + MySQL + Redis로 — 셋 다 혼자 개발했습니다. 과제 수행도를 한눈에 보는 대시보드와 WebSocket 기반 실시간 상담 채팅이 핵심 기능입니다.",
-        },
-        {
-          heading: "배움",
-          body: "첫 Flutter 프로젝트이자 WebSocket 실시간 통신을 깊게 이해하게 된 작업입니다. 사용자·관리자·서버 세 방향의 상태를 동기화하며 실시간 시스템의 상태 설계를 몸으로 배웠습니다.",
-        },
-      ],
-      gallery: [
-        { src: "/work/letsdo-g1.webp", width: 483, height: 805 },
-        { src: "/work/letsdo-g2.webp", width: 482, height: 802 },
-        { src: "/work/letsdo-g4.webp", width: 484, height: 806 },
-        { src: "/work/letsdo-g6.webp", width: 484, height: 802 },
-        { src: "/work/letsdo-g7.webp", width: 485, height: 807 },
-      ],
-      links: [
-        { label: "앱 GitHub ↗", href: "https://github.com/79841/letsdo-app" },
-        { label: "관리자 앱 ↗", href: "https://github.com/79841/letsdo-admin-app" },
-        { label: "백엔드 ↗", href: "https://github.com/79841/letsdo-back" },
-      ],
-    },
+    role: "사용자 앱, 관리자 앱, API 서버를 혼자 개발",
+    links: [
+      { label: "앱 GitHub", href: "https://github.com/79841/letsdo-app" },
+      { label: "관리자 앱", href: "https://github.com/79841/letsdo-admin-app" },
+      { label: "API 서버", href: "https://github.com/79841/letsdo-back" },
+    ],
   },
   {
     slug: "chusinsa",
@@ -230,30 +170,10 @@ export const works: Work[] = [
       "체형 정보로 의류를 추천하는 쇼핑몰. 프론트엔드와 백엔드를 맡았습니다.",
     stack: "Next.js · Recoil · FastAPI · MySQL",
     images: [{ src: "/work/chusinsa.webp", width: 1600, height: 1030 }],
-    detail: {
-      sections: [
-        {
-          heading: "문제",
-          body: "기존 쇼핑몰의 추천은 구매 이력과 클릭 기반이라 신규 사용자에게 무력합니다. 성별·키·몸무게라는 명시적 신체 정보로 첫 방문부터 맞는 옷을 추천하는 것이 목표였습니다.",
-        },
-        {
-          heading: "설계",
-          body: "5인 팀에서 프론트엔드(Next.js + Recoil)와 백엔드(FastAPI + MySQL) 전반을 맡았습니다. 상품 데이터 규모가 커서 데이터베이스 정규화에 특히 집중했고, 카테고리·사이즈·가격 필터가 얽히는 검색 화면의 상태 관리를 설계했습니다.",
-        },
-        {
-          heading: "배움",
-          body: "열정적인 팀원들과 함께한 첫 규모 있는 협업 프로젝트입니다. 화면과 데이터 모델이 서로를 어떻게 제약하는지 — 풀스택 관점의 기초를 여기서 다졌습니다.",
-        },
-      ],
-      gallery: [
-        { src: "/work/chusinsa-2.webp", width: 1600, height: 1023 },
-        { src: "/work/chusinsa-3.webp", width: 1600, height: 1006 },
-        { src: "/work/chusinsa-arch.avif", width: 2278, height: 1062 },
-      ],
-      links: [
-        { label: "GitHub ↗", href: "https://github.com/79841/chusinsa-front" },
-      ],
-    },
+    role: "5인 팀에서 프론트엔드와 백엔드 전반",
+    links: [
+      { label: "GitHub", href: "https://github.com/79841/chusinsa-front" },
+    ],
   },
 ];
 
@@ -304,8 +224,8 @@ export const experiences: ExperienceEntry[] = [
   {
     period: "2024.02 — 현재",
     org: "새솔테크",
-    role: "Front-End Developer",
-    desc: "Electron·React 자동화 테스트 데스크톱 앱(OmniAir 인증, 3사 납품), Next.js 권한 관리 플랫폼, 인증 서비스 개발과 운영. 프레임 드롭 85% 감소, 배포 15분 → 6분.",
+    role: "Software Developer",
+    desc: "Electron·React 자동화 테스트 데스크톱 앱, Next.js 권한 관리 플랫폼, 사내 인증 서비스 개발·운영",
     tags: ["Electron", "React", "Next.js", "NestJS", "성능 최적화"],
     current: true,
   },
@@ -313,28 +233,28 @@ export const experiences: ExperienceEntry[] = [
     period: "2023.03 — 현재",
     org: "비욘드 코딩",
     role: "Programming Instructor",
-    desc: "HTML·CSS·JavaScript·Python 커리큘럼 개발과 강의. 만족도 4.8/5.0, 완주율 65% → 80%.",
+    desc: "HTML·CSS·JavaScript·Python 커리큘럼 개발·강의",
     tags: ["JavaScript", "Python", "커리큘럼 개발"],
   },
   {
     period: "2022.04 — 2022.06",
     org: "토스페이먼츠",
     role: "Security Engineer",
-    desc: "웹 애플리케이션 취약점 진단과 보안 리스크 평가.",
+    desc: "웹 애플리케이션 취약점 진단, 보안 리스크 평가",
     tags: ["웹 취약점 진단", "리스크 평가"],
   },
   {
     period: "2018.08 — 2020.05",
     org: "공군 사이버 작전센터",
     role: "체계 개발 · 취약점 분석",
-    desc: "군 복무 중 사이버 방호 체계 개발과 취약점 분석.",
+    desc: "사이버 방호 체계 개발, 취약점 분석 (군 복무)",
     tags: ["사이버 방호", "취약점 분석"],
   },
   {
     period: "2017.06 — 2018.02",
     org: "Best of the Best 7기",
     role: "차세대 보안리더 양성프로그램",
-    desc: "취약점 분석 과정 수료. 시큐리티짐 프로젝트에서 웹 보안과 시스템 성능 분석 담당.",
+    desc: "취약점 분석 과정 수료, 시큐리티짐 프로젝트 웹 보안·시스템 분석",
     tags: ["웹 보안", "시스템 최적화", "네트워크 분석"],
   },
 ];
@@ -349,7 +269,7 @@ export const awards: Award[] = [
 
 /** /about 상단 요약 숫자 — 경력 연차와 프로젝트 수 */
 export const stats: Stat[] = [
-  { label: "FRONT-END", value: "2년+", note: "2024.02 — 현재" },
+  { label: "DEVELOPMENT", value: "2년+", note: "2024.02 — 현재" },
   { label: "SECURITY", value: "5년", note: "2017 — 2022" },
   { label: "PROJECTS", value: "8", note: "운영 중 2" },
 ];

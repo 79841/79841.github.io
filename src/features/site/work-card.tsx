@@ -10,7 +10,8 @@ interface WorkCardProps {
 /** 유리 카드 — 이미지가 카드 전체를 차지하고, 이름과 연도만 유리 캡션으로 얹는다 */
 export function WorkCard({ work, priority }: WorkCardProps) {
   return (
-    <Link href={`/work/${work.slug}`} className="gcard glass p-1.5">
+    <Link href={`/work/${work.slug}`} data-glow
+      className="gcard glass p-1.5">
       <WorkThumb
         work={work}
         priority={priority}

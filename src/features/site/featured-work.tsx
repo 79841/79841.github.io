@@ -8,6 +8,7 @@ export function FeaturedWork({ work }: { work: Work }) {
   return (
     <Link
       href={`/work/${work.slug}`}
+      data-glow
       className="gcard glass p-1.5 sm:rounded-[28px] sm:p-2"
     >
       <WorkThumb

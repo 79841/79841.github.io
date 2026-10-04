@@ -40,6 +40,9 @@
   --bar-bg: rgba(244, 244, 241, 0.72);
   --chip-bg: rgba(255, 255, 255, 0.36);
   --code-bg: rgba(255, 255, 255, 0.5);
+  --glass-shadow-hover: 0 2px 4px rgba(23, 23, 26, 0.05),
+    0 34px 68px -28px rgba(23, 23, 26, 0.42);
+  --glow-tint: rgba(255, 255, 255, 0.5);
   /* 글 썸네일 판화 — 무늬는 그대로 두고 색만 테마를 따른다 */
   --art-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)' opacity='0.26'/%3E%3C/svg%3E");
   --art-glow: rgba(255, 255, 255, 0.95);
@@ -85,6 +88,9 @@
     --bar-bg: rgba(19, 19, 21, 0.72);
     --chip-bg: rgba(38, 38, 42, 0.5);
     --code-bg: rgba(28, 28, 31, 0.6);
+    --glass-shadow-hover: 0 1px 0 rgba(0, 0, 0, 0.25),
+      0 30px 60px -26px rgba(0, 0, 0, 0.7);
+    --glow-tint: rgba(255, 255, 255, 0.07);
     --art-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)' opacity='0.26'/%3E%3C/svg%3E");
     --art-glow: rgba(255, 255, 255, 0.13);
     --art-shade: rgba(0, 0, 0, 0.3);
@@ -127,6 +133,9 @@
   --bar-bg: rgba(19, 19, 21, 0.72);
   --chip-bg: rgba(38, 38, 42, 0.5);
   --code-bg: rgba(28, 28, 31, 0.6);
+  --glass-shadow-hover: 0 1px 0 rgba(0, 0, 0, 0.25),
+    0 30px 60px -26px rgba(0, 0, 0, 0.7);
+  --glow-tint: rgba(255, 255, 255, 0.07);
   --art-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)' opacity='0.26'/%3E%3C/svg%3E");
   --art-glow: rgba(255, 255, 255, 0.13);
   --art-shade: rgba(0, 0, 0, 0.3);
@@ -754,6 +763,304 @@ button:focus-visible {
   overflow-wrap: anywhere;
 }
 
+/* ── 코드 블록 — 머리줄에 언어와 복사 버튼 ──────────────────────────────── */
+.copy-btn {
+  color: var(--color-muted);
+  border: 1px solid transparent;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.copy-btn:hover {
+  color: var(--color-ink);
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border);
+}
+
+/* ── 마우스 인터랙션 — 포인터가 있는 기기에서만 ─────────────────────────────
+   손가락으로 만지는 화면에서는 호버가 눌린 채로 남아 오히려 방해가 된다. */
+[data-glow]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    260px circle at var(--gx, 50%) var(--gy, 0%),
+    var(--glow-tint),
+    transparent 72%
+  );
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+
+/* 반지름은 건드리지 않는다 — 윗줄만 있는 괘선이 끝에서 휘고, 타임라인 카드의
+   모서리(20px)도 덮어써 버린다 */
+.stack-row,
+.more-row,
+.tl-card {
+  transition:
+    background 200ms ease,
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.more svg,
+.btn svg,
+.tagrow {
+  transition:
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 160ms ease,
+    background 160ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  /* 카드 위의 포인터를 따라다니는 옅은 빛 */
+  [data-glow]:hover::after {
+    opacity: 1;
+  }
+
+  .gcard:hover {
+    box-shadow: var(--glass-shadow-hover);
+  }
+
+  /* 괘선 목록의 줄 — 지나가면 바탕이 살짝 뜬다 */
+  .stack-row:hover,
+  .more-row:hover {
+    background: var(--glass-bg);
+  }
+
+  .tl-line:hover {
+    background: var(--glass-bg);
+    transform: translateY(-2px);
+  }
+
+  /* 화살표는 가는 방향으로 한 걸음 */
+  .more:hover svg,
+  .btn:hover svg {
+    transform: translateX(3px);
+  }
+
+  .taglist > li > .tagrow:hover {
+    transform: translateX(2px);
+  }
+}
+
+/* 누르는 순간의 반응 — 살짝 눌렸다 돌아온다 */
+.btn:active,
+.copy-btn:active,
+.more:active {
+  transform: translateY(1px);
+}
+
+.gcard:active {
+  transform: translateY(-1px);
+}
+
+/* ── 프로젝트 상세 본문 — 요점·번호 달린 화면·회고 ─────────────────────────
+   글·표·코드·다이어그램은 블로그와 같은 규칙을 쓰고, 여기는 프로젝트 글에만
+   있는 블록만 다룬다. 전부 정적이다. */
+.point-kind {
+  margin-top: 4.5rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--color-faint);
+}
+
+/* 분류 바로 아래의 요점 제목은 분류와 한 덩어리로 붙는다 */
+.point-kind + h2 {
+  margin-top: 0.4rem;
+}
+
+.work-points {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 2.5rem;
+  padding: 1.25rem 0 0.5rem;
+  border-top: 1px solid var(--color-hairline);
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.work-points ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.work-points a {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 8px;
+  padding: 0.55rem 0;
+  font-size: 16.5px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.work-points .n {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-ghost);
+  padding-top: 3px;
+}
+
+.work-shot,
+.work-screens {
+  margin-top: 1.75rem;
+}
+
+.work-shot-frame {
+  padding: 6px;
+  border-radius: 22px;
+}
+
+.work-shot-img {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.work-shot-img img,
+.work-landscape-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* 번호는 밝은 화면에도 어두운 화면에도 읽히게 잉크 원에 흰 테를 두른다 */
+.work-pin {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: #ffffff;
+  background: #17171a;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.92),
+    0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+.work-notes {
+  list-style: none;
+  display: grid;
+  gap: 12px 24px;
+  margin: 0;
+  padding: 16px 4px 0;
+}
+
+@media (min-width: 640px) {
+  .work-notes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.work-notes li {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+.work-notes .n {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  border-radius: 50%;
+  border: 1px solid var(--color-hairline);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--color-body);
+}
+
+.work-notes b {
+  display: block;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+.work-notes .t {
+  display: block;
+}
+
+.work-phones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 4%;
+  padding: 28px 16px;
+  border-radius: 20px;
+}
+
+.work-phones img {
+  width: 28%;
+  max-width: 180px;
+  height: auto;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px -20px rgb(23 23 26 / 0.45);
+}
+
+.work-landscape {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .work-landscape {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.work-landscape-item {
+  padding: 5px;
+  border-radius: 18px;
+}
+
+.work-landscape-item img {
+  border-radius: 13px;
+}
+
+.work-caption {
+  margin-top: 10px;
+  font-size: 13.5px;
+  color: var(--color-faint);
+}
+
+.work-retro {
+  margin-top: 5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.work-retro .point-kind {
+  margin-top: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .work-points a:hover {
+    color: var(--color-muted);
+  }
+}
+
 /* 색칠한 토큰 — shiki가 라이트·다크 두 색을 변수로 남기고 여기서 고른다 */
 .code-pre {
   color: var(--color-body);
@@ -800,7 +1107,9 @@ button:focus-visible {
 .mermaid-figure svg .node rect,
 .mermaid-figure svg .node polygon,
 .mermaid-figure svg .cluster rect,
-.mermaid-figure svg .label-container {
+.mermaid-figure svg .label-container,
+.mermaid-figure svg rect.actor,
+.mermaid-figure svg rect.note {
   rx: 14px;
   ry: 14px;
 }
@@ -823,7 +1132,8 @@ button:focus-visible {
 .mermaid-figure svg .node polygon,
 .mermaid-figure svg .node path,
 .mermaid-figure svg .cluster rect,
-.mermaid-figure svg .icon-shape .icon {
+.mermaid-figure svg .icon-shape .icon,
+.mermaid-figure svg rect.actor {
   filter: var(--mermaid-shadow) !important;
 }
 
@@ -885,8 +1195,24 @@ button:focus-visible {
   .btn,
   .tagrow,
   .nav-cap,
-  .nav-link {
+  .nav-link,
+  .stack-row,
+  .more-row,
+  .tl-card,
+  .copy-btn,
+  [data-glow]::after {
     transition: none;
+  }
+
+  .more:hover svg,
+  .btn:hover svg,
+  .tl-line:hover,
+  .taglist > li > .tagrow:hover,
+  .btn:active,
+  .copy-btn:active,
+  .more:active,
+  .gcard:active {
+    transform: none;
   }
 
   .nav-pill[data-ready] {
@@ -908,20 +1234,4 @@ button:focus-visible {
   :root:not([data-theme="light"]) .tl-line {
     border-color: rgba(232, 232, 228, 0.14);
   }
-}
-
-/* ── 가운뎃점으로 이어붙인 낱말 목록 — 칩 대신 읽히는 목록 ──────────────── */
-.dotlist {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  column-gap: 8px;
-  row-gap: 4px;
-}
-
-/* 구분점은 앞 낱말에 붙여 둔다 — 줄이 바뀌어도 점이 줄머리로 내려오지 않는다 */
-.dotlist > span:not(:last-child)::after {
-  content: "·";
-  margin-left: 8px;
-  color: var(--color-ghost);
 }

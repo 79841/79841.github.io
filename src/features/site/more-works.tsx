@@ -19,7 +19,7 @@ export function MoreWorks() {
           </>
         );
         const rowClass =
-          "grid gap-1 px-2 py-4 sm:grid-cols-[220px_minmax(0,1fr)_auto] sm:items-baseline sm:gap-6";
+          "more-row grid gap-1 px-2 py-4 sm:grid-cols-[220px_minmax(0,1fr)_auto] sm:items-baseline sm:gap-6";
         return (
           <li
             key={work.name}

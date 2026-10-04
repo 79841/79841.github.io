@@ -7,7 +7,7 @@ interface CopyButtonProps {
   code: string;
 }
 
-/** 코드 블록 오른쪽 위 복사 버튼 */
+/** 코드 블록 머리줄의 복사 버튼 — 늘 보이고 누르면 잠깐 "복사됨"으로 바뀐다 */
 export function CopyButton({ code }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
@@ -26,10 +26,9 @@ export function CopyButton({ code }: CopyButtonProps) {
       type="button"
       onClick={copy}
       aria-label={copied ? "복사됨" : "코드 복사"}
-      className="absolute top-3 right-3 inline-flex h-7 items-center gap-1.5 rounded-full border border-hairline bg-paper/80 px-2.5 font-mono text-[11px] text-muted opacity-70 transition-opacity hover:opacity-100"
+      className="copy-btn inline-flex size-7 shrink-0 items-center justify-center rounded-full"
     >
       {copied ? <Check /> : <Copy />}
-      {copied ? "복사됨" : "복사"}
     </button>
   );
 }

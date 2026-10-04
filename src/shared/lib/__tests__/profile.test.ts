@@ -34,15 +34,18 @@ describe("profile data", () => {
     expect(works[0].wide).toBe(true);
   });
 
-  it("gives every work a unique slug and complete detail", () => {
+  it("gives every work a unique slug, a role, and external links", () => {
     const slugs = works.map((w) => w.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
     for (const work of works) {
       expect(work.slug).toMatch(/^[a-z0-9-]+$/);
-      expect(work.detail.sections.length).toBeGreaterThanOrEqual(2);
-      expect(work.detail.links.length).toBeGreaterThan(0);
-      for (const link of work.detail.links) {
+      // 상세 개요의 역할 칸 — 채용 담당자가 가장 먼저 찾는다
+      expect(work.role.trim().length).toBeGreaterThan(0);
+      expect(work.links.length).toBeGreaterThan(0);
+      for (const link of work.links) {
         expect(link.href).toMatch(/^https:\/\//);
+        // 화살표는 페이지가 붙인다 — 라벨에 넣으면 두 번 그려진다
+        expect(link.label).not.toMatch(/↗/);
       }
     }
   });

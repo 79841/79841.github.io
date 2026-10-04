@@ -9,7 +9,7 @@ interface CodeBlockProps {
 }
 
 /**
- * MDX의 <pre> — 언어 라벨과 복사 버튼이 붙은 유리 코드 블록.
+ * MDX의 <pre> — 머리줄에 언어와 복사 버튼을 두고 그 아래 코드를 놓는다.
  * ```mermaid 펜스는 코드 대신 다이어그램으로 그린다.
  * 색칠은 빌드 때 shiki가 하고, 모르는 언어면 원문을 그대로 둔다.
  */
@@ -23,20 +23,20 @@ export async function CodeBlock({ children }: CodeBlockProps) {
   const highlighted = await highlightCode(code, lang);
 
   return (
-    <div className="relative mt-6">
-      {lang ? (
-        <span className="absolute top-3.5 left-5 font-mono text-[10.5px] tracking-[0.08em] text-faint uppercase">
-          {lang}
+    <figure className="code-card glass mt-6 overflow-hidden rounded-[18px]">
+      <figcaption className="code-head flex items-center justify-between gap-3 pt-3 pr-3 pb-0.5 pl-5">
+        <span className="font-mono text-[11px] tracking-[0.1em] text-faint uppercase">
+          {lang || "code"}
         </span>
-      ) : null}
-      <CopyButton code={code} />
-      <pre className="code-pre glass rounded-[18px] px-5 pt-11 pb-5 font-mono text-[13px] leading-[1.75]">
+        <CopyButton code={code} />
+      </figcaption>
+      <pre className="code-pre px-5 pt-2 pb-5 font-mono text-[13px] leading-[1.75]">
         {highlighted ? (
           <code dangerouslySetInnerHTML={{ __html: highlighted }} />
         ) : (
           children
         )}
       </pre>
-    </div>
+    </figure>
   );
 }

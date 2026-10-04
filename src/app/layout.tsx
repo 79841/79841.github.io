@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist_Mono } from "next/font/google";
 import { Aurora } from "@/features/site/aurora";
 import { Nav } from "@/features/site/nav";
+import { PointerGlow } from "@/features/site/pointer-glow";
 import { SiteFooter } from "@/features/site/site-footer";
 import { profile, SITE_URL } from "@/shared/lib/profile";
 import "./globals.css";
@@ -14,13 +15,13 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "명인지 — Front-End Developer",
+    default: "명인지 — Software Developer",
     template: "%s | 명인지",
   },
   description:
-    "실시간 데이터 시각화와 렌더링 성능 개선을 주로 다루는 프론트엔드 개발자 명인지의 포트폴리오.",
+    "실시간 데이터 시각화와 렌더링 성능 개선을 주로 다루는 소프트웨어 개발자 명인지의 포트폴리오.",
   keywords: [
-    "Front-End Developer",
+    "Software Developer",
     "React",
     "Next.js",
     "성능 최적화",
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
     "포트폴리오",
   ],
   openGraph: {
-    title: "명인지 — Front-End Developer",
+    title: "명인지 — Software Developer",
     description: profile.summary,
     url: SITE_URL,
     siteName: "명인지 포트폴리오",
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "명인지 — Front-End Developer",
+    title: "명인지 — Software Developer",
     description: profile.headline,
     images: ["/og.png"],
   },
@@ -58,7 +59,7 @@ const jsonLd = {
   "@type": "Person",
   name: profile.name,
   alternateName: profile.nameEn,
-  jobTitle: "Front-End Developer",
+  jobTitle: "Software Developer",
   email: `mailto:${profile.email}`,
   url: SITE_URL,
   sameAs: [profile.github],
@@ -80,6 +81,7 @@ export default function RootLayout({
         />
         <Aurora />
         {/* 헤더는 전체 폭 스티키 유리 바 — 내부 정렬은 Nav가 맞춘다 */}
+        <PointerGlow />
         <Nav />
         <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
           {children}
