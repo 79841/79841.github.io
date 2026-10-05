@@ -796,11 +796,10 @@ button:focus-visible {
   transition: opacity 260ms ease;
 }
 
-/* 반지름은 건드리지 않는다 — 윗줄만 있는 괘선이 끝에서 휘고, 타임라인 카드의
-   모서리(20px)도 덮어써 버린다 */
+/* 반지름은 건드리지 않는다 — 윗줄만 있는 괘선이 끝에서 휘어 버린다 */
 .stack-row,
 .more-row,
-.tl-card {
+.tl-chip {
   transition:
     background 200ms ease,
     transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -831,9 +830,9 @@ button:focus-visible {
     background: var(--glass-bg);
   }
 
-  .tl-line:hover {
-    background: var(--glass-bg);
-    transform: translateY(-2px);
+  .tl-chip:not(.is-current):hover {
+    background: var(--glass-bg-hover);
+    transform: translateY(-1px);
   }
 
   /* 화살표는 가는 방향으로 한 걸음 */
@@ -856,6 +855,29 @@ button:focus-visible {
 
 .gcard:active {
   transform: translateY(-1px);
+}
+
+/* ── 글 카드 — 이미지 없이 제목과 메타만 ──────────────────────────────────
+   .gcard의 6px 여백은 이미지를 감싸는 테두리용이라 글 카드는 따로 둔다.
+   한 줄의 카드끼리 높이를 맞추고 날짜·태그를 바닥에 붙인다 */
+.gcard.post-card {
+  height: 100%;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 24px 24px 20px;
+}
+
+/* ── 홈 섹션 간격 ──────────────────────────────────────────────────────────
+   이력·Contact 같은 섹션은 About·프로젝트 상세에서도 쓰여서 컴포넌트의 mt-24는
+   그대로 두고, 홈에서만 섹션 사이를 넓힌다 (레이어 밖 규칙이라 유틸리티를 이긴다) */
+.home > section + section {
+  margin-top: 8.5rem;
+}
+
+@media (min-width: 640px) {
+  .home > section + section {
+    margin-top: 10rem;
+  }
 }
 
 /* ── 프로젝트 상세 본문 — 요점·번호 달린 화면·회고 ─────────────────────────
@@ -1198,7 +1220,7 @@ button:focus-visible {
   .nav-link,
   .stack-row,
   .more-row,
-  .tl-card,
+  .tl-chip,
   .copy-btn,
   [data-glow]::after {
     transition: none;
@@ -1206,7 +1228,7 @@ button:focus-visible {
 
   .more:hover svg,
   .btn:hover svg,
-  .tl-line:hover,
+  .tl-chip:hover,
   .taglist > li > .tagrow:hover,
   .btn:active,
   .copy-btn:active,
@@ -1220,18 +1242,80 @@ button:focus-visible {
   }
 }
 
-/* ── 이력 타임라인 카드 — 유리는 현재 자리 하나뿐, 나머지는 괘선만 ───────── */
-.tl-line {
+/* ── 이력 칩 — 소속과 역할을 한 알약에, 아래에 키워드 뱃지 ─────────────────
+   현재 자리만 잉크로 채워 타임라인에서 바로 눈에 들어오게 한다 */
+.tl-chip {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 10px;
+  row-gap: 2px;
+  min-height: 40px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: var(--chip-bg);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+.tl-chip-org {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.tl-chip-role {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--color-faint);
+}
+
+.tl-chip.is-current {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+}
+
+.tl-chip.is-current .tl-chip-org {
+  color: var(--color-paper);
+}
+
+.tl-chip.is-current .tl-chip-role {
+  color: color-mix(in srgb, var(--color-paper) 68%, transparent);
+}
+
+/* 수상 — 경력 칩보다 한 단계 가볍게: 바탕 없이 테두리만, 글자도 조금 작게 */
+.tl-chip.tl-award {
+  column-gap: 8px;
   background: transparent;
-  border: 1px solid rgba(23, 23, 26, 0.13);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-color: color-mix(in srgb, var(--color-ink) 16%, transparent);
 }
 
-:root[data-theme="dark"] .tl-line {
-  border-color: rgba(232, 232, 228, 0.14);
+.tl-award .tl-chip-org {
+  font-size: 14px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .tl-line {
-    border-color: rgba(232, 232, 228, 0.14);
-  }
+.tl-award svg {
+  color: var(--color-muted);
+}
+
+/* 레일 위 수상 표시 — 경력의 점 대신 트로피 고리 */
+.tl-award-mark {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-paper);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 22%, transparent);
+  color: var(--color-muted);
+}
+
+.tl-award-mark svg {
+  width: 12px;
+  height: 12px;
 }

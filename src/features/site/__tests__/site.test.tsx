@@ -176,20 +176,43 @@ describe("Experience", () => {
     expect(screen.getByText(experiences[0].desc)).toBeInTheDocument();
   });
 
-  it("marks the current role with the strong glass card", () => {
+  it("fills only the current role's chip with ink", () => {
     render(<Experience />);
-    const current = experiences.find((e) => e.current)!;
-    const card = screen.getAllByText(current.org)[0].closest(".tl-card");
-    expect(card).toHaveClass("glass-strong");
+    for (const entry of experiences) {
+      const chip = screen.getAllByText(entry.org)[0].closest(".tl-chip");
+      expect(chip).not.toBeNull();
+      if (entry.current) {
+        expect(chip).toHaveClass("is-current");
+      } else {
+        expect(chip).not.toHaveClass("is-current");
+      }
+    }
   });
 
-  it("leaves the past roles as hairline cards so only the current one is glass", () => {
-    render(<Experience />);
-    for (const entry of experiences.filter((e) => !e.current)) {
-      const card = screen.getAllByText(entry.org)[0].closest(".tl-card");
-      expect(card).toHaveClass("tl-line");
-      expect(card).not.toHaveClass("glass");
-      expect(card).not.toHaveClass("glass-strong");
+  it("places each award on the timeline itself, in date order", () => {
+    const { container } = render(<Experience />);
+    const items = [...container.querySelectorAll("ol > li")];
+    expect(items).toHaveLength(experiences.length + awards.length);
+    const awardItems = items.filter((li) => li.getAttribute("data-kind") === "award");
+    expect(awardItems).toHaveLength(awards.length);
+    for (const award of awards) {
+      const li = screen.getByText(award.name).closest("li")!;
+      expect(li).toHaveAttribute("data-kind", "award");
+      expect(li).toHaveTextContent(award.org);
+    }
+    // 수상을 타임라인 아래에 따로 모으던 줄은 없다
+    expect(screen.queryByText("AWARDS")).not.toBeInTheDocument();
+  });
+
+  it("shows each role's keywords as badges under its chip", () => {
+    const { container } = render(<Experience />);
+    // 카드 없이 칩과 뱃지만 — 유리 카드로 돌아가면 여기서 걸린다
+    expect(container.querySelector(".tl-card, .glass-strong")).toBeNull();
+    const [first] = experiences;
+    const chip = screen.getAllByText(first.org)[0].closest(".tl-chip")!;
+    const badges = chip.nextElementSibling!;
+    for (const tag of first.tags) {
+      expect(within(badges as HTMLElement).getByText(tag)).toBeInTheDocument();
     }
   });
 });

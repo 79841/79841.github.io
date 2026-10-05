@@ -12,7 +12,7 @@ export default function Home() {
   const posts = getAllPosts();
 
   return (
-    <main>
+    <main className="home">
       <Hero />
       <Works />
       <RecentPosts posts={posts.slice(0, RECENT_POST_COUNT)} />

@@ -15,7 +15,7 @@ export function Works() {
         <FeaturedWork work={featured} />
       </Reveal>
 
-      <div className="mt-6">
+      <div className="mt-16 sm:mt-20">
         <SectionHead
           eyebrow="WORK"
           title="프로젝트"
