@@ -14,7 +14,6 @@ export function PostCard({ post }: PostCardProps) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      data-glow
       className="gcard glass post-card"
     >
       <h3 className="text-[18px] leading-[1.45] font-medium tracking-[-0.02em] text-pretty">

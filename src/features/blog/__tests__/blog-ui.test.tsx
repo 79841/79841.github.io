@@ -18,7 +18,6 @@ const post: Post = {
   summary: "요약",
   tags: ["React", "Performance", "Electron"],
   readingMinutes: 4,
-  art: "mist",
   headings: [
     { id: "sym", text: "증상", level: 2 },
     { id: "fix", text: "수정", level: 2 },

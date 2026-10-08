@@ -83,13 +83,7 @@ export default async function PostPage({ params }: PostPageProps) {
           </Reveal>
         </header>
 
-        <Reveal>
-          <div className="thumb aspect-[16/6] rounded-[24px] sm:aspect-[1200/360]">
-            <div aria-hidden className="art" data-art={post.art} />
-          </div>
-        </Reveal>
-
-        <div className="mt-8 grid gap-10 lg:grid-cols-[180px_minmax(0,840px)] lg:justify-center lg:gap-11">
+        <div className="mt-4 grid gap-10 lg:grid-cols-[180px_minmax(0,840px)] lg:justify-center lg:gap-11">
           <aside className="lg:order-1">
             <Toc headings={post.headings} />
           </aside>

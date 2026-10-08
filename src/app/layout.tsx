@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist_Mono } from "next/font/google";
-import { Aurora } from "@/features/site/aurora";
 import { Nav } from "@/features/site/nav";
-import { PointerGlow } from "@/features/site/pointer-glow";
 import { SiteFooter } from "@/features/site/site-footer";
 import { profile, SITE_URL } from "@/shared/lib/profile";
 import "./globals.css";
@@ -59,7 +57,7 @@ const jsonLd = {
   "@type": "Person",
   name: profile.name,
   alternateName: profile.nameEn,
-  jobTitle: "Software Developer",
+  jobTitle: profile.jobTitle,
   email: `mailto:${profile.email}`,
   url: SITE_URL,
   sameAs: [profile.github],
@@ -79,9 +77,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Aurora />
         {/* 헤더는 전체 폭 스티키 유리 바 — 내부 정렬은 Nav가 맞춘다 */}
-        <PointerGlow />
         <Nav />
         <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
           {children}

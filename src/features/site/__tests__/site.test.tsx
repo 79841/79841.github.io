@@ -28,7 +28,6 @@ function post(slug: string, title: string, date: string): Post {
     summary: `${title} 요약`,
     tags: ["React", "Performance", "Electron"],
     readingMinutes: 3,
-    art: "dune",
     headings: [],
   };
 }
@@ -52,13 +51,16 @@ describe("Hero", () => {
 });
 
 describe("FeaturedWork", () => {
-  it("links the first work and shows its badge on dark glass", () => {
+  it("links the first work and puts its name and meta under the image card", () => {
     const [featured] = works;
     render(<FeaturedWork work={featured} />);
     expect(screen.getByRole("link")).toHaveAttribute("href", `/work/${featured.slug}`);
-    expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(featured.name);
-    const badge = screen.getByText(featured.badge!);
-    expect(badge).toHaveClass("glass-dark");
+    const heading = screen.getByRole("heading", { level: 3 });
+    expect(heading).toHaveTextContent(featured.name);
+    // 글자는 이미지 카드 밖에 둔다
+    expect(heading.closest(".gcard")).toBeNull();
+    expect(screen.getByRole("link")).toHaveTextContent(featured.badge!);
+    expect(screen.getByRole("link")).toHaveTextContent(featured.stack);
   });
 });
 
@@ -103,16 +105,61 @@ describe("WorkCard", () => {
     }
   });
 
-  it("uses light glass on light screenshots regardless of theme", () => {
-    const light = works.find((w) => !w.dark && w.badge && !w.phone)!;
-    render(<WorkCard work={light} />);
-    expect(screen.getByText(light.badge!)).toHaveClass("glass-light");
-    expect(screen.getByText(light.badge!)).not.toHaveClass("glass-dark");
+  it("keeps the image card free of text and shows name, period and badge below it", () => {
+    for (const work of works) {
+      const { container, unmount } = render(<WorkCard work={work} />);
+      const card = container.querySelector(".gcard")!;
+      expect(card.textContent).toBe("");
+      const heading = screen.getByRole("heading", { level: 3 });
+      expect(heading).toHaveTextContent(work.name);
+      expect(heading.closest(".gcard")).toBeNull();
+      for (const meta of [work.period, work.badge].filter(Boolean)) {
+        expect(screen.getByRole("link")).toHaveTextContent(meta!);
+      }
+      unmount();
+    }
   });
 });
 
 describe("MoreWorks", () => {
-  it("links rows that have an href and leaves the rest as plain rows", () => {
+  it("shows what each work is and what it was built with", () => {
+    render(<MoreWorks />);
+    for (const work of moreWorks) {
+      const tile = screen.getByText(work.name).closest(".more-tile") as HTMLElement;
+      expect(tile).toHaveTextContent(work.summary);
+      for (const tech of work.stack) {
+        expect(tile).toHaveTextContent(tech);
+      }
+    }
+  });
+
+  it("keeps the period apart from the stack so the meta line never mixes them", () => {
+    render(<MoreWorks />);
+    for (const work of moreWorks) {
+      const tile = screen.getByText(work.name).closest(".more-tile") as HTMLElement;
+      const stackLine = within(tile).getByText(work.stack.join(" · "));
+      if (work.period) {
+        expect(stackLine).not.toHaveTextContent(work.period);
+        expect(within(tile).getByText(work.period)).toBeInTheDocument();
+      }
+    }
+  });
+
+  it("uses wide two-column tiles when asked", () => {
+    const { container } = render(<MoreWorks wide />);
+    expect(container.querySelectorAll(".more-tile-wide")).toHaveLength(moreWorks.length);
+    expect(container.querySelector("ul")!.className).not.toContain("lg:grid-cols-4");
+  });
+
+  it("makes only linked tiles behave like cards", () => {
+    render(<MoreWorks />);
+    for (const work of moreWorks) {
+      const tile = screen.getByText(work.name).closest(".more-tile");
+      expect(tile?.classList.contains("gcard")).toBe(Boolean(work.href));
+    }
+  });
+
+  it("links tiles that have an href and leaves the rest as plain tiles", () => {
     render(<MoreWorks />);
     for (const work of moreWorks) {
       const name = screen.getByText(work.name);
@@ -127,6 +174,30 @@ describe("MoreWorks", () => {
 });
 
 describe("RecentPosts", () => {
+  it("draws each post as a cover card with one big word and the title below it", () => {
+    const posts = [
+      { ...post("a", "첫 번째 글", "2026-03-01"), tags: ["Obsidian", "Claude"] },
+      { ...post("b", "두 번째 글", "2026-02-01"), tags: ["Expo", "EAS"] },
+      { ...post("c", "세 번째 글", "2026-01-01"), tags: ["Expo", "iOS"] },
+    ];
+    const { container } = render(<RecentPosts posts={posts} />);
+    const covers = [...container.querySelectorAll(".post-cover")];
+    expect(covers.map((cover) => cover.querySelector(".cover-word")!.textContent)).toEqual([
+      "Obsidian",
+      "EAS",
+      "iOS",
+    ]);
+    // 제목은 커버 밖에 둔다
+    const heading = screen.getByRole("heading", { name: "첫 번째 글" });
+    expect(heading.closest(".post-cover")).toBeNull();
+    expect(heading.closest("a")).toHaveAttribute("href", "/blog/a");
+  });
+
+  it("says so when there is nothing to show", () => {
+    render(<RecentPosts posts={[]} />);
+    expect(screen.getByText("아직 쓴 글이 없습니다.")).toBeInTheDocument();
+  });
+
   it("shows the posts it is given and links to the full blog", () => {
     const posts = [
       post("a", "첫 번째 글", "2026-03-01"),
@@ -218,7 +289,7 @@ describe("Experience", () => {
 });
 
 describe("Stack", () => {
-  it("renders every group and item as rows on the home page", () => {
+  it("renders every group and item as plain text columns on the home page", () => {
     render(<StackRows />);
     for (const group of stackGroups) {
       expect(screen.getByText(group.label)).toBeInTheDocument();
@@ -230,17 +301,19 @@ describe("Stack", () => {
       "href",
       "/about",
     );
+    // 기술 이름은 칩이 아니라 글자로 — 칩은 이력 뱃지에만 쓴다
+    expect(document.querySelector("#about .chip")).toBeNull();
   });
 
-  it("uses the same rows on the about page as on the home page", () => {
+  it("uses the same columns on the about page as on the home page", () => {
     const home = render(<StackRows />).container;
     const rowsOf = (root: HTMLElement) =>
-      [...root.querySelectorAll(".stack-row")].map((row) => row.innerHTML);
+      [...root.querySelectorAll(".stack-group")].map((row) => row.innerHTML);
     const homeRows = rowsOf(home);
     cleanup();
 
     const about = render(<StackPanels />).container;
-    // 홈과 About의 스택 줄은 글자 하나까지 같아야 한다 — 한쪽만 손대면 여기서 걸린다
+    // 홈과 About의 스택 열은 글자 하나까지 같아야 한다 — 한쪽만 손대면 여기서 걸린다
     expect(rowsOf(about)).toEqual(homeRows);
     expect(homeRows).toHaveLength(stackGroups.length);
     // 이동 알약은 홈에만 있다
@@ -251,15 +324,26 @@ describe("Stack", () => {
 });
 
 describe("Contact", () => {
+  it("shows a business card with name and title next to the heading", () => {
+    render(<Contact />);
+    const section = screen.getByRole("region", { name: /Get in touch/ });
+    expect(within(section).getByText(profile.name)).toBeInTheDocument();
+    expect(within(section).getByText(profile.jobTitle)).toBeInTheDocument();
+  });
+
   it("links email, github, and resume", () => {
     render(<Contact />);
     const section = screen.getByRole("region", { name: /Get in touch/ });
     expect(
       within(section).getByRole("link", { name: profile.email }),
     ).toHaveAttribute("href", `mailto:${profile.email}`);
-    expect(within(section).getByRole("link", { name: /GitHub/ })).toHaveAttribute(
+    expect(within(section).getByRole("link", { name: profile.githubLabel })).toHaveAttribute(
       "href",
       profile.github,
+    );
+    expect(within(section).getByRole("link", { name: "메일 보내기" })).toHaveAttribute(
+      "href",
+      `mailto:${profile.email}`,
     );
     expect(within(section).getByRole("link", { name: /이력서 PDF/ })).toHaveAttribute(
       "href",

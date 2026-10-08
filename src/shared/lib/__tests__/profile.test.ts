@@ -50,6 +50,13 @@ describe("profile data", () => {
     }
   });
 
+  it("gives every more-work a summary and its stack", () => {
+    for (const work of moreWorks) {
+      expect(work.summary.length).toBeGreaterThan(0);
+      expect(work.stack.length).toBeGreaterThan(0);
+    }
+  });
+
   it("uses valid external hrefs on more-works", () => {
     for (const work of moreWorks) {
       if (work.href) {

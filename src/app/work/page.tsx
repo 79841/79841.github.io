@@ -35,7 +35,7 @@ export default function WorkPage() {
 
       <section aria-labelledby="works-h">
         <SectionHead eyebrow="WORK" title="프로젝트" id="works-h" />
-        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {works.map((work, i) => (
             <Reveal key={work.slug} delay={(i % 3) * 80}>
               <WorkCard work={work} priority={i === 0} />
@@ -46,8 +46,8 @@ export default function WorkPage() {
 
       <section aria-labelledby="more-h" className="mt-16">
         <SectionHead eyebrow="MORE" title="그 밖의 작업" id="more-h" />
-        <Reveal>
-          <MoreWorks />
+        <Reveal className="mt-6">
+          <MoreWorks wide />
         </Reveal>
       </section>
 

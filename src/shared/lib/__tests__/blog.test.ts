@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { ARTS } from "@/shared/lib/art";
 import {
   estimateReadingMinutes,
   extractHeadings,
@@ -174,12 +173,6 @@ describe("content on disk", () => {
   it("orders posts newest first", () => {
     const dates = getAllPosts().map((post) => post.date);
     expect([...dates].sort().reverse()).toEqual(dates);
-  });
-
-  it("rotates the thumbnail pattern down the list so no two neighbours match", () => {
-    const arts = getAllPosts().map((post) => post.art);
-    expect(arts).toEqual(arts.map((_, i) => ARTS[i % ARTS.length]));
-    expect(new Set(arts).size).toBe(Math.min(arts.length, ARTS.length));
   });
 
   it("finds a post by slug", () => {

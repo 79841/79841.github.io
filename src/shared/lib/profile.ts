@@ -26,10 +26,8 @@ export interface Work {
   tagline: string;
   /** 기간 — YYYY.MM — YYYY.MM 또는 "YYYY — 현재" */
   period?: string;
-  /** 카드 이미지 위 배지 — "운영 중", "5인 팀" */
+  /** 카드 아래 메타에 붙는 짧은 표시 — "운영 중", "5인 팀" */
   badge?: string;
-  /** 어두운 스크린샷 — 그 위의 유리 배지·캡션을 다크 유리로 뒤집는다 (대비 확보) */
-  dark?: boolean;
   /** 카드 아래 설명 */
   description?: string;
   /** mono 표기 스택 */
@@ -50,7 +48,9 @@ export interface Work {
 export interface MoreWork {
   name: string;
   period?: string;
-  note: string;
+  /** 무엇인지 한 줄 */
+  summary: string;
+  stack: string[];
   href?: string;
 }
 
@@ -89,14 +89,16 @@ export const profile = {
   name: "명인지",
   nameEn: "Myeong Inji",
   role: "Software Developer · Seoul",
+  /** 직함만 — 명함과 구조화 데이터에 쓴다 */
+  jobTitle: "Software Developer",
   email: "79841@naver.com",
   github: "https://github.com/79841",
   githubLabel: "github.com/79841",
   resumeHref: "/docs/명인지_이력서.pdf",
-  /** 히어로 한 줄 — 짧은 영어 단어 셋 */
-  headline: "Simple. Fast. Precise.",
+  /** 히어로 한 줄 — 작업 방식을 드러내는 짧은 영어 문장 */
+  headline: "Automate everything except judgment.",
   summary:
-    "실시간 데이터 시각화와 렌더링 성능 개선을 주로 다루는 소프트웨어 개발자입니다. 지금은 새솔테크에서 Electron·React 데스크톱 앱과 Next.js 서비스를 만들고 있습니다.",
+    "누가 만들었는지보다 무엇으로 증명했는지를 봅니다. AI와 함께 만든 결과물에 끝까지 책임질 수 있는 프로세스를 설계합니다.",
   /** /about 머리 */
   aboutHeadline: "보안에서 소프트웨어 개발로.",
   aboutSummary:
@@ -117,7 +119,6 @@ export const works: Work[] = [
     stack: "Next.js 15 · Electron · OpenTelemetry · SQLite · Recharts",
     images: [{ src: "/work/argus.webp", width: 1280, height: 900 }],
     wide: true,
-    dark: true,
     role: "수집 서버, 트레이 앱, 릴리즈 자동화까지 직접 구현",
     links: [
       { label: "GitHub", href: "https://github.com/79841/argus" },
@@ -182,24 +183,28 @@ export const moreWorks: MoreWork[] = [
   {
     name: "Travel Docent",
     period: "개발 중",
-    note: "위치 기반 여행 안내 앱 · React Native · NestJS",
+    summary: "위치 기반 여행 안내 앱",
+    stack: ["React Native", "NestJS"],
   },
   {
     name: "Dream Share",
     period: "2023",
-    note: "꿈 일기 공유 앱 · 3인 협업 · Next.js · Flutter · Spring Boot",
+    summary: "꿈 일기 공유 앱 · 3인 협업",
+    stack: ["Next.js", "Flutter", "Spring Boot"],
     href: "https://github.com/Dream-share",
   },
   {
     name: "Portfolio",
     period: "2023 —",
-    note: "이 사이트 · Lighthouse 98 · LCP < 2s",
+    summary: "이 사이트 · Lighthouse 98 · LCP < 2s",
+    stack: ["Next.js", "TypeScript", "Tailwind CSS"],
     href: "https://github.com/79841/79841.github.io",
   },
   {
     name: "Metflix",
     period: "2022",
-    note: "TMDB 기반 영화 웹 · HTML · CSS · JavaScript",
+    summary: "TMDB 기반 영화 웹",
+    stack: ["HTML", "CSS", "JavaScript"],
     href: "https://github.com/79841/metflix",
   },
 ];

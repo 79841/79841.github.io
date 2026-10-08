@@ -20,7 +20,7 @@ export function Hero() {
         </h1>
       </Reveal>
       <Reveal delay={160}>
-        <p className="max-w-[640px] text-[16px] leading-[1.6] text-muted sm:text-[20px]">
+        <p className="max-w-[640px] text-[16px] leading-[1.6] text-muted text-balance sm:text-[20px]">
           {profile.summary}
         </p>
       </Reveal>

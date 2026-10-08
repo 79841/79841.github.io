@@ -2,25 +2,25 @@ import { SectionHead } from "@/features/site/section-head";
 import { stackGroups } from "@/shared/lib/profile";
 import { Reveal } from "@/shared/ui/reveal";
 
-/** 괘선 행 — 왼쪽에 분류, 오른쪽에 칩. 홈과 About이 같은 모양을 쓴다 */
+/**
+ * 분류마다 한 열 — 윗줄 괘선 아래 이름표, 그 아래 기술 이름을 글자로만 세운다.
+ * 칩을 쓰지 않는 것은 이력 뱃지와 겹쳐 페이지가 알약으로 가득해지지 않게 하기 위해서다.
+ * 홈과 About이 같은 모양을 쓴다.
+ */
 function StackList() {
   return (
-    <div className="mt-6 flex flex-col">
+    <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-x-10 lg:grid-cols-3">
       {stackGroups.map((group, i) => (
         <Reveal key={group.label} delay={(i % 3) * 50}>
-          <div
-            className={`stack-row grid gap-2.5 border-t border-hairline px-2 py-4 sm:grid-cols-[220px_minmax(0,1fr)] sm:items-center sm:gap-6 ${
-              i === stackGroups.length - 1 ? "border-b" : ""
-            }`}
-          >
-            <span className="eyebrow">{group.label}</span>
-            <div className="flex flex-wrap gap-2">
+          <div className="stack-group flex flex-col gap-4 border-t border-hairline pt-4">
+            <h3 className="eyebrow">{group.label}</h3>
+            <ul className="flex flex-col gap-2">
               {group.items.map((item) => (
-                <span key={item} className="chip">
+                <li key={item} className="text-[15px] leading-[1.45] tracking-[-0.01em]">
                   {item}
-                </span>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </Reveal>
       ))}
@@ -43,7 +43,7 @@ export function StackRows() {
   );
 }
 
-/** /about의 기술 스택 — 홈과 같은 행, 이동 알약만 없다 */
+/** /about의 기술 스택 — 홈과 같은 열, 이동 알약만 없다 */
 export function StackPanels() {
   return (
     <section aria-labelledby="stack-panels-h" className="mt-20">

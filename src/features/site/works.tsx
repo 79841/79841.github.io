@@ -24,7 +24,7 @@ export function Works() {
         />
       </div>
 
-      <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-6 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
         {rest.map((work, i) => (
           <Reveal key={work.slug} delay={(i % 3) * 80}>
             <WorkCard work={work} />
@@ -32,7 +32,7 @@ export function Works() {
         ))}
       </div>
 
-      <div className="mt-6">
+      <div className="mt-10">
         <MoreWorks />
       </div>
     </section>

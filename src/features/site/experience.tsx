@@ -31,7 +31,7 @@ function sideOf(index: number): Side {
 function RoleBody({ item, side, detail }: { item: Extract<TimelineItem, { kind: "role" }>; side: Side; detail: boolean }) {
   const { entry } = item;
   return (
-    <div className={`flex max-w-[460px] flex-col gap-2.5 ${side.align}`}>
+    <div className={`flex max-w-[460px] flex-col items-start gap-2.5 ${side.align}`}>
       <div className={`tl-chip${entry.current ? " is-current" : ""}`}>
         <h3 className="tl-chip-org">{entry.org}</h3>
         <span className="tl-chip-role">{entry.role}</span>
@@ -55,7 +55,7 @@ function RoleBody({ item, side, detail }: { item: Extract<TimelineItem, { kind: 
 function AwardBody({ item, side }: { item: Extract<TimelineItem, { kind: "award" }>; side: Side }) {
   const { award } = item;
   return (
-    <div className={`flex max-w-[460px] flex-col gap-2.5 ${side.align}`}>
+    <div className={`flex max-w-[460px] flex-col items-start gap-2.5 ${side.align}`}>
       <div className="tl-chip tl-award">
         <Trophy className="shrink-0 self-center" />
         <span className="tl-chip-org">{award.name}</span>
@@ -72,7 +72,7 @@ function AwardBody({ item, side }: { item: Extract<TimelineItem, { kind: "award"
 function Marker({ item }: { item: TimelineItem }) {
   if (item.kind === "award") {
     return (
-      <div className="flex justify-center pt-[9px]">
+      <div className="flex justify-center pt-[13px]">
         <span aria-hidden className="tl-award-mark">
           <Trophy />
         </span>
@@ -80,7 +80,7 @@ function Marker({ item }: { item: TimelineItem }) {
     );
   }
   return (
-    <div className="flex justify-center pt-[14px]">
+    <div className="flex justify-center pt-[18px]">
       <span
         aria-hidden
         className={`block size-3 rounded-full border-[1.5px] ${
@@ -106,7 +106,7 @@ export function Experience({ detail = false }: ExperienceProps) {
       <div className="relative mx-auto mt-10 w-full max-w-[1000px]">
         <div
           aria-hidden
-          className="absolute top-5 bottom-6 left-[9.5px] w-px bg-gradient-to-b from-ink via-ink/35 to-ink/10 md:left-1/2 md:-translate-x-px"
+          className="absolute top-[24px] bottom-6 left-[9.5px] w-px bg-ink/20 md:left-1/2 md:-translate-x-px"
         />
         <ol className="flex flex-col gap-9">
           {timeline.map((item, i) => {
@@ -138,7 +138,7 @@ export function Experience({ detail = false }: ExperienceProps) {
                   </div>
                   <div className={`hidden md:block ${side.left ? "md:order-3" : "md:order-1"}`}>
                     <span
-                      className={`block pt-[10px] font-mono text-[13px] text-faint ${
+                      className={`block pt-[14px] font-mono text-[13px] text-faint ${
                         side.left ? "text-left" : "text-right"
                       }`}
                     >
