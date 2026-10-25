@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist_Mono } from "next/font/google";
+import { ViewTransition } from "react";
 import { Nav } from "@/features/site/nav";
 import { SiteFooter } from "@/features/site/site-footer";
 import { profile, SITE_URL } from "@/shared/lib/profile";
@@ -79,10 +80,14 @@ export default function RootLayout({
         />
         {/* 헤더는 전체 폭 스티키 유리 바 — 내부 정렬은 Nav가 맞춘다 */}
         <Nav />
-        <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
-          {children}
-          <SiteFooter />
-        </div>
+        {/* 페이지 전환 — 라우트가 바뀌면 이 영역만 이전 화면이 빠지고 새 화면이 올라온다.
+            헤더는 이 밖에 있어 움직이지 않는다 */}
+        <ViewTransition update="page-swap" default="none">
+          <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
+            {children}
+            <SiteFooter />
+          </div>
+        </ViewTransition>
       </body>
     </html>
   );

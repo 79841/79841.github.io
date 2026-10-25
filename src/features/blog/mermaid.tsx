@@ -1,7 +1,10 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import type { CSSProperties } from "react";
+import { createPortal } from "react-dom";
 import { useIsDark } from "@/shared/lib/theme";
+import { Close, Expand } from "@/shared/ui/icons";
 
 interface MermaidProps {
   /** ```mermaid 펜스의 원문 */
@@ -96,6 +99,13 @@ export function Mermaid({ code }: MermaidProps) {
   const id = useId().replace(/[^a-zA-Z0-9]/g, "");
   const [svg, setSvg] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  // 크게 보기를 연 순간의 본문 속 다이어그램 폭 — 확대 판은 적어도 이보다 크게 그린다 (0이면 닫힘)
+  const [zoomBase, setZoomBase] = useState(0);
+  const figureRef = useRef<HTMLElement>(null);
+  const openZoom = () => {
+    const inline = figureRef.current?.querySelector("svg")?.getBoundingClientRect().width;
+    setZoomBase(inline && inline > 0 ? inline : 1);
+  };
   // 서버·첫 하이드레이션에서는 null — 그때는 라이트로 그리고 구독이 붙으면 다시 그린다
   const dark = useIsDark() === true;
 
@@ -136,12 +146,88 @@ export function Mermaid({ code }: MermaidProps) {
   }
 
   return (
-    <figure
-      className="mermaid-figure mt-8 mb-2 min-h-[120px]"
-      role="img"
-      aria-label="다이어그램"
-      data-rendered={svg ? "" : undefined}
-      dangerouslySetInnerHTML={svg ? { __html: svg } : undefined}
-    />
+    <>
+      <figure ref={figureRef} className="mermaid-figure diagram-frame mt-8 mb-2 min-h-[120px]">
+        <div
+          role="img"
+          aria-label="다이어그램"
+          data-rendered={svg ? "" : undefined}
+          onClick={svg ? openZoom : undefined}
+          dangerouslySetInnerHTML={svg ? { __html: svg } : undefined}
+        />
+        {svg ? (
+          <button
+            type="button"
+            className="diagram-expand"
+            aria-label="다이어그램 크게 보기"
+            onClick={openZoom}
+          >
+            <Expand />
+          </button>
+        ) : null}
+      </figure>
+      {zoomBase > 0 ? (
+        <DiagramZoom svg={svg} baseWidth={zoomBase} onClose={() => setZoomBase(0)} />
+      ) : null}
+    </>
+  );
+}
+
+/**
+ * 크게 보기 — 본문 폭에 갇힌 다이어그램을 화면 크기의 판에 다시 그린다.
+ * 판이 가로·세로로 화면을 채우고, SVG는 viewBox 비율을 지킨 채 그 판에 맞춰 커진다.
+ * Esc, 바깥 클릭, 닫기 버튼으로 닫는다. 열려 있는 동안 본문 스크롤은 멈춘다.
+ */
+/** SVG viewBox의 가로세로 비율 — 판을 다이어그램 모양에 맞춰 키우는 데 쓴다 */
+export function viewBoxRatio(svg: string): number {
+  const match = /viewBox="\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)\s*"/.exec(svg);
+  const width = match ? Number(match[1]) : 0;
+  const height = match ? Number(match[2]) : 0;
+  return width > 0 && height > 0 ? width / height : 1.5;
+}
+
+function DiagramZoom({
+  svg,
+  baseWidth,
+  onClose,
+}: {
+  svg: string;
+  baseWidth: number;
+  onClose: () => void;
+}) {
+  const closeRef = useRef<HTMLButtonElement>(null);
+  // 넓은 다이어그램은 화면 폭까지, 긴 다이어그램은 화면 높이까지 키우되 본문보다 작아지지는 않게 한다
+  const shape = { "--ratio": viewBoxRatio(svg), "--base": `${baseWidth}px` } as CSSProperties;
+
+  useEffect(() => {
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    // 닫기 버튼은 오른쪽 위에 있어, 그냥 포커스하면 넓은 판이 그쪽으로 스크롤된 채 열린다
+    closeRef.current?.focus({ preventScroll: true });
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  return createPortal(
+    <div className="diagram-zoom" role="dialog" aria-modal="true" aria-label="다이어그램 크게 보기" onClick={onClose}>
+      {/* 판 밖에 둔다 — 유리 판의 블러가 고정 위치의 기준을 판으로 바꿔 버리기 때문 */}
+      <button ref={closeRef} type="button" className="diagram-zoom-close" aria-label="닫기" onClick={onClose}>
+        <Close size={16} />
+      </button>
+      <div className="diagram-zoom-panel glass" onClick={(event) => event.stopPropagation()}>
+        <div
+          className="mermaid-figure diagram-zoom-stage"
+          style={shape}
+          dangerouslySetInnerHTML={{ __html: svg }}
+        />
+      </div>
+    </div>,
+    document.body,
   );
 }

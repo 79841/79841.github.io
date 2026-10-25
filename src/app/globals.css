@@ -110,6 +110,12 @@ body {
   overflow-wrap: break-word;
 }
 
+/* Tailwind v4는 버튼에 손가락 포인터를 주지 않는다 — 누를 수 있는 것은 모두 포인터로 */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
 /* ── 유리 ─────────────────────────────────────────────────────────────── */
 .glass,
 .glass-strong {
@@ -312,9 +318,11 @@ button.chip:hover {
 }
 
 .nav-pill[data-ready] {
+  /* 출발과 도착을 모두 완만하게 — 처음에 몰아 가는 곡선은 미끄러지기보다 튀어 보인다.
+     폭도 같은 곡선·같은 시간으로 바뀌어 이동과 크기 변화가 한 몸처럼 움직인다 */
   transition:
-    transform 460ms cubic-bezier(0.22, 1, 0.36, 1),
-    width 460ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 560ms cubic-bezier(0.45, 0, 0.2, 1),
+    width 560ms cubic-bezier(0.45, 0, 0.2, 1),
     opacity 200ms ease,
     background 220ms ease;
 }
@@ -331,6 +339,40 @@ button.chip:hover {
   background: rgba(255, 255, 255, 0.14);
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* 메뉴 이름 — 현재 항목만 아이콘 옆에 펼친다. 알약과 같은 곡선·시간이라 폭이 함께 자란다.
+   0fr → 1fr 그리드 트랙으로 글자 폭만큼 부드럽게 열고 닫는다 */
+.nav-label {
+  display: grid;
+  grid-template-columns: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-columns 560ms cubic-bezier(0.45, 0, 0.2, 1),
+    opacity 320ms ease;
+}
+
+.nav-label > span {
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* 여백은 잘리는 상자 안쪽 글자에 둔다 — 바깥에 두면 접혀도 그 폭이 남는다.
+   max-content라 펼쳐지기 전에도 실제 글자 폭을 잴 수 있다(알약 목적지 계산) */
+.nav-label-text {
+  display: block;
+  width: max-content;
+  padding-left: 7px;
+  padding-right: 2px;
+  white-space: nowrap;
+}
+
+.nav-link[data-open] .nav-label {
+  grid-template-columns: 1fr;
+  opacity: 1;
+  transition:
+    grid-template-columns 560ms cubic-bezier(0.45, 0, 0.2, 1),
+    opacity 360ms ease 140ms;
 }
 
 /* 마우스를 올린 항목 — 옅은 유리 기운이 따라온다 */
@@ -562,6 +604,62 @@ button:focus-visible {
   color: var(--color-ink);
   background: var(--glass-bg-hover);
   border-color: var(--glass-border);
+}
+
+/* ── 페이지 전환 — 라우트가 바뀌면 본문 영역만 빠지고 올라온다 ────────────────
+   이전 화면은 짧게 흐려지며 위로 빠지고, 새 화면은 조금 늦게 아래에서 올라온다.
+   새 화면 쪽 스냅숏은 살아 있는 화면이라 메뉴 알약 같은 애니메이션이 멈추지 않는다 */
+.site-header {
+  view-transition-name: site-header;
+}
+
+/* 페이지 바깥(바탕)은 전환하지 않는다 — 기본 교차 페이드를 끈다 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* 헤더는 고정점 — 움직이지 않고 본문 위에 그대로 둔다 */
+::view-transition-group(site-header) {
+  z-index: 100;
+  animation: none;
+}
+
+::view-transition-old(site-header) {
+  display: none;
+}
+
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+/* 본문 영역은 높이가 달라도 늘어나는 모핑 없이 제자리에서 바뀐다 */
+::view-transition-group(.page-swap) {
+  animation: none;
+}
+
+::view-transition-old(.page-swap) {
+  animation: page-leave 200ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+::view-transition-new(.page-swap) {
+  animation: page-enter 520ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+}
+
+@keyframes page-leave {
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+    filter: blur(2px);
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(3px);
+  }
 }
 
 /* ── 마우스 인터랙션 — 포인터가 있는 기기에서만 ─────────────────────────────
@@ -976,6 +1074,155 @@ button:focus-visible {
   margin: 0 auto;
 }
 
+/* ── 다이어그램 크게 보기 — 본문 폭을 벗어나 화면 크기의 판에 다시 그린다 ──────── */
+.diagram-frame {
+  position: relative;
+}
+
+.diagram-frame [data-rendered] {
+  cursor: zoom-in;
+}
+
+.diagram-expand {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  color: var(--color-muted);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  transition:
+    opacity 200ms ease,
+    color 160ms ease,
+    background-color 160ms ease;
+}
+
+/* 마우스가 있는 기기에서는 다이어그램 위에 올렸을 때만 보인다 — 터치 기기는 늘 보인다 */
+@media (hover: hover) and (pointer: fine) {
+  .diagram-expand {
+    opacity: 0;
+  }
+
+  .diagram-frame:hover .diagram-expand,
+  .diagram-expand:focus-visible {
+    opacity: 1;
+  }
+
+  .diagram-expand:hover {
+    color: var(--color-ink);
+    background-color: var(--glass-bg-hover);
+  }
+}
+
+.diagram-zoom {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  /* 판이 화면보다 길면 이 겹 안에서 스크롤한다 — 가운데 맞춤은 판의 margin: auto가 맡는다 */
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(16px, env(safe-area-inset-bottom, 0px));
+  background: color-mix(in srgb, var(--color-paper) 78%, transparent);
+  animation: diagram-zoom-fade 220ms ease;
+}
+
+/* 블러는 겹 자체가 아니라 뒤에 깐 층에 준다 — 겹에 주면 닫기 버튼의 고정 위치 기준이 겹이 되어 함께 스크롤된다 */
+.diagram-zoom::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* 판은 다이어그램 비율(--ratio)대로, 화면 가로(96vw)와 세로(92vh) 중 먼저 닿는 쪽까지 커진다.
+   넓은 흐름도는 가로로, 긴 흐름도는 세로로 화면을 채운다 */
+.diagram-zoom-panel {
+  position: relative;
+  margin: auto;
+  padding: 28px;
+  border-radius: 28px;
+  animation: diagram-zoom-grow 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.diagram-zoom-stage {
+  /* 화면에 꼭 맞는 크기와 본문 크기의 1.6배 중 큰 쪽 — 단, 가로는 화면 폭을 넘지 않는다 */
+  width: min(
+    calc(96vw - 56px),
+    max(calc((92vh - 56px) * var(--ratio, 1.5)), calc(var(--base, 0px) * 1.6)),
+    1680px
+  );
+  aspect-ratio: var(--ratio, 1.5);
+}
+
+/* 폰에서는 화면 폭에 맞추면 본문보다 작아진다 — 본문의 1.6배를 지키고 넘치는 만큼 가로로도 스크롤한다 */
+@media (max-width: 767px) {
+  .diagram-zoom {
+    padding: max(12px, env(safe-area-inset-top, 0px)) 12px max(12px, env(safe-area-inset-bottom, 0px));
+  }
+
+  .diagram-zoom-panel {
+    padding: 12px;
+    border-radius: 22px;
+  }
+
+  .diagram-zoom-stage {
+    width: max(calc(100vw - 48px), calc(var(--base, 0px) * 1.6));
+  }
+}
+
+/* 머메이드가 넣는 max-width 인라인 스타일을 풀어야 판 크기까지 커진다 */
+.diagram-zoom-stage svg {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+}
+
+.diagram-zoom-close {
+  position: fixed;
+  top: max(18px, calc(env(safe-area-inset-top, 0px) + 10px));
+  right: 18px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  color: var(--color-ink);
+  background: var(--glass-bg-hover);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  transition: background-color 160ms ease;
+}
+
+.diagram-zoom-close:hover {
+  background-color: var(--glass-strong-bg);
+}
+
+@keyframes diagram-zoom-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes diagram-zoom-grow {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
 /* 머메이드가 그려 준 SVG 다듬기 — 모서리를 둥글리고 선을 얇게 */
 .mermaid-figure svg .node rect,
 .mermaid-figure svg .node polygon,
@@ -1092,8 +1339,21 @@ button:focus-visible {
     transform: none;
   }
 
-  .nav-pill[data-ready] {
+  .nav-pill[data-ready],
+  .nav-label {
     transition: none;
+  }
+
+  .diagram-zoom,
+  .diagram-zoom-panel {
+    animation: none;
+  }
+
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
   }
 }
 

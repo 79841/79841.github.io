@@ -6,11 +6,11 @@ import { profile } from "@/shared/lib/profile";
 import { Reveal } from "@/shared/ui/reveal";
 
 export const metadata: Metadata = {
-  title: "Writing",
+  title: "Blog",
   description:
     "개발하면서 겪은 문제와 해결 과정을 기록합니다. 측정한 숫자와 재현 조건을 같이 남깁니다.",
   openGraph: {
-    title: `Writing — ${profile.name}`,
+    title: `Blog — ${profile.name}`,
     description: "개발하면서 겪은 문제와 해결 과정을 기록합니다.",
     url: "/blog",
     type: "website",
@@ -28,7 +28,7 @@ export default function BlogPage() {
           <div className="flex items-end justify-between gap-10">
             <div className="flex flex-col gap-3.5">
               <h1 className="text-[clamp(2.6rem,6vw,4.5rem)] leading-[1.04] font-medium tracking-[-0.035em]">
-                Writing
+                Blog
               </h1>
               <p className="max-w-[620px] text-[17px] leading-[1.55] text-muted sm:text-[18px]">
                 개발하면서 겪은 문제와 해결 과정을 기록합니다. 측정한 숫자와 재현

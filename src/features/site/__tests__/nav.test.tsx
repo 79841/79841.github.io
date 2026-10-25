@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { isActive, Nav } from "@/features/site/nav";
 
@@ -43,7 +43,7 @@ describe("Nav", () => {
     for (const [label, href] of [
       ["Home", "/"],
       ["Work", "/work"],
-      ["Writing", "/blog"],
+      ["Blog", "/blog"],
       ["About", "/about"],
     ]) {
       expect(screen.getByRole("link", { name: label })).toHaveAttribute("href", href);
@@ -71,8 +71,40 @@ describe("Nav", () => {
 
     pathname.current = "/blog/";
     rerender(<Nav />);
-    expect(screen.getByRole("link", { name: "Writing" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "Blog" })).toHaveAttribute("aria-current", "page");
     expect(screen.getByRole("link", { name: "Work" })).not.toHaveAttribute("aria-current");
+  });
+
+  it("sends the pill toward a clicked item before the route changes, but keeps aria-current on the real page", () => {
+    const { container } = render(<Nav />);
+    const pill = container.querySelector<HTMLElement>(".nav-pill")!;
+    const before = pill.style.transform;
+    // 접힌 항목은 아이콘 폭 36px — 알약 목적지는 앞 항목들이 모두 접힌 뒤의 자리다
+    for (const link of screen.getAllByRole("link")) {
+      Object.defineProperty(link, "offsetWidth", { configurable: true, value: 36 });
+    }
+    const about = screen.getByRole("link", { name: "About" });
+    fireEvent.click(about);
+    expect(pill.style.transform).toBe("translateX(108px)");
+    expect(pill.style.transform).not.toBe(before);
+    expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("aria-current", "page");
+    expect(about).not.toHaveAttribute("aria-current");
+  });
+
+  it("shows the label only on the current item and keeps every item named for screen readers", () => {
+    pathname.current = "/blog";
+    render(<Nav />);
+    for (const name of ["Home", "Work", "Blog", "About"]) {
+      const link = screen.getByRole("link", { name });
+      expect(link.querySelector("svg")).not.toBeNull();
+      if (name === "Blog") {
+        expect(link).toHaveAttribute("data-open");
+      } else {
+        expect(link).not.toHaveAttribute("data-open");
+        // 아이콘만 보이는 항목은 마우스를 올리면 이름이 뜬다
+        expect(link).toHaveAttribute("title", name);
+      }
+    }
   });
 
   it("starts on the light tone and exposes it for the capsule styles", () => {
@@ -87,7 +119,7 @@ describe("Nav", () => {
     pathname.current = "/blog/frame-drop/";
     render(<Nav />);
 
-    expect(screen.getByRole("link", { name: "Writing" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Blog" })).toHaveAttribute(
       "aria-current",
       "page",
     );

@@ -46,7 +46,7 @@ export function RecentPosts({ posts }: RecentPostsProps) {
   return (
     <section id="writing" aria-labelledby="writing-h" className="mt-24 scroll-mt-20">
       <SectionHead
-        eyebrow="WRITING"
+        eyebrow="BLOG"
         title="최근 글"
         id="writing-h"
         more={{ href: "/blog", label: "전체 보기" }}

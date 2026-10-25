@@ -23,7 +23,7 @@ export async function generateMetadata({
   if (!entry) return {};
 
   return {
-    title: `${entry.tag} — Writing`,
+    title: `${entry.tag} — Blog`,
     description: `${entry.tag} 태그가 붙은 글 ${entry.count}편.`,
   };
 }
@@ -46,7 +46,7 @@ export default async function TagPage({ params }: TagPageProps) {
             href="/blog"
             className="inline-flex h-8 items-center gap-1.5 text-[14px] text-faint transition-colors hover:text-ink"
           >
-            <ArrowLeft /> Writing
+            <ArrowLeft /> Blog
           </Link>
           <h1 className="mt-3 text-[clamp(2.6rem,6vw,4.5rem)] leading-[1.04] font-medium tracking-[-0.035em]">
             {entry.tag}

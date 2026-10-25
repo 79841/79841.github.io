@@ -6,12 +6,14 @@ import { useEffect, useRef, useState } from "react";
 import { ThemeToggle } from "@/features/site/theme-toggle";
 import { pageTone, toneBehind } from "@/shared/lib/tone";
 import type { Tone } from "@/shared/lib/tone";
+import { NavAbout, NavBlog, NavHome, NavWork } from "@/shared/ui/icons";
 
 const links = [
-  { href: "/", label: "Home" },
-  { href: "/work", label: "Work" },
-  { href: "/blog", label: "Writing" },
-  { href: "/about", label: "About" },
+  // Phosphor Regular — 집, 네 칸(만든 것들), 책갈피(글), @(나를 부르는 핸들)
+  { href: "/", label: "Home", Icon: NavHome },
+  { href: "/work", label: "Work", Icon: NavWork },
+  { href: "/blog", label: "Blog", Icon: NavBlog },
+  { href: "/about", label: "About", Icon: NavAbout },
 ];
 
 /** trailingSlash: true라 브라우저 경로는 "/work/"로 들어온다 — 비교 전에 끝 슬래시를 떼어낸다 */
@@ -19,7 +21,7 @@ function normalize(pathname: string): string {
   return pathname.replace(/\/+$/, "") || "/";
 }
 
-/** 상세 페이지에서도 상위 항목이 켜져 있어야 한다 — /work/argus → Work, /blog/tag/react → Writing */
+/** 상세 페이지에서도 상위 항목이 켜져 있어야 한다 — /work/argus → Work, /blog/tag/react → Blog */
 export function isActive(pathname: string, href: string): boolean {
   const current = normalize(pathname);
   if (href === "/") return current === "/";
@@ -81,16 +83,23 @@ function usePillPosition(
     if (!list || !pill) return;
 
     const place = () => {
-      const target = activeHref
-        ? list.querySelector<HTMLElement>(`[data-href="${activeHref}"]`)
-        : null;
-      if (!target) {
+      const items = [...list.querySelectorAll<HTMLElement>("[data-href]")];
+      const index = items.findIndex((item) => item.dataset.href === activeHref);
+      if (index < 0) {
         pill.style.opacity = "0";
         return;
       }
+      // 이름이 펼쳐지고 접히는 동안 항목 위치는 매 프레임 바뀐다 — 지금 위치를 쫓으면 늦게 도착한다.
+      // 그래서 전환이 끝난 뒤의 자리(앞 항목은 모두 접힘, 대상만 펼침)를 계산해 한 번에 보낸다
+      const gap = parseFloat(getComputedStyle(list).columnGap) || 0;
+      const iconWidth = (item: HTMLElement) =>
+        item.offsetWidth - (item.querySelector<HTMLElement>(".nav-label")?.offsetWidth ?? 0);
+      const left = items.slice(0, index).reduce((sum, item) => sum + iconWidth(item) + gap, 0);
+      const target = items[index];
+      const labelWidth = target.querySelector<HTMLElement>(".nav-label-text")?.offsetWidth ?? 0;
       pill.style.opacity = "1";
-      pill.style.transform = `translateX(${target.offsetLeft}px)`;
-      pill.style.width = `${target.offsetWidth}px`;
+      pill.style.transform = `translateX(${left}px)`;
+      pill.style.width = `${iconWidth(target) + labelWidth}px`;
     };
 
     place();
@@ -109,7 +118,8 @@ function usePillPosition(
 }
 
 /**
- * 상단에 떠 있는 유리 캡슐 — Home·Work·Writing·About 메뉴와 테마 토글.
+ * 상단에 떠 있는 유리 캡슐 — Home·Work·Blog·About 메뉴와 테마 토글.
+ * 현재 페이지만 아이콘 옆에 이름을 펼치고, 나머지는 아이콘만 둔다.
  * 현재 페이지 뒤의 유리 알약 하나가 항목 사이를 미끄러져 이동한다.
  * 글자색과 유리 색은 캡슐 뒤에 깔린 것의 밝기를 따른다.
  */
@@ -120,33 +130,55 @@ export function Nav() {
   const pillRef = useRef<HTMLSpanElement>(null);
   const tone = useSurfaceTone(navRef);
 
-  const activeHref = links.find((link) => isActive(pathname, link.href))?.href ?? null;
-  usePillPosition(listRef, pillRef, activeHref);
+  const routeHref = links.find((link) => isActive(pathname, link.href))?.href ?? null;
+  // 누른 순간 알약을 출발시킨다 — 페이지 전환이 끝날 때까지 기다리면 한 박자 늦게 움직인다.
+  // 누른 곳과 누를 때의 경로를 함께 기억해, 경로가 바뀌면 그 기억은 저절로 무효가 된다
+  const [pending, setPending] = useState<{ href: string; from: string } | null>(null);
+  const pillHref = pending && pending.from === pathname ? pending.href : routeHref;
+  // 알약은 누른 곳으로 먼저 가지만, 현재 페이지 표시(aria-current)는 실제 경로를 따른다
+  const activeHref = routeHref;
+  usePillPosition(listRef, pillRef, pillHref);
 
   return (
-    <header className="pointer-events-none sticky top-3 z-50 flex justify-center px-3 sm:top-5">
+    <header className="site-header pointer-events-none sticky top-3 z-50 flex justify-center px-3 sm:top-5">
       <nav
         ref={navRef}
         aria-label="주 메뉴"
         data-tone={tone}
-        className="nav-cap pointer-events-auto flex h-[52px] max-w-full items-center gap-1 rounded-full py-0 pr-2 pl-2 sm:gap-2"
+        className="nav-cap pointer-events-auto flex h-[46px] max-w-full items-center gap-1 rounded-full px-[5px] py-0 sm:gap-1.5"
       >
         <div ref={listRef} className="relative flex items-center gap-0.5 text-[14px]">
           {/* 활성 알약 — 하나뿐이고 항목 사이를 미끄러진다 (위치는 usePillPosition이 DOM에 쓴다) */}
           <span ref={pillRef} aria-hidden className="nav-pill" />
-          {links.map((link) => {
-            const active = activeHref === link.href;
+          {links.map(({ href, label, Icon }) => {
+            const active = activeHref === href;
+            // 이름은 알약과 같은 박자로 펼친다 — 누른 순간 알약이 가는 곳이 곧 펼쳐지는 곳
+            const open = pillHref === href;
             return (
               <Link
-                key={link.href}
-                href={link.href}
-                data-href={link.href}
+                key={href}
+                href={href}
+                data-href={href}
+                onClick={(event) => {
+                  // 새 탭 열기 같은 수정자 클릭은 이 페이지를 떠나지 않으므로 알약도 그대로 둔다
+                  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                  setPending({ href, from: pathname });
+                }}
                 aria-current={active ? "page" : undefined}
-                className={`nav-link relative flex h-9 items-center rounded-full px-3 ${
+                aria-label={label}
+                title={open ? undefined : label}
+                data-open={open ? "" : undefined}
+                className={`nav-link relative flex h-9 items-center rounded-full px-2.5 ${
                   active ? "nav-link-active font-medium" : ""
                 }`}
               >
-                {link.label}
+                <Icon size={16} className="shrink-0" />
+                {/* 접힌 항목은 폭 0 — 이름은 aria-label이 읽어 주므로 화면 낭독기에서 숨긴다 */}
+                <span aria-hidden className="nav-label">
+                  <span>
+                    <span className="nav-label-text">{label}</span>
+                  </span>
+                </span>
               </Link>
             );
           })}

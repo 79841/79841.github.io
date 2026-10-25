@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
   output: "export",
   trailingSlash: true,
   images: { unoptimized: true },
+  // 라우트 이동을 React <ViewTransition>과 브라우저 View Transitions API로 잇는다 (페이지 전환효과)
+  experimental: {
+    viewTransition: true,
+  },
 };
 
 const withMDX = createMDX({
